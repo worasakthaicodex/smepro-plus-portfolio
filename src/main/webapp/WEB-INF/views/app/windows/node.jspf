@@ -1,0 +1,270 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+  
+  
+  <style>
+
+.tree,
+.tree ul {
+  margin:0 0 0 0em; /* indentation */
+  padding:0;
+  list-style:none;
+  color:#369;
+  position:relative;
+}
+
+.tree ul {margin-left:.5em} /* (indentation/2) */
+
+.tree:before,
+.tree ul:before {
+  content:"";
+  display:block;
+  width:0;
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:4px;
+  border-left:1px dashed;
+}
+
+ul.tree:before {
+  border-left:none
+}
+
+.tree li {
+  margin:0;
+  padding:0 1.5em; /* indentation + .5em */
+  line-height:2em; /* default list item's `line-height` */
+  font-weight:bold;
+    font-size:10px;
+  position:relative;
+  
+  /* --- ส่วนที่เพิ่มเพื่อตัดคำ --- */
+  width: 100%;        /* 1. กำหนดความกว้างสูงสุดที่ยอมรับได้ (ปรับเลขตามชอบ) */
+  white-space: nowrap;     /* 2. บังคับให้อยู่บรรทัดเดียว ห้ามปัดตก */
+  overflow: hidden;        /* 3. ส่วนที่เกินจากความกว้างให้ซ่อนไว้ */
+  text-overflow: ellipsis; /* 4. ใส่จุด ... ต่อท้ายส่วนที่ถูกซ่อน */
+  display: block;
+  
+}
+
+.tree container, .tree folder {
+  display: block;
+}
+
+.tree container icon, .tree folder icon {
+  background-repeat: no-repeat;
+  background-position: 4px center;
+  padding-left: 24px;
+}
+
+.tree container icon {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAQCAYAAADwMZRfAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAnJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyI+CiAgICAgICAgIDx0aWZmOllSZXNvbHV0aW9uPjcyPC90aWZmOllSZXNvbHV0aW9uPgogICAgICAgICA8dGlmZjpDb21wcmVzc2lvbj41PC90aWZmOkNvbXByZXNzaW9uPgogICAgICAgICA8dGlmZjpYUmVzb2x1dGlvbj43MjwvdGlmZjpYUmVzb2x1dGlvbj4KICAgICAgICAgPHhtcDpDcmVhdG9yVG9vbD5GbHlpbmcgTWVhdCBBY29ybiA1LjIuMTwveG1wOkNyZWF0b3JUb29sPgogICAgICAgICA8eG1wOk1vZGlmeURhdGU+MjAxNi0wMi0wMlQxMjo0ODo1ODwveG1wOk1vZGlmeURhdGU+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgqitOMRAAABuklEQVQ4EZVSvy9sQRT+Znfseh4rfuUVSCQahSBeIZaORqURT6L1FyjlFSJER0In0RMajeqphEVHqxIhmydYrL137sydce5ds9lYWesk9557vvOdb+acexjebXrtMqHjv2I2VtEnvTPT/mDjcp7bpKypX4Vxxm3MTOyKvn/buJwPRQYXTzYn+yLj3W2JJkvO5OTP68XUEWAmU3+TNxb/zLM/G+n1gc7I1FBnork5EYeQgCOAuxcf++f/ce+wXWmiz8XFDOxqe6Zl4Xhl8EdyNuVww9h0f0dDQ2Mdh+cDngakAeKxKMZ6W3D7LCaUT0CReQo3eiP9dHa3vAWQSJCrpndNYaRFbHD00PPRrh9V6+Flbj4T6doLchx0iKcNXLpFpSYLXDcs4dAKgkCnkPhayg3a8yVcVOdFpBJwlEZOfV1sGQFfSUESmbyIki6JmIpE2LuKS3xFh1vjSnkQBH5nJkE7gYgr8kJcKxm280r7UZHRdcJ2aCbWuO/L0/SjM5z1dK0Fy/mgpWxOZLWvTl2vKrxK2Obo0vE/gPWWKy7OGWYuDuaSIxYLN4kmPUFA6VZZVqn/xr8sLf4UeQNldMTNDtyI9wAAAABJRU5ErkJggg==');
+}
+
+.tree folder icon {
+  background-image: url('<c:url value="/resources/app-assets/images/icons/doc.png" />');
+
+  height: 20px;
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom bottom; /* <<< สำคัญมาก */
+}
+
+.tree folder.selected {
+  background-image: linear-gradient(to bottom, #e4eef5, #c0d1db);
+  padding:1px;
+  width: 100%;
+}
+
+.tree folder:hover {
+    background-image: linear-gradient(to bottom, #e9f5e7, #c3d9bf);
+  border-radius: 5px;
+    cursor: pointer;
+}
+.tree container:hover {
+    background-image: linear-gradient(to bottom, #e9f5e7, #c3d9bf);
+  border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.tree li:before {
+  content:"";
+  display:block;
+  width:10px; /* same with indentation */
+  height:0;
+  border-top:1px dashed;
+  margin-top:-1px; /* border top width */
+  position:absolute;
+  top:1em; /* (line-height/2) */
+  left:4px;
+}
+
+ul.tree>li:before {
+  border-top:none;
+}
+
+.tree li:last-child:before {
+  background:white; /* same with body background */
+  height:auto;
+  top:1em; /* (line-height/2) */
+  bottom:0;
+}
+  </style>
+  
+  
+
+<!-- CSS สำหรับซ่อน Node -->
+<style>
+    .hidden-tree-node {
+        display: none !important;
+    }
+    #treeContextMenu div:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+  
+  <div id="treeContextMenu" style="display:none; position:fixed; z-index:9999; background:#fff; border:1px solid #ccc; box-shadow: 2px 2px 5px rgba(0,0,0,0.2); border-radius: 4px; padding: 5px 0;">
+    <div onclick="applyTreeView('full'); closeTreeMenu();" style="padding: 8px 15px; cursor: pointer; border-bottom: 1px solid #eee;">1. แสดงแบบเต็มปกติ</div>
+    <div onclick="applyTreeView('short'); closeTreeMenu();" style="padding: 8px 15px; cursor: pointer;">2. แสดงแบบย่อ (เฉพาะที่เลือกและกลุ่มเดียวกัน)</div>
+</div>
+  
+  <ul class="tree" id="myDocTree">
+      <!-- HTML เมนูคลิกขวา -->
+
+  
+    <li title="${Node.main_doc_code } ${Node.main_doc_name }">
+        <folder data-doc-code="${Node.relations_doc_code}" 
+                onclick="openwindow('draggable-window6','ข้อมูลเอกสาร','9500');getData('/viewRelationsDoc-filemanager/${Node.relations_id}','mainbody6');">
+            <icon/>${Node.relations_doc_code } ${Node.relations_doc_name }
+        </folder>
+        <ul>
+            <c:forEach var="row" items="${Node.relations }">
+                <li title="${row.main_doc_code } ${row.main_doc_name }"  
+                    onclick="openwindow('draggable-window6','ข้อมูลเอกสาร','9500');getData('/viewRelationsDoc-filemanager/${row.main_id }','mainbody6');">
+                    
+                    <!-- เพิ่ม data-doc-code ที่นี่ -->
+                    <folder data-doc-code="${row.main_doc_code}" 
+                            class="<c:if test="${edatas.data_id == row.main_id }">selected</c:if>">
+                        <icon/>${row.main_doc_code } ${row.main_doc_name }
+                    </folder>
+                    
+                    <ul>
+                        <c:forEach var="row2" items="${row.relations }">
+                            <li title="${row2.main_doc_code } ${row2.main_doc_name }"  
+                                onclick="openwindow('draggable-window6','ข้อมูลเอกสาร','9500');getData('/viewRelationsDoc-filemanager/${row2.main_id }','mainbody6');">
+                                
+                                <!-- เพิ่ม data-doc-code ที่นี่ -->
+                                <folder data-doc-code="${row2.main_doc_code}" 
+                                        class="<c:if test="${edatas.data_id == row2.main_id }">selected</c:if>">
+                                    <icon/>${row2.main_doc_code } ${row2.main_doc_name }
+                                </folder>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </li>
+            </c:forEach>
+        </ul>
+    </li>
+</ul>
+
+<script>
+   
+        var savedView = localStorage.getItem("erp_tree_view_mode") || "full";
+        applyTreeView(savedView);
+        TreeView();
+
+    // ฟังก์ชันจัดการแสดงผล
+    function applyTreeView(mode) {
+        // บันทึกค่าลงในเครื่อง
+        localStorage.setItem("erp_tree_view_mode", mode);
+        
+        const tree = document.getElementById('myDocTree');
+        if(!tree) return;
+        const allListItems = tree.querySelectorAll('li');
+
+        if (mode === 'full') {
+            // โหมดเต็ม: ลบ class ซ่อนออกให้หมด
+            allListItems.forEach(li => li.classList.remove('hidden-tree-node'));
+            return;
+        }
+
+        // โหมดย่อ: ค้นหา Node ที่กำลัง selected อยู่
+        const selectedFolder = tree.querySelector('folder.selected');
+        
+        if (!selectedFolder) {
+            // ถ้าไม่มีอะไร selected เลย ให้โชว์เต็มไปก่อน
+            allListItems.forEach(li => li.classList.remove('hidden-tree-node'));
+            return;
+        }
+
+        // ดึงรหัสเอกสารของตัวที่ถูกเลือก และตัด -RX ออก (เช่น DOC-001-R1 -> DOC-001)
+        const rawCode = selectedFolder.getAttribute('data-doc-code') || "";
+        const baseCode = rawCode.replace(/-R\w*$/i, '').trim(); 
+
+        // 1. ซ่อนทั้งหมดก่อน
+        allListItems.forEach(li => li.classList.add('hidden-tree-node'));
+
+        // 2. วนลูปเปิดเฉพาะตัวที่ตรงเงื่อนไข
+        allListItems.forEach(li => {
+            const folder = li.querySelector('folder');
+            if (!folder) return;
+
+            const folderCode = folder.getAttribute('data-doc-code') || "";
+            const folderBaseCode = folderCode.replace(/-R\w*$/i, '').trim();
+
+            // เงื่อนไข: เป็นตัวที่ถูก selected หรือ มี baseCode เดียวกัน
+            if (folder.classList.contains('selected') || (folderBaseCode !== "" && folderBaseCode === baseCode)) {
+                // แสดง Node ตัวเอง
+                li.classList.remove('hidden-tree-node');
+                
+                // แสดง Parent ของตัวเองขึ้นไปจนสุด (เพื่อให้เส้นไม่ขาด)
+                let parentEle = li.parentElement;
+                while (parentEle && parentEle !== tree.parentElement) {
+                    if (parentEle.tagName.toLowerCase() === 'li') {
+                        parentEle.classList.remove('hidden-tree-node');
+                    }
+                    parentEle = parentEle.parentElement;
+                }
+            }
+        });
+        
+    }
+    
+    
+    var contextMenu;   
+    
+    function TreeView() {
+
+    // --- จัดการระบบคลิกขวา (Context Menu) ---
+    var treeElement = document.getElementById('myDocTree');
+     contextMenu = document.getElementById('treeContextMenu');
+
+    treeElement.addEventListener('contextmenu', function(e) {
+        e.preventDefault(); // ปิดเมนูคลิกขวาปกติของเบราว์เซอร์
+        
+        // แสดงเมนูของเราที่ตำแหน่งเมาส์
+        contextMenu.style.display = 'block';
+        contextMenu.style.left =  '40px';
+        contextMenu.style.top = (e.pageY-30) + 'px';
+    });
+
+    // ปิดเมนูเมื่อคลิกที่อื่น
+    document.addEventListener('click', function(e) {
+        if (e.target.id !== 'treeContextMenu') {
+            closeTreeMenu();
+        }
+    });
+    }
+
+    function closeTreeMenu() {
+        contextMenu.style.display = 'none';
+    }
+</script>
+  
+
+    
+    

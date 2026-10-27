@@ -1,0 +1,146 @@
+     <%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>   
+  
+      <div class="modal-body">
+
+       
+      
+       
+                            <spring:message code="app.activate" text="-" /> :
+					
+					<c:set var="namesArray" value="${fn:split(commitment, ',')}" />
+					
+					<select class="form-select form-select-sm d-inline w-auto" name="activate_action" id="activate_action" onchange="toggleDivVisibility(this)">
+					    <option value="-" <c:if test="${sub_processes.action == '-' }">selected</c:if>>Disable</option>
+					    
+					    <c:forEach var="commit" items="${namesArray}">
+					        <option value="${commit}" <c:if test="${sub_processes.action == commit }">selected</c:if>>${commit}</option>
+					    </c:forEach>
+					</select>    
+                  
+                  
+                  
+                  
+                                   <br><br>         
+                                   
+                                                
+                                   
+                                       
+                                   
+                         
+                                              <c:forEach var="rowcommit" items="${commitments}"> 
+                                              
+                                              
+                                         
+                                                 
+                                                <div id="${rowcommit.name}" class="register-div mainaction-div" style="display:none"> 
+                                   					 <div class="mb-1 row">
+                                               
+                                                       
+                                                         <div class="col-sm-6"><spring:message code="app.e-formcolumn"  text="-​" />  </div>
+                                                         
+                                                                   <div class="col-sm-6">
+                                              
+                                                       <spring:message code="app.tag"  text="-​" />
+                                                        </div>
+                                                           
+                                                            </div>
+                                   
+                                                               <div class="col-12">
+                                                               
+                                                               
+                                                               
+                                                  <c:forEach items="${eformfields }" var="fields" >     
+                                                       
+                                                     
+		                                                                   <div class="mb-1 row">
+		                                                                 <div class="col-sm-6">
+                                                        <label class="col-form-label" for="fname-icon">${fields.field_label} 
+                                                                </div>   
+                                                           <div class="col-sm-6">          
+		                                                   <input type="hidden" name="keymap.eformkey" value="${fields.field_id}">
+		                                                 
+		                                                                      <select class="form-select" name="keymap.registerkey_id">
+											                                   <option value="0" selected>-</option>
+															
+															
+																 <c:forEach items="${rowcommit.actionkeys }" var="row" varStatus="counts">   
+						  <option value="${row.id}" <c:if test="${row.keymap.eformkey.contains(fields.field_id.toString())}">selected </c:if> >
+						  #<spring:message code="${row.title }"  text="-​" /></option>
+																 </c:forEach>
+										 	                               </select>
+										 	                           
+		                                                            
+		                                                               </div>   
+		                                                               </div>      
+                                                  </c:forEach>        
+                                                               
+                                                       
+                                                     </div>    
+                                                     <hr>
+                                                          <div class="mb-1 row">  
+                                             <div class="col-sm-4">
+                                              
+                                                       
+                                                       
+                                                       <spring:message code="app.batchinsert"  text="-​" />
+                                                        </div>
+                                                        
+                                                                    	<c:set var="actionBatchArray" value="${fn:split(sub_processes.action_batch_insert, ',')}" />
+                                                              
+                                                                          <div class="col-sm-8">  
+                                                                           <select class="form-select select2s"  name="action_batch_insert"   multiple="multiple">
+													                           
+													                             <c:forEach items="${rowcommit.actionkeys }" var="rowed" varStatus="counts">  
+													                        
+													                             <spring:message code="${rowed.title }"  text="-​" var="vardata" />
+													                             
+																		
+																				<c:set var="isSelected" value="false" />
+																				<c:forEach var="item" items="${actionBatchArray}">
+																				    <c:if test="${item eq rowed.mainkey}">
+																				        <c:set var="isSelected" value="true" />
+																				    </c:if>
+																				</c:forEach>
+																																                             
+													                             
+													                              <option value="${rowed.mainkey }" ${isSelected ? 'selected' : ''}>${vardata }
+													                              </option>
+													        					   </c:forEach>   
+												 	          				  </select>
+    
+                                                               <small class="text-muted"><spring:message code="app.batchinsertinfo"  text="-​" /> .</small>
+                               
+                                         
+                                                                          </div>
+                  							             </div>
+                  							           
+ 													  </div> 		
+                                               </c:forEach>           
+                                                                
+                                            
+                                                     
+                                              
+                                                          
+                                                            </div>
+                                                            
+                                                            
+ <script>
+
+$(document).ready(function () {
+    $(".select2s").select2({
+        tags: true
+    }).on("change", function () {
+        let selectedValues = $(this).val();
+        let customId = $(this).data("custom");
+
+        $('input[name="filter' + customId + '"]').val(selectedValues ? selectedValues.join("|") : "");
+    });
+});
+</script>                             
+	      <script src="<c:url value="/resources/app-assets/vendors/js/forms/select/select2.full.min.js" />"></script>
+  <script src="<c:url value="/resources/app-assets/js/scripts/forms/form-select2.js" />"></script>      
+  
+                                                             
+                                            

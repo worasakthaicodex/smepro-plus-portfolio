@@ -1,0 +1,161 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<style>
+.fixhead {
+    max-width: 150px; /* กำหนดความกว้างสูงสุด */
+    white-space: nowrap; /* ป้องกันข้อความขึ้นบรรทัดใหม่ */
+    overflow: hidden; /* ซ่อนข้อความที่เกินขอบเขต */
+    text-overflow: ellipsis; /* แสดง ... เมื่อข้อความยาวเกินไป */
+}
+</style>
+
+	    			
+
+		    	  <input type="hidden" name="process_id" value="${process_id }">
+		    	  <input type="hidden" name="tables" value="${tables }">
+		    	   <input type="hidden" name="filters" value="${filters }">
+		    	  <input type="hidden" name="edata_id" value="${edata_id+0 }">
+			  <input type="hidden" name="type" value="${type }">
+
+    <div class="row">
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="first-name-column"><spring:message code="register.name"  /></label>
+                                                    <input type="text" name="register_name" id="first-name-column" class="form-control"  name="fname-column">
+                                                </div>
+                                            </div>
+                                            
+                                            <c:set var="dataArray" value="${fn:split(register_type, ',')}" />
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="last-name-column"><spring:message code="register.type"  /></label>
+                                                    <select class="form-select" name="register_type">
+                                                      <option value="-">-</option>
+                                                        <c:forEach var="item" items="${dataArray}">
+													     <option value="${item}">${item}</option>
+													    </c:forEach>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                                   <c:set var="dataArray2" value="${fn:split(register_group, ',')}" />
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="last-name-column"><spring:message code="register.groups"  /></label>
+                                                    <select class="form-select " name="register_groups" >
+                                                    <option value="-">-</option>
+                                                      <c:forEach var="item" items="${dataArray2}">
+													     <option value="${item}">${item}</option>
+													    </c:forEach>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                      <div>       
+                                      
+                                 <a class="btn btn-primary waves-effect waves-float waves-light" onclick='postdata("/search_workflow_dbs-filemanager?${_csrf.parameterName}=${_csrf.token}","subdata_search","wrappermain")' >Submit</a>           
+                                    </div>         
+                                        </div>
+                                                
+                                                <br>  <br>
+                                                
+                                             
+  <table  class="table">
+                                    <thead>
+                                        <tr>
+                                        
+            	 <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>   
+            	 
+       					<th class="form-label fixhead" style="padding:5px;font-size:13px">ID</th>         	                          
+ 					<th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="register.name"  /></th>     
+  
+<th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="register.type"  /></th>     
+  <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="register.groups"  /></th>  
+    <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="register.address"  /></th>  
+     <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="register.note"  /></th>  
+          <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>  
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <c:forEach items="${item }" var="row"  varStatus="count">
+				                                     
+				                                     
+				                                                            <tr>
+                                        
+            	 <td class="form-label fixhead" style="padding:5px;font-size:13px">${count.count }</td>   
+            	 
+            	                          
+ 					<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="code" title="${row.register_code }${row.register_daterun }${row.register_id }">${row.register_code }${row.register_daterun }${row.register_id }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="name"  title="${row.register_name }">${row.register_name }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="type"   title="${row.register_type }">${row.register_type }</td>     
+  <td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="groups"  title="${row.register_groups }">${row.register_groups }</td>  
+    <td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="address"   title="${row.register_address }">${row.register_address }</td>  
+     <td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="note"  title="${row.register_note }">${row.register_note }</td>  
+     
+     
+          <td class="form-label fixhead" style="padding:5px;font-size:13px">
+          
+          <c:if test="${action_type != 'view' }">
+         	 <a class="btn btn-sm btn-success" onclick="showAddressTitle(this)" data-bs-dismiss="modal">+</a>
+          </c:if>
+          
+                   <a  href="/viewregistration-workflow/${row.id }" target="_blank" class="btn btn-sm btn-light" ><i data-feather='eye'></i></a>
+          </td>  
+                                        </tr>
+														
+				                                     
+				                                      
+				                                      
+                                      
+                                        	</c:forEach>   
+                                        
+                                    </tbody>
+                                    </table>     
+                                    
+   <script>
+        
+            if (feather) {
+                feather.replace({
+                    width: 14,
+                    height: 14
+                });
+            }
+      
+    </script>                                   
+                                    
+<script>
+function showAddressTitle(element) {
+    // หา parent <tr> ที่อยู่ใกล้ที่สุดของปุ่มที่กด
+    let row = element.closest("tr");
+
+    if (row) {
+        // ค้นหา <td> ที่มี data-custom="address"
+        let codeTd = row.querySelector('td[data-custom="code"]').getAttribute("title");
+        let nameTd = row.querySelector('td[data-custom="name"]').getAttribute("title");
+        let typeTd = row.querySelector('td[data-custom="type"]').getAttribute("title");
+        let groupsTd = row.querySelector('td[data-custom="groups"]').getAttribute("title");
+        let addressTd = row.querySelector('td[data-custom="address"]').getAttribute("title");
+        let noteTd = row.querySelector('td[data-custom="note"]').getAttribute("title");
+      
+        fillPossibleFields(['customer_code','skg_supplier_code'], codeTd);
+        fillPossibleFields(['customer_name','skg_supplier_name'], nameTd);
+      
+    }
+}
+
+
+function fillPossibleFields(possibleNames, value) {
+    for (var i = 0; i < possibleNames.length; i++) {
+        var name = possibleNames[i];
+        var field = document.querySelector('input[name="' + name + '"]');
+        if (field !== null) {
+            field.value = value;
+            break;
+        }
+    }
+}
+</script>                       

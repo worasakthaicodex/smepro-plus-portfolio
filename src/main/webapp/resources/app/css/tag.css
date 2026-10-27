@@ -1,0 +1,20 @@
+
+tags {
+   width: 350px;
+     padding: 5px;
+}
+
+
+
+.disabled tags {
+  display: none;
+}
+.disabled tags + input, .disabled tags + textarea {
+  display: inline-block !important;
+  width: 350px;
+  padding: 0.5em;
+  border: 1px inset;
+}
+.tagify__input {
+	     padding: 5px;
+}

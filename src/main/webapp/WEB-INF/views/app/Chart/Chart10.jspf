@@ -1,0 +1,177 @@
+
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+ <script>
+ window.addEventListener("DOMContentLoaded", function () {
+	  const theme = "${customreports.theme}";
+
+	    // ฟังก์ชันเพิ่มคอมมาในตัวเลข
+	    function numberWithCommas(x) {
+	        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	    }
+
+	    // ดึงตาราง
+	    var tables = document.getElementsByClassName("ui-dynamic-table-page");
+	    var table = tables[0];
+	    if (!table) {
+	        console.error("ไม่พบตาราง ui-dynamic-table-page");
+	        return;
+	    }
+	    var rows = table.querySelectorAll('tbody tr');
+	    if (!rows.length) {
+	        console.error("ไม่พบแถวในตาราง");
+	        return;
+	    }
+
+	    // กำหนด axisY และ axisXClass
+	    var axisY = "${customreports.axis_y}".split(","); // "38"
+	    var axisXClass = '.cell-' + ${customreports.level}; // .cell-36
+	    var axisYClasses = axisY.map(function(y) { return '.cell-' + y; }); // [.cell-38]
+
+	    // ดึงชื่อหัวคอลัมน์ของ axisX
+	    var axisXHeaderIndex = parseInt(${customreports.axis_x}) - 1; // 36 - 1 = 35
+	    var axisXHeaderCell = document.getElementById("ui-dynamic-table-header-cell-" + axisXHeaderIndex);
+	    var axisXHeaderLabel = axisXHeaderCell ? axisXHeaderCell.innerText : "แกน X";
+
+	    // เตรียม labels (สำหรับแกน X)
+	    var labels = [];
+	    for (var i = 0; i < rows.length; i++) {
+	        var row = rows[i];
+	        var labelCell = row.querySelector(axisXClass);
+	        var label = labelCell ? labelCell.innerText : '';
+	        labels.push(label);
+	    }
+
+	    // เตรียมข้อมูลสำหรับ Bar Chart
+	    var productionData = [];
+	    for (var i = 0; i < axisY.length; i++) {
+	        productionData.push([]);
+	    }
+	    for (var i = 0; i < rows.length; i++) {
+	        var row = rows[i];
+	        for (var j = 0; j < axisY.length; j++) {
+	            var dataCell = row.querySelector(axisYClasses[j]);
+	            var value = dataCell && dataCell.innerText ? Number(dataCell.innerText) : 0;
+	            productionData[j].push(value);
+	        }
+	    }
+
+	    // เตรียมข้อมูลสำหรับ Line Chart (ยอดสะสม)
+	    var totalData = [];
+	    for (var i = 0; i < rows.length; i++) {
+	        var row = rows[i];
+	        var sum = 0;
+	        for (var j = 0; j < axisY.length; j++) {
+	            var dataCell = row.querySelector(axisYClasses[j]);
+	            var value = dataCell && dataCell.innerText ? Number(dataCell.innerText) : 0;
+	            sum += value;
+	        }
+	        totalData.push(sum);
+	    }
+
+	    // ดึงชื่อ header ของแต่ละ column ใน axisY
+	    var headerLabels = [];
+	    for (var i = 0; i < axisY.length; i++) {
+	        var correctedIndex = parseInt(axisY[i].trim()) - 1;
+	        var headerCell = document.getElementById("ui-dynamic-table-header-cell-" + correctedIndex);
+	        headerLabels.push(headerCell ? headerCell.innerText : "Column" + correctedIndex);
+	    }
+
+	    // สร้าง datasets
+	    var datasets = [];
+	    // Datasets สำหรับ Bar Chart
+	    for (var i = 0; i < axisY.length; i++) {
+	        datasets.push({
+	            type: 'bar',
+	            label: headerLabels[i], // เช่น "Frequency"
+	            data: productionData[i], // เช่น [1.0, 1.0, 2.0]
+	            backgroundColor: getThemeColor(theme, i),
+	            borderColor: getThemeColor(theme, i),
+	            borderWidth: 1
+	        });
+	    }
+	    // Dataset สำหรับ Line Chart (ยอดสะสม)
+	    datasets.push({
+	        type: 'line',
+	        label: 'ยอดสะสม',
+	        data: totalData, // เช่น [1.0, 1.0, 2.0]
+	        backgroundColor: getThemeColor(theme, axisY.length),
+	        borderColor: getThemeColor(theme, axisY.length),
+	        borderWidth: 2,
+	        fill: false // ไม่เติมสีใต้เส้น
+	    });
+
+	    // สร้าง chart
+	    var ctx = document.getElementById('myChart').getContext('2d');
+	    var myChart = new Chart(ctx, {
+	        data: {
+	            labels: labels, // เช่น ["ช้า", "กลาง", "เร็ว"]
+	            datasets: datasets
+	        },
+	        options: {
+	            responsive: true,
+	            plugins: {
+	                legend: {
+	                    position: 'top' // Legend อยู่ด้านบน
+	                },
+	                tooltip: {
+	                    callbacks: {
+	                        label: function(context) {
+	                            var label = context.dataset.label || '';
+	                            var value = context.raw || 0;
+	                            return label + ": " + numberWithCommas(value);
+	                        }
+	                    }
+	                }
+	                /*
+	                datalabels: {
+	                    anchor: 'start',
+	                    align: 'top',
+	                    offset: 10,
+	                    clip: false,
+	                    formatter: function(value, context) {
+	                        if (context.dataset.type === 'bar') {
+	                            return headerLabels[context.datasetIndex];
+	                        }
+	                        return '';
+	                    },
+	                    color: '#000',
+	                    font: {
+	                        weight: 'bold'
+	                    }
+	                }
+	                */
+	            },
+	            scales: {
+	                y: {
+	                    beginAtZero: true,
+	                    title: {
+	                        display: true,
+	                        text: "ความถี่"
+	                    }
+	                },
+	                x: {
+	                    title: {
+	                        display: true,
+	                        text: ""
+	                    }
+	                }
+	            }
+	        }
+	        // plugins: [ChartDataLabels] // เปิดถ้าต้องการ datalabels
+	    });
+
+	    // DEBUG
+	    console.log("Labels (X):", labels);
+	    console.log("Production Data (Bar):", productionData);
+	    console.log("Total Data (Line):", totalData);
+	});
+ 
+ 
+ 
+ </script> 

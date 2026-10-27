@@ -1,0 +1,110 @@
+
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+ <script>
+
+ window.addEventListener("DOMContentLoaded", function () {
+	  const theme = "${customreports.theme}";
+
+	    // ดึงตาราง
+	    const tables = document.getElementsByClassName("ui-dynamic-table-page");
+	    const table = tables[0];
+	    if (!table) {
+	        console.error("ไม่พบตาราง ui-dynamic-table-page");
+	        return;
+	    }
+	    const rows = table.querySelectorAll('tbody tr');
+	    if (!rows.length) {
+	        console.error("ไม่พบแถวในตาราง");
+	        return;
+	    }
+
+	    // กำหนด axisX และ axisY
+	    const axisY = "${customreports.axis_y}".split(","); // คอลัมน์สำหรับแกน X (เช่น Month 1-12)
+	    const axisXClass = '.cell-' + ${customreports.level}; // คอลัมน์สำหรับชื่อซี่รี่ (เช่น ขั้นตอน)
+
+	    // ดึงชื่อ header สำหรับแกน X (จาก axisY)
+	    const headerLabels = axisY.map(y => {
+	        const correctedIndex = parseInt(y.trim()) - 1;
+	        const headerCell = document.getElementById("ui-dynamic-table-header-cell-" + correctedIndex);
+	        return headerCell ? headerCell.innerText : "Month " + y;
+	    });
+
+	    // เตรียมข้อมูลสำหรับแต่ละซี่รี่
+	    const productionData = [];
+	    const seriesLabels = [];
+
+	    // วนลูปผ่านแต่ละแถวเพื่อสร้างซี่รี่
+	    rows.forEach(row => {
+	        // ดึงชื่อซี่รี่จากคอลัมน์ axisX (เช่น "อบ", "ผสมส่วนผสม", "การผัด")
+	        const labelCell = row.querySelector(axisXClass);
+	        seriesLabels.push(labelCell ? labelCell.innerText : `แถว ${seriesLabels.length + 1}`);
+
+	        // ดึงข้อมูลตัวเลขจากคอลัมน์ใน axisY
+	        const rowData = axisY.map(y => {
+	            const cellClass = '.cell-' + y.trim();
+	            const dataCell = row.querySelector(cellClass);
+	            return dataCell ? Number(dataCell.innerText) || 0 : 0;
+	        });
+	        productionData.push(rowData);
+	    });
+
+	    // ดึงชื่อสำหรับหัวกราฟ
+	    const axisXHeaderIndex = parseInt(${customreports.level}) - 1;
+	    const axisXHeaderCell = document.getElementById("ui-dynamic-table-header-cell-" + axisXHeaderIndex);
+	    const chartTitleLabel = axisXHeaderCell ? axisXHeaderCell.innerText : "ขั้นตอน";
+
+	    // ดีบักข้อมูล
+	    console.log("Labels (แกน X):", headerLabels);
+	    console.log("Production Data:", productionData);
+	    console.log("Series Labels:", seriesLabels);
+	    console.log("Chart Title Label:", chartTitleLabel);
+
+	    // สร้าง chart
+	    const ctx = document.getElementById('myChart').getContext('2d');
+	    new Chart(ctx, {
+	        type: 'line',
+	        data: {
+	            labels: headerLabels, // ชื่อบนแกน X (เช่น Month 1, Month 2, ...)
+	            datasets: productionData.map((data, index) => ({
+	                label: seriesLabels[index], // ชื่อซี่รี่ (เช่น อบ, ผสมส่วนผสม, การผัด)
+	                data: data, // ข้อมูลตัวเลขสำหรับซี่รี่
+	                backgroundColor: getThemeColor(theme, index),
+	                borderColor: getThemeColor(theme, index),
+	                borderWidth: 1
+	            }))
+	        },
+	        options: {
+	            responsive: true,
+	            plugins: {
+	                title: {
+	                    display: true,
+	                    text: "${customreports.report_name} " + chartTitleLabel,
+	                    font: {
+	                        size: 18
+	                    }
+	                },
+	                legend: {
+	                    display: true // แสดง legend เพื่อดูชื่อซี่รี่
+	                }
+	            },
+	            scales: {
+	                y: {
+	                    beginAtZero: true
+	                }
+	            }
+	        }
+	    });
+	});
+
+ 
+ 
+ 
+ 
+ 
+ </script> 

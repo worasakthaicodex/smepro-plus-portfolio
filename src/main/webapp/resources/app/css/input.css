@@ -1,0 +1,57 @@
+/* กล่องคลุมทั้งหมด */
+.search-select-box {
+    position: relative;
+    width: 60%;
+    display: inline-block;
+}
+
+/* ตัว Input (ใช้สไตล์เดิมของคุณได้เลย) */
+.search-select-box input {
+    width: 100%;
+    box-sizing: border-box; /* สำคัญ! ให้ Padding ไม่ดันขนาดเกิน */
+}
+
+/* กล่องรายการที่จะเด้งออกมา */
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: white;
+    border: 1px solid #bbb;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: none;
+    
+    /* --- แก้ตรงนี้ครับ --- */
+    padding: 0; /* ลบระยะร่นด้านซ้ายออก */
+    margin: 0;  /* ลบระยะห่างขอบออก */
+    width: 100%; /* บังคับให้กว้างเท่ากับ Input */
+    box-sizing: border-box; /* ให้ขอบไม่ดันขนาดเกิน */
+}
+
+/* แต่ละบรรทัดในรายการ */
+.search-results li {
+    list-style: none; /* เอาจุดดำๆ หน้า list ออก */
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: #333;
+    
+    /* --- เพิ่มตรงนี้เพื่อความชัวร์ --- */
+    width: 100%; /* ให้ยืดเต็ม */
+    box-sizing: border-box; /* เวลาใส่ padding จะได้ไม่ล้น */
+    display: block; /* บังคับเป็นบล็อกเต็มบรรทัด */
+    margin: 0;
+    text-align: left; /* บังคับชิดซ้าย */
+}
+
+/* เอฟเฟกต์ตอนเอาเมาส์ชี้ */
+.search-results li:hover {
+    background-color: #3595f6; /* สีฟ้าตาม Theme คุณ */
+    color: white;
+}

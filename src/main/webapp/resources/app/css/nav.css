@@ -1,0 +1,272 @@
+
+
+
+.nav {
+  height: 50px;
+  max-width: 800px;
+  background: #333;
+  margin: 40px auto;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+}
+
+.submenu-item a {
+  text-decoration: none; /* Remove default underline */
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.nav #toggle {
+  display: none;
+  position: absolute;
+}
+.nav .icon {
+  min-width: 50px;
+  transition: all 0.5s;
+}
+.nav .changable {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.nav .changable .links {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+}
+.nav .changable .links .link {
+  opacity: 1;
+  flex: 1;
+  text-align: center;
+  line-height: 50px;
+  display: flex;
+  transition: all 0.25s;
+}
+.nav .changable .links .link * {
+  margin: 0px auto;
+}
+.nav .changable .links .link:nth-of-type(1) {
+  transition-delay: 0.3s;
+}
+.nav .changable .links .link:nth-of-type(2) {
+  transition-delay: 0.35s;
+}
+.nav .changable .links .link:nth-of-type(3) {
+  transition-delay: 0.4s;
+}
+.nav .changable .links .link:nth-of-type(4) {
+  transition-delay: 0.45s;
+}
+.nav .changable .links .link:nth-of-type(5) {
+  transition-delay: 0.5s;
+}
+.nav .changable .links .link:nth-of-type(6) {
+  transition-delay: 0.55s;
+}
+.nav .changable .search {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: none;
+  top: 0px;
+  left: 0px;
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  background: #333;
+  transition: 0.4s;
+  transition-delay: 0s;
+}
+.nav .changable .search input {
+  flex: 1;
+  background: #333;
+  height: 100%;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 0px;
+  font-size: 16px;
+}
+.nav .changable .search .quicklinks {
+  position: absolute;
+  top: 100%;
+  left: 0px;
+  background: #FFF;
+  width: 100%;
+  min-height: 40px;
+  padding: 20px;
+
+}
+.nav .changable .search .quicklinks label {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+}
+.nav .changable .search .quicklinks .link {
+  opacity: 0;
+  color: rgba(0, 0, 0, 0.7);
+  transform: translateX(150px);
+  transition: all 0.25s;
+  margin: 12px;
+}
+.nav .changable .search .quicklinks .link:nth-of-type(1) {
+  transition-delay: 0.4s;
+}
+.nav .changable .search .quicklinks .link:nth-of-type(2) {
+  transition-delay: 0.7s;
+}
+.nav .changable .search .quicklinks .link:nth-of-type(3) {
+  transition-delay: 1s;
+}
+.nav .changable .search .quicklinks .link:nth-of-type(4) {
+  transition-delay: 1.3s;
+}
+.nav .changable .search .quicklinks .link:nth-of-type(5) {
+  transition-delay: 1.6s;
+}
+.nav .changable .search .quicklinks .link:nth-of-type(6) {
+  transition-delay: 1.9s;
+}
+
+.nav #toggle {
+  position: absolute;
+  display: none;
+}
+.nav #toggle:checked ~ .changable .links .link {
+  opacity: 0;
+}
+.nav #toggle:checked ~ .changable .links .link:nth-of-type(1) {
+  transition-delay: 0.3s;
+}
+.nav #toggle:checked ~ .changable .links .link:nth-of-type(2) {
+  transition-delay: 0.15s;
+}
+.nav #toggle:checked ~ .changable .links .link:nth-of-type(3) {
+  transition-delay: 0.1s;
+}
+.nav #toggle:checked ~ .changable .links .link:nth-of-type(4) {
+  transition-delay: 0.075s;
+}
+.nav #toggle:checked ~ .changable .links .link:nth-of-type(5) {
+  transition-delay: 0.06s;
+}
+.nav #toggle:checked ~ .changable .links .link:nth-of-type(6) {
+  transition-delay: 0.05s;
+}
+.nav #toggle:checked ~ .changable .search {
+  opacity: 1;
+  pointer-events: initial;
+  transition-delay: 0.5s;
+  transform: translateX(0px);
+}
+.nav #toggle:checked ~ .changable .search .quicklinks .link {
+  transform: translateX(0px);
+  opacity: 1;
+}
+.nav #toggle:checked ~ .shopicon:before, .nav #toggle:checked ~ .shopicon:after {
+  border: none;
+  border-radius: 0px;
+  background: transparent;
+  width: 20px;
+  height: 20px;
+  top: 22px;
+}
+.nav #toggle:checked ~ .shopicon:after {
+  border-left: 2px solid white;
+  transform: rotateZ(45deg);
+  left: 21px;
+}
+.nav #toggle:checked ~ .shopicon:before {
+  border-right: 2px solid white;
+  transform: rotateZ(-45deg);
+  left: 7px;
+}
+
+/* Some simple Icon I made! */
+.searchicon {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  display: inline-block;
+}
+.searchicon:after, .searchicon:before {
+  content: "";
+  border: 2px solid white;
+  position: absolute;
+  background: #333;
+  width: 10px;
+  height: 30px;
+}
+.searchicon:after {
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  left: 14px;
+  top: 14px;
+}
+.searchicon:before {
+  width: 4px;
+  height: 20px;
+  transform: rotateZ(45deg);
+  top: 17px;
+  left: 15px;
+}
+
+.appicon {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+.appicon:before, .appicon:after {
+  content: "";
+  width: 25px;
+  height: 25px;
+  border: 2px solid white;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  border-radius: 50%;
+  background: #333;
+}
+.appicon:after {
+  left: 60%;
+  top: 38%;
+  width: 10px;
+  height: 10px;
+  background: #333;
+}
+
+.shopicon {
+  position: relative;
+  display: inline-block;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  transition: all 0.2s;
+}
+.shopicon:hover {
+  cursor: pointer;
+}
+.shopicon:before {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  top: 10px;
+  left: 18px;
+  border: 2px solid white;
+  border-radius: 100%;
+  transition: all 0.2s;
+}
+.shopicon:after {
+  content: "";
+  position: absolute;
+  transition: all 0.2s;
+  width: 20px;
+  height: 20px;
+  border: 2px solid white;
+  border-radius: 3px;
+  background: #333;
+  top: 16px;
+  left: 14px;
+}

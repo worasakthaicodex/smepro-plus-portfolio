@@ -1,0 +1,114 @@
+
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+ <script>
+
+ window.addEventListener("DOMContentLoaded", function () {
+	    const theme = "${customreports.theme}";
+
+	    // ดึงตาราง
+	    const tables = document.getElementsByClassName("ui-dynamic-table-page");
+	    const table = tables[0];
+	    if (!table) {
+	        console.error("ไม่พบตาราง ui-dynamic-table-page");
+	        return;
+	    }
+	    const rows = table.querySelectorAll('tbody tr');
+	    if (!rows.length) {
+	        console.error("ไม่พบแถวในตาราง");
+	        return;
+	    }
+
+	    // กำหนด axisY และ axisXClass
+	    const axisY = "${customreports.axis_y}".split(",").map(y => y.trim()); // คอลัมน์ข้อมูล (Month 1-12)
+	    const axisXClass = '.cell-' + ${customreports.level}; // คอลัมน์ชื่อซี่รี่ (ขั้นตอน, cell-5)
+
+	    // เตรียมข้อมูลสำหรับกราฟ Pie
+	    const productionData = [];
+	    const seriesLabels = [];
+
+	    // วนลูปผ่านแต่ละแถวเพื่อสร้างซี่รี่และรวมข้อมูล
+	    rows.forEach(row => {
+	        // ดึงชื่อซี่รี่ (เช่น "อบ", "ผสมส่วนผสม", "การผัด")
+	        const labelCell = row.querySelector(axisXClass);
+	        seriesLabels.push(labelCell ? labelCell.innerText : `แถว ${seriesLabels.length + 1}`);
+
+	        // รวมข้อมูลจากคอลัมน์ใน axisY (ยอดรวมต่อแถว)
+	        const rowSum = axisY.reduce((sum, y) => {
+	            const cellClass = '.cell-' + y;
+	            const dataCell = row.querySelector(cellClass);
+	            return sum + (dataCell && dataCell.innerText ? Number(dataCell.innerText) : 0);
+	        }, 0);
+	        productionData.push(rowSum);
+	    });
+
+	    // กรองเฉพาะแถวที่มีข้อมูล (ถ้ายอดรวมเป็น 0 จะไม่แสดงใน Pie)
+	    const validIndices = productionData.map(data => data !== 0);
+	    const filteredSeriesLabels = seriesLabels.filter((_, i) => validIndices[i]);
+	    const filteredProductionData = productionData.filter(data => data !== 0);
+
+	    // ดึงชื่อสำหรับหัวกราฟ
+	    const axisXHeaderIndex = parseInt(${customreports.level}) - 1;
+	    const axisXHeaderCell = document.getElementById("ui-dynamic-table-header-cell-" + axisXHeaderIndex);
+	    const chartTitleLabel = axisXHeaderCell ? axisXHeaderCell.innerText : "ขั้นตอน";
+
+	    // ดีบักข้อมูล
+	    console.log("Labels (Pie):", filteredSeriesLabels);
+	    console.log("Production Data:", filteredProductionData);
+	    console.log("Chart Title Label:", chartTitleLabel);
+
+	    // สร้างกราฟ Pie
+	    var ctx = document.getElementById('myChart').getContext('2d');
+	    ctx.width = 500;
+	    ctx.height = 500;
+	    
+	    new Chart(ctx, {
+	        type: 'pie',
+	        data: {
+	            labels: filteredSeriesLabels, // ชื่อใน Pie (อบ, ผสมส่วนผสม, การผัด)
+	            datasets: [{
+	                data: filteredProductionData, // ยอดรวมของแต่ละขั้นตอน
+	                backgroundColor: filteredProductionData.map((_, i) => getThemeColor(theme, i)),
+	                borderColor: filteredProductionData.map((_, i) => getThemeColor(theme, i)),
+	                borderWidth: 1
+	            }]
+	        },
+	        options: {
+	            responsive: true,
+	            plugins: {
+	                title: {
+	                    display: true,
+	                    text: "${customreports.report_name} " + chartTitleLabel,
+	                    font: { size: 18 }
+	                },
+	                legend: {
+	                    display: true, // แสดงชื่อขั้นตอนใน legend
+	                    position: 'top' // วาง legend ด้านขวา
+	                },
+	                tooltip: {
+	                    callbacks: {
+	                        label: function(context) {
+	                            const label = context.label || '';
+	                            const value = context.raw || 0;
+	                            const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+	                            const percentage = ((value / total) * 100).toFixed(1);
+	                            return label + ": " + value + " (" + percentage + "%)";
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	    });
+	    
+
+	    canvas.style.maxWidth = '300px';
+	    canvas.style.maxHeight = '300px';
+	    canvas.style.margin = 'auto';
+	});
+ 
+ </script> 

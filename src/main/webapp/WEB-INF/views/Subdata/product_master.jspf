@@ -1,0 +1,160 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<style>
+.fixhead {
+    max-width: 150px; /* กำหนดความกว้างสูงสุด */
+    white-space: nowrap; /* ป้องกันข้อความขึ้นบรรทัดใหม่ */
+    overflow: hidden; /* ซ่อนข้อความที่เกินขอบเขต */
+    text-overflow: ellipsis; /* แสดง ... เมื่อข้อความยาวเกินไป */
+}
+</style>
+    <div class="row">
+    
+    
+    	    	  <input type="hidden" name="process_id" value="${process_id }">
+		    	  <input type="hidden" name="tables" value="${tables }">
+		    	   <input type="hidden" name="filters" value="${filters }">
+		    	  <input type="hidden" name="edata_id" value="${edata_id+0 }">
+			  <input type="hidden" name="type" value="${type }">
+    
+    
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="first-name-column"><spring:message code="register.name"  /></label>
+                                                    <input type="text" name="register_name" id="first-name-column" class="form-control"  name="fname-column">
+                                                </div>
+                                            </div>
+                                            
+                                            <c:set var="dataArray" value="${fn:split(register_category, ',')}" />
+                                            <div class="col-md-4 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="last-name-column"><spring:message code="product.product_category"  /></label>
+                                                    <select class="form-select" name="register_type">
+                                                      <option value="-">-</option>
+                                                        <c:forEach var="item" items="${dataArray}">
+													     <option value="${item}">${item}</option>
+													    </c:forEach>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                      
+                                      <div>       
+                                  <a class="btn btn-primary waves-effect waves-float waves-light" onclick='postdata("/search_workflow_dbs-filemanager?${_csrf.parameterName}=${_csrf.token}","subdata_search","wrappermain")' >Submit</a>           
+                                   
+                                    </div>         
+                                        </div>
+                                                
+                                                <br>  <br>
+  <table  class="table">
+                                    <thead>
+                                        <tr>
+                                        
+            	 <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>   
+            	 
+       					<th class="form-label fixhead" style="padding:5px;font-size:13px">ID</th>         	                          
+ 					<th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="product.product_name"  /></th>     
+  
+<th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="product.product_category"  /></th>     
+
+     <c:if test="${load_type == 'log'}">  
+       <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="register.addby"  /></th>  
+         <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="register.created_at"  /></th>  
+     </c:if>
+     
+          
+          <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>  
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <c:forEach items="${item }" var="row"  varStatus="count">
+				                                     
+				                                     
+				                                                            <tr>
+                                        
+            	 <td class="form-label fixhead" style="padding:5px;font-size:13px">${count.count }</td>   
+            	 
+            	                          
+ 					<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="code" 
+ 					title="${row.product_code }${row.product_daterun }${row.product_id }">
+ 					${row.product_code }${row.product_daterun }${row.product_id }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="product_name"  title="${row.product_names }">${row.product_names }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="product_category"   title="${row.product_category }">${row.product_category }</td>     
+
+   	<c:if test="${load_type == 'log'}">  
+          <td class="form-label fixhead" style="padding:5px;font-size:13px"   >${usersed_name }</td>  
+          <td class="form-label fixhead" style="padding:5px;font-size:13px" >${row.created_at }</td>  
+         </c:if>
+
+          <td class="form-label fixhead" style="padding:5px;font-size:13px">
+             <c:if test="${load_type != 'log'}">  <a class="btn btn-sm btn-success" onclick="showAddressTitle2(this)" data-bs-dismiss="modal">+</a></c:if>
+                   <a href="/fg-workflow/${row.id }" class="btn btn-sm btn-light" target="_blank"><i data-feather='eye'></i></a>
+          </td>  
+                                        </tr>
+														
+				                                     
+				                                      
+				                                      
+                                      
+                                        	</c:forEach>   
+                                        
+                                    </tbody>
+                                    </table>     
+                                    
+   <script>
+        
+            if (feather) {
+                feather.replace({
+                    width: 14,
+                    height: 14
+                });
+            }
+      
+    </script>                                   
+                                    
+<script>
+function showAddressTitle2(element) {
+  
+
+    let row = element.closest("tr");
+
+    if (row) {
+        let codeTd = row.querySelector('td[data-custom="code"]')?.getAttribute("title");
+        let nameTd = row.querySelector('td[data-custom="product_name"]')?.getAttribute("title");
+        let product_categoryTd = row.querySelector('td[data-custom="product_category"]')?.getAttribute("title");
+
+        fillPossibleFields(['product_code','bom_product_code','goods_receipt_product_code'], codeTd);
+        fillPossibleFields(['product_name','bom_product_name','goods_receipt_product_name'], nameTd);
+        fillPossibleFields2(['product_category'], product_categoryTd);
+
+        
+    }
+}
+function fillPossibleFields2(possibleNames, value) {
+    for (var i = 0; i < possibleNames.length; i++) {
+        var name = possibleNames[i];
+        var field = document.querySelector('textarea[name="' + name + '"]');
+        if (field !== null) {
+            field.value = value;
+            break;
+        }
+    }
+}
+
+function fillPossibleFields(possibleNames, value) {
+    for (var i = 0; i < possibleNames.length; i++) {
+        var name = possibleNames[i];
+        var field = document.querySelector('input[name="' + name + '"]');
+        if (field !== null) {
+            field.value = value;
+            break;
+        }
+    }
+}
+
+</script>                       

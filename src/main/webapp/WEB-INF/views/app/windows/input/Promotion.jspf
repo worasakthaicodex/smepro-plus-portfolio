@@ -1,0 +1,75 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>                    
+                    
+
+
+<div class="search-select-box" id="box-${row.keymap.mainkey}" style="display: flex;align-items: center;gap: 5px;">
+    
+    <input type="hidden" id="hidden-${row.keymap.mainkey}" name="edata.${key}" value="${edatas[key]}">
+
+    <select id="input-${row.keymap.mainkey}" 
+            placeholder="เลือกชุดข้อมูล..." 
+            autocomplete="off"
+            style="width: 100%;"
+            ${readonly} <c:if test="${readonly != ''}">disabled</c:if>>
+    </select>
+
+   
+</div>
+<script>
+//🌟 ครอบด้วย (function() { ... })(); เพื่อสร้าง Scope ส่วนตัวให้แต่ละลูป
+(function() {
+ var initialId = "${edatas[key]}"; 
+ var initialText = "${edatas[key]}"; 
+
+ var selectElement = document.getElementById("input-${row.keymap.mainkey}");
+ var hiddenElement = document.getElementById("hidden-${row.keymap.mainkey}");
+
+ // เผื่อเหนียว ดักไว้ก่อนว่าถ้าหา Element ไม่เจอให้หยุดทำงาน
+ if (!selectElement) return;
+
+ if (selectElement.tomselect) {
+     selectElement.tomselect.destroy();
+ }
+
+ fetch('/Promosforuse-app/${Node.relations_id+0}/'+initialId+0)
+     .then(response => response.json())
+     .then(json => {
+         if(!json) json = [];
+
+         var tomSelectInstance = new TomSelect(selectElement, {
+             options: json,
+             valueField: 'value',  
+             labelField: 'text',   
+             searchField: 'text',
+             create: false,          
+             maxOptions: 50,         
+             allowEmptyOption: true,
+             
+             onChange: function(value) {
+                 if (hiddenElement) hiddenElement.value = value || "";
+             }
+         });
+
+         if (initialId && initialId.trim() !== "") {
+             var existsInOptions = json.some(item => String(item.value) === String(initialId));
+             
+             if (!existsInOptions) {
+                 tomSelectInstance.addOption({ 
+                     value: initialId, 
+                     text: initialText + " (รหัสที่เลือกไว้)" 
+                 });
+             }
+             
+             tomSelectInstance.setValue(initialId, true); 
+         }
+
+     }).catch(err => {
+         console.error("โหลดข้อมูล Segmentation สำหรับ ${row.keymap.mainkey} ไม่สำเร็จ:", err);
+     });
+
+})(); // 🌟 ปิดฟังก์ชันแล้วสั่งให้ทำงานทันที
+</script>

@@ -1,0 +1,83 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>                    
+    <div class="search-select-box" id="box-${row.keymap.mainkey}" style="display: flex;align-items: center;gap: 5px;">
+    
+    <input type="hidden" id="hidden-${row.keymap.mainkey}" name="edata.${key}" value="${edatas[key]}">
+    <input type="hidden" id="segmentation_data" value="${edatas[key]}">
+
+    <select id="input-${row.keymap.mainkey}" 
+            placeholder="พิมพ์เพื่อค้นหาชุดข้อมูล..." 
+            autocomplete="off"
+            style="width: 100%;"
+            ${readonly} <c:if test="${readonly != ''}">disabled</c:if>>
+    </select>
+
+</div>
+
+<script>
+    var initialId = "${edatas[key]}"; 
+    var initialText = "${edatas[key]}"; 
+
+    var selectElement = document.getElementById("input-${row.keymap.mainkey}");
+    var hiddenElement = document.getElementById("hidden-${row.keymap.mainkey}");
+
+    // 🌟 เริ่มการทำงานของ TomSelect แบบ AJAX Search
+    var tomSelectInstance = new TomSelect(selectElement, {
+        valueField: 'value', 
+        labelField: 'text',  
+        searchField: 'text',
+        create: false,          
+        maxOptions: 50,         
+        allowEmptyOption: true,
+
+        // 🌟 พระเอกอยู่ตรงนี้: จัดการค่าเริ่มต้นในกรณีโหลดหน้า Edit
+        // ถ้ามีค่าเก่าที่เคยเซฟไว้ ให้ยัดเป็น Option เริ่มต้นและเลือกไว้เลย
+        options: (initialId && initialId.trim() !== "") ? [{ value: initialId, text: initialText + " (เลือกไว้)" }] : [],
+        items: (initialId && initialId.trim() !== "") ? [initialId] : [],
+
+        // เมื่อมีการเปลี่ยนค่า ให้ไปอัปเดต hidden input
+        onChange: function(value) {
+            if (hiddenElement) hiddenElement.value = value || "";
+        },
+        
+        // ฟังก์ชันค้นหาเมื่อ User พิมพ์
+        load: function(query, callback) {
+            if (!query.length) return callback();
+
+            var formData = new FormData();
+            formData.append('search', query); 
+            // หากต้องการส่ง parameter อื่นๆ เพิ่มเติม สามารถ append ตรงนี้ได้
+
+            // เปลี่ยน URL ไปที่ Endpoint ใหม่ที่ต้องการค้นหา
+            var targetUrl = '/fulladdresssearchajax-filemanage?${_csrf.parameterName}=${_csrf.token}';
+
+            fetch(targetUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(json => {
+                if(!json) json = [];
+                
+                // 🔥 แปลงร่าง JSON ให้เข้ากับ TomSelect 
+                var formattedJson = json.map(function(item) {
+                    // ⚠️ สำคัญ: เปลี่ยน 'item.dataset_data_title' ให้ตรงกับ Key ของ JSON ที่ Backend ส่งกลับมา
+                    var mappedData = item.dataset_data_title; 
+                    
+                    return {
+                        value: mappedData, // Value ที่จะถูก submit ลง hidden
+                        text: mappedData   // Text ที่จะแสดงให้ User เห็น
+                    };
+                });
+                
+                callback(formattedJson);
+            }).catch(err => {
+                console.error("โหลดข้อมูลไม่สำเร็จ:", err);
+                callback();
+            });
+        }
+    });
+</script>

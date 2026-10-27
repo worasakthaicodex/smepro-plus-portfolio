@@ -1,0 +1,139 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
+ <c:set var="subtable_readonly" value=""/>
+ <c:if test="${!fn:contains(process.subtable_editmode,Appstep_no)}"> 
+ <c:set var="subtable_readonly" value="readonly"/>
+</c:if>
+
+
+<c:set var="key" value="data_value${row.field_postion }" scope="page"/>
+ <c:if test="${ steptype.contains(row.keymap.type)  }">
+ 
+
+
+ <c:choose>
+ 
+<c:when test='${row.keymap.change_format == "DATE" }'>
+<input type="date" class="tif-inp-date" id="${row.keymap.mainkey}" name="batchEdata.${key}"  value="${subData[key]}" ${subtable_readonly }>
+</c:when>
+<c:when test='${row.keymap.change_format == "DATETIME"}'>
+<input type="datetime-loca" class="tif-inp-date"  id="${row.keymap.mainkey}"
+             name="BatchEdata.${key}"
+             value="${fn:replace(fn:replace(subData[key], ' ', 'T'), '.000', '')}"
+             ${subtable_readonly }>
+</c:when>
+
+
+
+
+
+<c:when test='${row.keymap.change_format == "NUMBER" }'>
+
+    <%-- 1. เตรียมตัวแปร Class และ Event ไว้ก่อน (ค่าเริ่มต้นเป็นว่าง) --%>
+    <c:set var="calcClass" value="" />
+    <c:set var="calcEvent" value="" />
+
+    <%-- 2. เช็คว่าเป็น Field ที่ใช้คำนวณหรือไม่ --%>
+    <c:choose>
+        <%-- ถ้าเป็น "ราคาต่อหน่วย" --%>
+        <c:when test="${row.keymap.mainkey == 'price_per_unit'}">
+            <c:set var="calcClass" value="js-price" />
+            <c:set var="calcEvent" value="oninput='calculateRow(this)'" />
+        </c:when>
+
+        <%-- ถ้าเป็น "จำนวน" --%>
+        <c:when test="${row.keymap.mainkey == 'unit_count'}">
+            <c:set var="calcClass" value="js-qty" />
+            <c:set var="calcEvent" value="oninput='calculateRow(this)'" />
+        </c:when>
+
+        <%-- ถ้าเป็น "ส่วนลด" --%>
+        <c:when test="${row.keymap.mainkey == 'discount'}">
+            <c:set var="calcClass" value="js-discount" />
+            <c:set var="calcEvent" value="oninput='calculateRow(this)'" />
+        </c:when>
+    </c:choose>
+
+    <%-- 3. สร้าง Input และยัดตัวแปรที่เรา Set ไว้ใส่ลงไป --%>
+    <input type="number" 
+           class="tif-inp-num ${calcClass}"  <%-- ยัด Class เฉพาะกิจ --%>
+           step="0.1" 
+           id="${row.keymap.mainkey}" 
+           name="batchEdata.${key}" 
+           value="${subData[key] + 0}" 
+          ${subtable_readonly }
+           ${calcEvent}>                     <%-- ยัด Event oninput --%>
+
+</c:when>
+
+
+
+	      
+<c:when test='${row.keymap.change_format == "Enum" }'>      
+                  <select class="tif-inp-select"  id="${row.keymap.mainkey}"  name="batchEdata.${key}"   ${subtable_readonly} 
+                                        <c:if test="${subtable_readonly != ''}">disabled</c:if>>
+                <c:forEach items="${row.dataset_data}" var="datasets" varStatus="count">
+                    <option value="${datasets.dataset_data_title}"
+                        <c:if test="${subData[key] == datasets.dataset_data_title}">selected</c:if>>
+                        ${datasets.dataset_data_title} 
+                        
+                         	    <c:if test="${row.dataset.dataset_show_sub == 1}">
+                        		 <c:if test="${datasets.dataset_data_subtitle1 != null}">
+                        		  ${row.dataset.dataset_sub_intermediate}${datasets.dataset_data_subtitle1}
+                        		  </c:if>
+                        		 <c:if test="${datasets.dataset_data_subtitle2 != null}">
+                        		  ${row.dataset.dataset_sub_intermediate}${datasets.dataset_data_subtitle2}
+                        		  </c:if>
+                        		   <c:if test="${datasets.dataset_data_subtitle3 != null}">
+                        		  ${row.dataset.dataset_sub_intermediate}${datasets.dataset_data_subtitle3}
+                        		  </c:if>
+                        		   <c:if test="${datasets.dataset_data_subtitle4 != null}">
+                        		  ${row.dataset.dataset_sub_intermediate}${datasets.dataset_data_subtitle4}
+                        		  </c:if>
+                          </c:if>
+                     
+                        
+                        
+                    </option>
+                </c:forEach>
+            </select> 
+</c:when>       
+<c:when test='${row.keymap.change_format == "Mandatory Reference Key" }'>  
+<c:set var="tiftext" value="tif-inp-text" />
+	 <%@ include file="../input/datalist.jsp" %> 
+</c:when>       
+
+<c:when test='${row.keymap.change_format == "Mandatory Reference data" }'>  
+<c:set var="tiftext" value="tif-inp-text" />
+	 <%@ include file="../input/datalist.jsp" %> 
+</c:when>  
+
+
+ <c:when test='${row.keymap.change_format == "Line_Total" }'> 
+ <input type="text" class="tif-inp-text js-total" 
+           id="${row.keymap.mainkey}" 
+           name="batchEdata.${key}" 
+           value="${subData[key]}" 
+           readonly 
+           style="background-color: #f0f0f0; text-align: right;"
+           autocomplete="off">
+</c:when>    
+
+
+<c:when test='${row.keymap.change_format != "" }'>
+<input type="text" class="tif-inp-text"   id="${row.keymap.mainkey}" name="batchEdata.${key}"  value="${subData[key]}" ${subtable_readonly } autocomplete="off">      
+ </c:when>
+	    <c:otherwise>
+	
+	    </c:otherwise>
+	    
+</c:choose>  
+              
+   
+        </c:if>       
+        
+        

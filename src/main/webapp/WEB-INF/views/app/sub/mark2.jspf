@@ -1,0 +1,73 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+
+
+                                
+                                 <li class="todo-item " title="ID${row.edata_id} ">
+                                 
+                                        <div class="todo-title-wrapper">
+                                            <div class="todo-title-area">
+                                            
+                                 
+                                                <div class="title-wrapper">
+                                                    <div class="form-checks">
+                                                    
+                                                    
+                
+                                <span class="badge bg-danger">               
+							<i data-feather='layout' ></i>
+							</span>  
+						
+                                                    </div>                    
+                                                    <span class="todo-title">
+                                          
+                                                    
+                                                       ${row.data_value1}   ${row.data_value2}  
+                         						
+                                             			
+                                                   <br>
+                                                    <span style="font-size:11px;color:#aaa">
+                                                     <spring:message code="tables.by" />  : ${row.data_nameadd}   ${row.created_at}     
+                                                    </span>
+                                                    
+          
+                                                    
+             
+                                                    
+                                                </div>
+                                            </div>
+                                    <div class="todo-item-action">
+                                        
+                                      
+                                                
+          										  
+                                               
+                                           
+                                  
+                                    
+                                       
+                                  		  
+                                                <div class="email-label">
+                                                          
+                          <div class="form-check form-check-success form-switch">
+                                                <input type="checkbox"  <c:if test='${row.alert == 0 }'>checked</c:if > class="form-check-input" id="customSwitch4"
+                                                 onclick="window.location.href='/setmarkasread-filemanager/${process_id}?type=2&id=${row.id}&alert=' + (this.checked ? 0 : 1)"
+                                                >
+                                            </div>  
+                                        </div>
+                                                
+                                                
+                                     
+                                                
+                                             
+                                            </div>
+                                        </div>
+                                        
+                                            
+                                    </li>
+                                    
+
+                       

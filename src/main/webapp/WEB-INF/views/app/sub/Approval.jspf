@@ -1,0 +1,169 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<link rel='stylesheet' href='https://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css'>
+ <link href="<c:url value="/resources/treeview/style.css" />" rel="stylesheet">
+
+   <ul class="nav nav-tabs" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="homeIcon-tab" data-bs-toggle="tab" href="#homeIconapp" aria-controls="home" role="tab" aria-selected="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-key"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+                                         <spring:message code="app.CodeGeneration"  text="-​" /></a>
+                                       
+                                        </li>
+                
+       
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="aboutIcon-tab2" data-bs-toggle="tab" href="#aboutIconapp2" aria-controls="about2" role="tab" aria-selected="false">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-key"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+                                      <spring:message code="app.setregistrationcodes"  text="-​" /></a>
+                                        </li>
+                                        
+                                        
+                                             <li class="nav-item">
+                                            <a class="nav-link" id="aboutIcon-tab" data-bs-toggle="tab" href="#aboutIconapp3" aria-controls="about2" role="tab" aria-selected="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-thumbs-up"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>      
+                                  <spring:message code="app.checking_list"  text="-​" /></a>
+                                        </li>
+                                        
+                                    </ul>
+                                    
+                                    
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="homeIconapp" aria-labelledby="homeIcon-tab" role="tabpanel">
+                                               <div class="modal-body">
+                                           
+                                           <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="activate_autoid"  value="1"
+                                             <c:if test="${sub_processes.activate_autoid== 1 }">checked</c:if> >
+                                            <label class="form-check-label" for="inlineCheckbox1"><spring:message code="app.activate"  text="-​" /></label>
+                                        </div> 
+                                        
+                                              <br><br>          
+                                    <small class="text-muted"><spring:message code="app.autoid_info"  text="-​" /> .</small>
+                                   <br><br>
+                            
+                                                             
+                                       <div id="step2_1">                      
+                                                       <div class="mb-1 row">
+                                                
+                                                           <div class="col-sm-6"><spring:message code="app.e-formcolumn"  text="-​" />  </div>
+                                                             <div class="col-sm-6"><spring:message code="app.prefixes"  text="-​" /></div>
+                                                            </div>
+                                                             
+                                                               <div class="mb-1 row">  
+                                                             
+		                                       
+                                                        <div class="col-sm-6">
+                                                        
+                                                        
+                                                        	
+
+
+                                                        
+                                                             <select class="form-select" name="autoiddatacolumn">
+											                                   <option value="0">-</option>
+											                            
+											                              <c:forEach items="${eformfields }" var="fields" >      
+										 <option value="${fields.field_id}" <c:if test="${sub_processes.autoiddatacolumn== fields.field_id }">selected</c:if> >${fields.field_label}</option>
+											                               </c:forEach>
+											                                   
+										 	                               </select>
+										 	                   
+										 	                               
+                                                        </div>
+                                                         <div class="col-sm-6">
+                                                     <input type="text" class="form-control" name="code_app" value="${sub_processes.code_app}">
+                                                                  
+                                                         </div>
+                                               
+                                                         
+                                                        
+                                             
+                                                                   
+ 
+                                        
+                                        </div>
+                                
+                                            </div>
+                                                 </div>
+                                                 
+
+                                   </div>
+                                              <div class="tab-pane" id="aboutIconapp2" aria-labelledby="aboutIcon-tab" role="tabpanel">
+                                            
+                                                  <div class="modal-body">
+                                           
+                                           <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" name="activate_autorid"  value="1"
+                                             <c:if test="${sub_processes.activate_autorid== 1 }">checked</c:if> >
+                                            <label class="form-check-label" for="inlineCheckbox1"><spring:message code="app.activate"  text="-​" /></label>
+                                        </div> 
+                                        
+                                              <br><br>          
+                                    <small class="text-muted"><spring:message code="app.setstrationcodes"  text="-​" /> .</small>
+                                   <br><br>
+                            
+                        
+                                                       <div class="mb-1 row">
+                                                
+                                                           <div class="col-sm-6"><spring:message code="app.setregistrationcodes"  text="-​" /> </div>
+                                                            </div>
+                                                             
+                                                               <div class="mb-1 row">  
+                                                             
+		                                       
+                      
+                                                         <div class="col-sm-6">
+                                                     <input type="text" class="form-control" name="code_rid" value="${sub_processes.code_rid}">
+                                                                  
+                                                         </div>
+                                               
+                                                         
+                                                        
+                                             
+                                                                   
+ 
+                                        
+                                        </div>
+                                
+                                     
+                                                 </div>
+                                                 
+                                            
+                                                    </div> 
+                                  
+                                        <div class="tab-pane" id="aboutIconapp3" aria-labelledby="aboutIcon-tab" role="tabpanel">
+                                        
+                                      <%@ include file="checking_list.jspf" %>   
+                                        
+                                        
+                              
+                                        </div>
+                                    </div>
+                                       </div> 
+
+
+
+
+<script>
+
+
+    $(document).ready(function () {
+        $(".select2s").select2({
+            tags: true
+        }).on("change", function () {
+            let selectedValues = $(this).val();
+            let customId = $(this).data("custom"); // ดึงค่า data-custom
+            
+            
+            // ค้นหา hidden input ที่มี data-custom ตรงกัน
+            $('input[name="filter_enum"][data-custom="' + customId + '"]')
+                .val(selectedValues ? selectedValues.join("|") : "");
+        });
+    });
+</script>                             
+	      <script src="<c:url value="/resources/app-assets/vendors/js/forms/select/select2.full.min.js" />"></script>
+  <script src="<c:url value="/resources/app-assets/js/scripts/forms/form-select2.js" />"></script>                                    

@@ -1,0 +1,155 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+  
+  
+  
+  <form:form method="POST" modelAttribute="process" action="/saveprocess-workflow">
+                                               
+                                                            <div class="modal-body">
+                                                                <label><spring:message code="process.name" />: </label>
+                                                                <div class="mb-1">
+                                                                  <input type="hidden" name="id"  id="id" class="form-control" value="${this_process.id }">
+                                                                    <input type="text" name="name"  id="name" class="form-control" value="${this_process.name }">
+                                                                </div>
+
+                                                                <label><spring:message code="process.description" />: </label>
+                                                                <div class="mb-1">
+                                                                    <input type="text"  name="description" id="description"   value="${this_process.description }"  class="form-control">
+                                                                </div>
+                                                                   <label><spring:message code="process.relatedpeople" />: </label>
+                                                                <div class="mb-1">
+                                                                    <input type="text"  name="relatedpeople"  id="relatedpeople"  value="${this_process.relatedpeople }"    class="form-control">
+                                                                </div>
+                                                              
+                                                                       
+                                                              <label><spring:message code="forms.join" />: </label>
+                                                                <div class="mb-1">
+								             
+								                                        
+								                                        
+								                                        
+								                                            <select class="form-select select2"  name="process_join" id="process_join" >
+								                               <option value="0">-</option>
+								                                 <optgroup label="${workflows.workflow_name}">
+								                               <c:forEach items="${process }" var="rows" varStatus="count">
+								                                        <option value="${rows.id}" <c:if test="${row.id == this_process.process_join}">selected</c:if>>${rows.name }</option>
+								                                 </c:forEach>   
+								                                   </optgroup>
+								                                   
+								                                   
+								                                  <c:set var="previousNote" value="" />
+																	<c:forEach items="${process2}" var="row" varStatus="count">
+																	    <c:if test="${row.note != previousNote}">
+																	        <c:if test="${not empty previousNote}">
+																	            </optgroup>
+																	        </c:if>
+																	        <optgroup label="${row.note}">
+																	        <c:set var="previousNote" value="${row.note}" />
+																	    </c:if>
+																	    
+																	    <option value="${row.id}" <c:if test="${row.id == this_process.process_join}">selected</c:if>>${row.name}</option>
+																	</c:forEach>
+																	<c:if test="${not empty previousNote}">
+																	    </optgroup>
+																	    </c:if>
+								                                        </select> 
+								                                        
+                                                                </div>
+                                                    
+                                                              
+                                                                
+                                                                
+                                                              <label><spring:message code="forms.Name" />: </label>
+                                                                <div class="mb-1">
+								                                     <select class="form-select select2"  name="id_condition" id="id_condition" >
+								                                 <c:forEach items="${conditionadd }" var="row" varStatus="count">
+								                                        <option value="${row.condition_id}"  
+								                                        <c:if test="${row.condition_id == this_process.id_condition}">selected</c:if> 
+								                                        >${row.condition_title }</option>
+								                                 </c:forEach>   
+								                                        </select> 
+                                                                </div>
+                                                    
+                                                                  
+                                                                  
+                                                            <label><spring:message code="forms.logo" />: </label>
+<div class="mb-1">
+  <select class="form-select" name="process_logo" id="process_logo" onchange="updateIconPreview(this)">
+    <option value="">-- เลือกไอคอน --</option>
+    <option value="business-plan.png" <c:if test="${'business-plan.png' == this_process.process_logo}">selected</c:if>>📋 Business Plan</option>
+    <option value="cargo.png" <c:if test="${'cargo.png' == this_process.process_logo}">selected</c:if>>🚚 Cargo</option>
+    <option value="icons8-believable-64.png" <c:if test="${'icons8-believable-64.png' == this_process.process_logo}">selected</c:if>>👍 Believable</option>
+    <option value="icons8-bill-96.png" <c:if test="${'icons8-bill-96.png' == this_process.process_logo}">selected</c:if>>🧾 Bill</option>
+    <option value="icons8-customer-96.png" <c:if test="${'icons8-customer-96.png' == this_process.process_logo}">selected</c:if>>👤 Customer 96</option>
+    <option value="icons8-customer-100.png" <c:if test="${'icons8-customer-100.png' == this_process.process_logo}">selected</c:if>>👤 Customer 100</option>
+    <option value="icons8-inspection-64.png" <c:if test="${'icons8-inspection-64.png' == this_process.process_logo}">selected</c:if>>🔍 Inspection 64</option>
+    <option value="icons8-inspection-100.png" <c:if test="${'icons8-inspection-100.png' == this_process.process_logo}">selected</c:if>>🔍 Inspection 100</option>
+    <option value="icons8-po-64.png" <c:if test="${'icons8-po-64.png' == this_process.process_logo}">selected</c:if>>📦 PO 64</option>
+    <option value="icons8-po-100.png" <c:if test="${'icons8-po-100.png' == this_process.process_logo}">selected</c:if>>📦 PO 100</option>
+    <option value="icons8-production-80.png" <c:if test="${'icons8-production-80.png' == this_process.process_logo}">selected</c:if>>🏭 Production 80</option>
+    <option value="icons8-production-96.png" <c:if test="${'icons8-production-96.png' == this_process.process_logo}">selected</c:if>>🏭 Production 96</option>
+    <option value="icons8-registration-100.png" <c:if test="${'icons8-registration-100.png' == this_process.process_logo}">selected</c:if>>📝 Registration</option>
+    <option value="icons8-video-call-64.png" <c:if test="${'icons8-video-call-64.png' == this_process.process_logo}">selected</c:if>>📞 Video Call</option>
+    <option value="manifest.png" <c:if test="${'manifest.png' == this_process.process_logo}">selected</c:if>>📃 Manifest</option>
+    <option value="online-registration.png" <c:if test="${'online-registration.png' == this_process.process_logo}">selected</c:if>>🌐 Online Registration</option>
+    <option value="order.png" <c:if test="${'order.png' == this_process.process_logo}">selected</c:if>>📦 Order</option>
+    <option value="order-processing.png" <c:if test="${'order-processing.png' == this_process.process_logo}">selected</c:if>>🔄 Order Processing</option>
+    <option value="planning.png" <c:if test="${'planning.png' == this_process.process_logo}">selected</c:if>>📅 Planning</option>
+    <option value="sign-form.png" <c:if test="${'sign-form.png' == this_process.process_logo}">selected</c:if>>✍️ Sign Form</option>
+    <option value="website.png" <c:if test="${'website.png' == this_process.process_logo}">selected</c:if>>🌐 Website</option>
+    <option value="work-plan.png" <c:if test="${'work-plan.png' == this_process.process_logo}">selected</c:if>>🧠 Work Plan</option>
+ 
+  <option value="no-insects.png" <c:if test="${'no-insects.png' == this_process.process_logo}">selected</c:if>> insects</option>
+   <option value="lathe-machine.png" <c:if test="${'lathe-machine.png' == this_process.process_logo}">selected</c:if>> machine</option>
+    <option value="directional-arrows.png" <c:if test="${'directional-arrows.png' == this_process.process_logo}">selected</c:if>> transfer</option>
+     <option value="examination.png" <c:if test="${'examination.png' == this_process.process_logo}">selected</c:if>> examination</option>
+ 
+ 
+
+    <!-- เพิ่มตามต้องการ -->
+  </select>
+</div>
+
+<!-- Preview image -->
+<div id="icon-preview" style="margin-top: 10px;">
+  <img src="" id="icon-image" style="max-height: 80px; display: none;" />
+</div>
+
+<script>
+function updateIconPreview(select) {
+    const value = select.value;
+    const img = document.getElementById("icon-image");
+    if (value) {
+        img.src = "/resources/app-assets/images/icons/APP/" + value;
+        img.style.display = "block";
+    } else {
+        img.style.display = "none";
+    }
+}
+</script>
+                                                    
+                                                                  
+                                                                               
+                                     
+                                                    <div class="mb-1">  
+      												<input  type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                                   					  <input type="hidden" class="form-select"  name="id_refer" value="${workflows.workflow_id }"> 
+                  							       </div>
+                  				     
+                  							       
+                  							       
+                                                          
+                                                            </div>
+                                                      
+                                                      
+                                                      
+                                                      
+                                                            
+                                                            
+                                                            <div class="modal-footer" Style="display: inline-block;">
+                                                                <button type="Submit"   class="btn btn-primary waves-effect waves-float waves-light" data-bs-dismiss="modal">เพิ่ม</button>
+                                                            </div>
+                                                </form:form>
+	       	          	 
+	          

@@ -1,0 +1,46 @@
+   <%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+      <table class="datatable" >
+          <thead>
+          
+          <tr>
+<th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>   
+<th class="form-label fixhead" style="padding:5px;font-size:13px">ID</th>         	                          
+<th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="product.product_name"  /></th>     
+<th ><spring:message code="product.product_category"  /></th>     
+<th style="width:10%">Action</th>
+           </tr>
+   
+
+                                    </thead>
+                                    <tbody>
+                         
+                                  <c:forEach items="${item }" var="row"  varStatus="count">  
+		                            <tr>
+		                            
+		                            
+		                                                                    
+            	 <td class="form-label fixhead" style="padding:5px;font-size:13px">${count.count }</td>   
+            	 
+            	                          
+<td data-custom="product_code" title="${row.product_code }${row.product_daterun }${row.product_id }">${row.product_code }${row.product_daterun }${row.product_id }</td>     
+<td  data-custom="product_name"  title="${row.product_names }">${row.product_names }</td>     
+<td   data-custom="product_category"   title="${row.product_category }">${row.product_category }</td>     
+
+          <td  style="text-align:center">
+         
+    <button class="fa-button dark" title="เลือก"   onclick="showAddressTitle(this,'product','myForms${process.id}');closeed2('draggable-window3')"  style="color:black;margin:auto" data-original-title="List"> 
+    <i class="material-icons text-success">
+  
+check_circle
+
+  </i></button>
+          </td>  
+           </tr>
+          
+		           </c:forEach>   
+       
+        </tbody>
+        </table>

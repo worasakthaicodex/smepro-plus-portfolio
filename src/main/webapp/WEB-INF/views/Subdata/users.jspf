@@ -1,0 +1,223 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<style>
+.fixhead {
+    max-width: 150px; /* กำหนดความกว้างสูงสุด */
+    white-space: nowrap; /* ป้องกันข้อความขึ้นบรรทัดใหม่ */
+    overflow: hidden; /* ซ่อนข้อความที่เกินขอบเขต */
+    text-overflow: ellipsis; /* แสดง ... เมื่อข้อความยาวเกินไป */
+}
+</style>
+
+	    			
+
+		    	  <input type="hidden" name="policy_id" value="${policy_id }">
+
+
+    <div class="row">
+                                            <div class="col-md-3 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="first-name-column"><spring:message code="register.name"  /></label>
+                                                    <input type="text" name="register_name" id="first-name-column" class="form-control"  name="fname-column">
+                                                </div>
+                                            </div>
+                                            
+                                       
+                                            <div class="col-md-3 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="last-name-column"><spring:message code="nav.position"  /></label>
+                                                    <select class="form-select" name="position">
+                                                      <option value="-">-</option>
+                                                        <c:forEach var="item" items="${position}">
+													     <option value="${item.group_name}">${item.group_name}</option>
+													    </c:forEach>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                          
+                                            <div class="col-md-3 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="last-name-column"><spring:message code="nav.department"  /></label>
+                                                    <select class="form-select " name="department" >
+                                                    <option value="-">-</option>
+                                                      <c:forEach var="item" items="${department}">
+													     <option value="${item.department_name}">${item.department_name}</option>
+													    </c:forEach>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 col-12"> 
+                                                          <div class="mb-1">
+                                                                    <label class="form-label" for="last-name-column">&nbsp;</label><br>
+                                                   <a class="btn btn-primary waves-effect waves-float waves-light" 
+                                                   onclick='postdata("/search_user_dbs-filemanager?${_csrf.parameterName}=${_csrf.token}","subdata_search","wrappermain")' >
+                                                   Search</a>           
+                                      </div>
+                                               </div> 
+                                      <div>       
+                                      
+                          </div>   
+               
+                                        </div>
+                  
+                                                <br>  <br>
+                                                
+                                                
+                          <div style="width:100%">                        
+                                                    
+                               <button type="submit" class="btn btn-sm btn-light" style="padding:5px" >    
+                               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline>
+                               <line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                               </button>
+                                              <div style="float:right;">
+                      <input type="checkbox" id="checkAll" class="form-check-input" onclick="checkall('check-input', this.checked)" >
+                      <spring:message code="btn.checkall_uncheckall"  />
+                      </div>        </div>            
+  <table  class="table">
+                                    <thead>
+                                        <tr>
+                                        
+            	 <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>   
+    	                          
+<th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="register.name"  /></th>     
+  
+<th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="nav.position"  /></th>     
+  <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="nav.department"  /></th>  
+          <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>  
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <c:forEach items="${item }" var="row"  varStatus="count">
+				                                     
+				                                     
+				                                                            <tr>
+                                        
+            	 <td class="form-label fixhead" style="padding:5px;font-size:13px">${count.count }</td>   
+            	 
+            	                              
+<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="name" >${row.user_name }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="type"   title="${row.group_name }">${row.group_name }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="type"   title="${row.group_department }">${row.group_department }</td>     
+
+     
+     
+          <td class="form-label fixhead" style="padding:5px;font-size:13px">
+          
+       
+          
+                    <input type="checkbox" name="selectedIds" class="form-check-input check-input" value="${row.user_id }_${row.user_name }_${row.group_name }_${row.group_department }">
+          </td>  
+                                        </tr>
+														
+				                                     
+				                                      
+				                                      
+                                      
+                                        	</c:forEach>   
+                                        
+                                    </tbody>
+                                    </table>     
+                                    
+   <script>
+        
+            if (feather) {
+                feather.replace({
+                    width: 14,
+                    height: 14
+                });
+            }
+      
+    </script>                                   
+                                    
+<script>
+function showAddressTitle(element) {
+    // หา parent <tr> ที่อยู่ใกล้ที่สุดของปุ่มที่กด
+    let row = element.closest("tr");
+
+    if (row) {
+        // ค้นหา <td> ที่มี data-custom="address"
+        let codeTd = row.querySelector('td[data-custom="code"]').getAttribute("title");
+        let nameTd = row.querySelector('td[data-custom="name"]').getAttribute("title");
+        let typeTd = row.querySelector('td[data-custom="type"]').getAttribute("title");
+        let groupsTd = row.querySelector('td[data-custom="groups"]').getAttribute("title");
+        let addressTd = row.querySelector('td[data-custom="address"]').getAttribute("title");
+        let noteTd = row.querySelector('td[data-custom="note"]').getAttribute("title");
+      
+        fillPossibleFields(['customer_code','skg_supplier_code'], codeTd);
+        fillPossibleFields(['customer_name','skg_supplier_name'], nameTd);
+      
+    }
+}
+
+
+function fillPossibleFields(possibleNames, value) {
+    for (var i = 0; i < possibleNames.length; i++) {
+        var name = possibleNames[i];
+        var field = document.querySelector('input[name="' + name + '"]');
+        if (field !== null) {
+            field.value = value;
+            break;
+        }
+    }
+}
+</script>    
+
+<script>
+function checkall(className, checked) {
+    const checkboxes = document.querySelectorAll('.' + className);
+    checkboxes.forEach(cb => cb.checked = checked);
+}
+
+
+
+function postdata(Mode, Mode2, Mode3) {
+
+    let targetDiv = $("#" + Mode3);
+    
+    // ทำให้เนื้อหาเก่าจางลง
+    targetDiv.css("opacity", "0.5").css("position", "relative");
+
+    // สร้าง Spinner อยู่ตรงกลางของ div
+    let loadingSpinner = `
+        <div class="spinner-overlay">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>`;
+
+    // แทรก Spinner เข้าไปใน div
+    targetDiv.append(loadingSpinner);
+
+		
+	
+	
+    var formData = new FormData($("#" + Mode2)[0]);
+
+    $.ajax({
+        url: Mode,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(result){
+            $('#' + Mode3).html(result);
+            targetDiv.css("opacity", "1"); // คืนค่า opacity ปกติ
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+                window.location.href = '/login'; // URL ของหน้า login
+       
+        }
+    });
+
+   // $("#" + Mode2)[0].reset();
+   
+    return false;
+}
+	    
+</script>                   

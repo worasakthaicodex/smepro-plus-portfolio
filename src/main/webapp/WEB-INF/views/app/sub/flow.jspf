@@ -1,0 +1,67 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+ 
+ 
+<c:if test="${edatas == null  }">
+                        <h6 class="dropdown-header">
+                              Flow :  <spring:message code="btn.sends"  text="การส่งเอกสาร" />
+                             
+                             </h6>
+                    			  <div class="dropdown-divider"></div>
+                    
+                                     <a class="dropdown-item" href="#" 
+                                      class="dropdown-item"  ><i class="me-1" data-feather="send"></i>
+                               <span class="align-middle" title="คุณยังไม่ได้บันทึกรายการ [You haven't save anything yet..]"><del><spring:message code="btn.send"/></span></del></a></a>
+ </c:if>      
+<c:if test="${edatas != null && ( docs.current_step == 'Create'  || docs.current_step == 'Clear'  ) }">
+                        <h6 class="dropdown-header">
+                              Flow :  <spring:message code="btn.sends"  text="การส่งเอกสาร" />
+                             
+                             </h6>
+                    			  <div class="dropdown-divider"></div>
+                    
+                                     <a class="dropdown-item" href="/senddocument-filemanager/${edatas.data_id}/${process.id}/${Nextstpe_id}/${Nextstpe}" 
+                                      class="dropdown-item"  ><i class="me-1" data-feather="send"></i>
+                                <spring:message code="btn.send"  text="ส่งเอกสาร" /></a>
+</c:if>
+                              
+<c:if test="${edatas != null && docs.current_step == 'Review' }">    
+                                 <h6 class="dropdown-header">
+                              Flow :  <spring:message code="btn.approval"   />
+                             
+                             </h6>
+                               <div class="dropdown-divider"></div>
+                              	   <a href="#"   onclick="app('${edata.data_id}')" class="dropdown-item" class="btn btn-primary"
+                              	    data-bs-toggle="modal" data-bs-target="#addNewCard" style="color:green">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg> 
+                                <spring:message code="btn.app" text="อนุมัติ" /></a>
+                                       	   <c:set var="step" value="1" />	
+                                      	   <a href="#"  onclick="reject('${edata.data_id}')" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addNewCards" style="color:red">
+							                                
+							             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-help-circle"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>                   
+							                                
+							                                  <spring:message code="btn.unapp" text="ไม่อนุมัติ" />
+							                </a>	
+                              
+</c:if>    
+
+<c:if test="${edatas != null && docs.current_step == 'Approval' }">    
+                                 <h6 class="dropdown-header">
+                              Flow :  <spring:message code="btn.approval"   />
+                             
+                             </h6>
+                               <div class="dropdown-divider"></div>
+                              	   <a href="#"   onclick="app('${edata.data_id}')" class="dropdown-item" class="btn btn-primary"
+                              	    data-bs-toggle="modal" data-bs-target="#addNewCard" style="color:green">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg> 
+                                <spring:message code="btn.app" text="อนุมัติ" /></a>
+                                       	   <c:set var="step" value="1" />	
+                                      	   <a href="#"  onclick="reject('${edata.data_id}')" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#addNewCards" style="color:red">
+							                                
+							             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-help-circle"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>                   
+							                                
+							                                  <spring:message code="btn.unapp" text="ไม่อนุมัติ" />
+							                </a>	
+                              
+</c:if>   

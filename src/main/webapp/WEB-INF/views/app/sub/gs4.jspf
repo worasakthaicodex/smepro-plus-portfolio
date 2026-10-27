@@ -1,0 +1,133 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+ 
+
+
+     <div class="modal fade" id="addNewGRC" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true">
+ 
+                    <div class="modal-dialog   modal-lg modal-dialog-centered">
+                         <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel33"> <spring:message code="item.Additem" /></h4>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                  
+                                                         <form:form method="POST"    action="/additem-filemanager?${_csrf.parameterName}=${_csrf.token}"  id="formgrc" name ="formgrc" > 
+                                                 
+                                          
+                                      
+                                                 
+                                                            <div class="modal-body">
+                 <div class="modal-body">                         
+  <c:set var="steptype" value="clear" />                                               
+<c:forEach items="${eformfields }"   var="row" varStatus="count">
+555
+
+<c:set var="title" value="${row.field_label }" />   
+	
+	   <c:choose>
+	    <c:when test="${( 
+	     row.field_id == input_supportdata1 
+	    || row.field_id == input_supportdata2 
+	    || row.field_id == input_supportdata3
+	    || row.field_id == input_supportdata4
+	    || row.field_id == input_supportdata5
+	    || row.field_id == input_supportdata6
+	    || row.field_id == input_supportdata7
+	     )
+	      && row.keymap != null && fn:contains(action_batch_clear,row.keymap.mainkey)}">
+	      <%@ include file="../input/search_input.jspf" %>      
+	    </c:when>	    
+	    
+	    
+	<c:when test="${row.keymap != null && fn:contains(action_batch_clear,row.keymap.mainkey) }">
+		      <%@ include file="../input/new_input.jspf" %> 
+	</c:when> 
+	
+	
+	    <c:otherwise>
+	    </c:otherwise>
+	</c:choose>      
+</c:forEach>           
+                                                             
+                                                             
+                                                                
+                                                             <div class="mb-1">  
+
+       											 <input type="hidden"  class="form-control" name="id_stock"  id="id_stock"   value="${stock.stock_stockid+0 }" >
+                                                    
+                                                    
+                                                   <input type="hidden" name="id" id="id"  readonly value="0" >
+                                                      <input type="hidden" name="tempId" id="tempId"  readonly value="${tempId}" >
+							       				<input type="hidden" name="sub_processes_id"  id="sub_processes_id"  value="${sub_processes.id}">                                                           
+												<input type="hidden" name="processes_id"  id="processes_id"  value="${process.id}">   
+							       				<input type="hidden" name="procurement_type"  id="type"  value="Clear">   
+							       				   	<input type="hidden" name="id_refer"  id="id_refer"  value="0">    
+
+                  							   <input type="checkbox" id="save"  name="save" value="1" > Don't close the window.
+                  							       </div>
+                                                            </div>
+                                                           
+                                                           
+                                                            <div class="modal-footer" >
+                                                                <button type="button"  onclick='sendc("/additem-filemanager?${_csrf.parameterName}=${_csrf.token}","formgrc","subdatac")'  class="btn btn-primary waves-effect waves-float waves-light" >เพิ่ม</button>
+                                                            </div>
+                                                </form:form>
+                                                    </div>    
+                               
+                                        </div>
+                                        </div>
+	       	     
+	       	     
+	       	     
+	       	     
+	       <script>             
+	       
+
+function setinic(){    
+	 $("form#formgrc .newinput").val("");    	   
+	 $("form#formgrc .id").val("0");    
+ }	       
+	       
+	       
+
+
+   function sendc(Mode1,Mode2,Mode3){        
+	   
+	   
+	   /*
+	     var maxQty = parseInt($("form#formsr #qty").attr("max")); // ดึงค่า max
+	    var currentQty = parseInt($("form#formsr #qty").val()); // ดึงค่าที่ผู้ใช้กรอก
+	    // ถ้าเกิน maxQty ให้เซ็ตค่าเป็น max
+	    if (currentQty > maxQty ) {
+            alert("Error จำนวนคงเหลือไม่เพียงพอ [The remaining amount is not enough.]");  
+	    }
+	    
+	    // ถ้าเกิน maxQty ให้เซ็ตค่าเป็น max
+	    else if (currentQty > maxQty ) {
+            alert("Error จำนวนคงเหลือไม่เพียงพอ [The remaining amount is not enough.]");  
+	    }
+	    else{   }
+	    */
+	 
+	    	 	
+	    	postdata(Mode1,Mode2,Mode3);
+	       $("form#formgrc .newinput").val("");
+	    
+	    
+	    	if ($("form#formgrc #save").is(":checked")) {
+
+	    	} else {
+		    	const modal = bootstrap.Modal.getInstance(document.getElementById('addNewGRC'));
+		    	modal.hide();
+	    	}
+
+
+	 
+
+   }  
+   </script>
+   
+    
+	       	     

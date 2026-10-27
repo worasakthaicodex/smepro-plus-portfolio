@@ -1,0 +1,561 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+  <style>
+/* ========================================================
+   BI DASHBOARD SPLIT PANEL (ซ้าย Alert / ขวา Stats)
+   ======================================================== */
+.bi-dashboard-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+    align-items: stretch; /* ให้กล่องซ้าย-ขวาสูงเท่ากันเสมอ */
+}
+
+.bi-zone {
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+}
+
+/* ฝั่งซ้าย (Alerts) กว้าง 60% */
+.bi-zone-left {
+    flex: 6;
+    min-width: 350px;
+}
+
+/* ฝั่งขวา (Stats/Charts) กว้าง 40% */
+.bi-zone-right {
+    flex: 4;
+    min-width: 250px;
+}
+
+/* หัวตารางของแต่ละโซน */
+.bi-zone-header {
+    background-color: #f5f6f8;
+    padding: 8px 15px;
+    border-bottom: 1px solid #dcdcdc;
+    font-size: 11px;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bi-zone-body {
+    padding: 0; /* ซ้ายไม่ต้องมี Padding จะได้ชิดขอบแบบ IDE */
+    flex: 1;
+    overflow-y: auto;
+}
+
+.bi-zone-body.padding-inner {
+    padding: 15px; /* ฝั่งขวาขอมี Padding หน่อย ไว้ใส่กราฟ */
+}
+
+/* ========================================================
+   CSS ของ Alert เดิม (สไตล์เรียบง่ายแบบ IDE)
+   ======================================================== */
+.val-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 15px; border-bottom: 1px solid #f0f0f0;
+}
+.val-item[onclick]:hover { background-color: #f5f6f8; cursor: pointer; }
+.val-icon { font-size: 16px; margin-top: 1px; }
+.val-content { display: flex; flex-direction: column; }
+.val-title { font-size: 12px; font-weight: bold; margin-bottom: 2px; }
+.val-desc { font-size: 11px; opacity: 0.9; }
+
+/* โทนสี IDE */
+.val-success { color: #107c10; } 
+.val-danger { color: #d13438; }  
+.val-warning { color: #9a6a00; } 
+.val-info { color: #0078d4; }    
+
+/* --- ตัวอย่าง CSS สำหรับกราฟจำลองฝั่งขวา --- */
+.mock-stat-box {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px; background: #fafafa; border: 1px solid #eee; margin-bottom: 10px;
+}
+.mock-stat-title { font-size: 11px; color: #666; }
+
+.mock-stat-value { font-size: 16px; font-weight: bold; color: var(--wpf-purple, #4c4391); }
+
+
+
+/* ========================================================
+   AI INSIGHTS BOX (ผู้ช่วยอัจฉริยะ)
+   ======================================================== */
+.ai-insight-box {
+    /* ใช้พื้นหลังไล่สีม่วงอ่อนๆ ให้ดูเป็นเทคโนโลยี AI */
+    background: linear-gradient(to right, #fcfaff, #ffffff);
+    border: 1px solid #ede8f5;
+    border-left: 3px solid #7c3aed; /* สีม่วง AI (Purple) */
+    padding: 12px 15px;
+    margin-top: 15px;
+    border-radius: 4px;
+}
+
+.ai-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #7c3aed;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ai-header i {
+    font-size: 14px;
+}
+
+.ai-body {
+    font-size: 11px;
+    color: #444;
+    line-height: 1.5;
+}
+
+/* ป้ายกำกับเล็กๆ สำหรับ AI */
+.ai-badge {
+    display: inline-block;
+    background: #f3ebff;
+    color: #5b21b6;
+    padding: 2px 6px;
+    border-radius: 2px;
+    font-size: 10px;
+    margin-top: 8px;
+    font-weight: bold;
+}
+/* บังคับให้กล่องนี้และลูกๆ ของมัน สามารถลากคลุมดำและ Copy ข้อความได้ */
+.bi-zone-body.padding-inner, 
+.bi-zone-body.padding-inner * {
+    user-select: text !important;
+    -webkit-user-select: text !important; /* สำหรับ Safari */
+    -moz-user-select: text !important; /* สำหรับ Firefox */
+    -ms-user-select: text !important; /* สำหรับ IE/Edge รุ่นเก่า */
+    cursor: text; /* เปลี่ยนเมาส์เป็นรูปตัว I เวลากระทบตัวหนังสือ */
+}
+
+/* เผื่อไว้สำหรับกล่อง AI โดยเฉพาะ */
+.ai-body {
+    user-select: text !important;
+}
+
+/* ========================================================
+   HP BAR (หลอดเลือดอายุเอกสาร) Gamification Style
+   ======================================================== */
+.hp-container {
+    margin-top: 8px;
+    width: 100%;
+    max-width: 300px; /* จำกัดความกว้างไม่ให้ยืดเต็มจอเกินไป */
+}
+
+.hp-bar-bg {
+    width: 100%;
+    height: 10px;
+    background-color: #e2e2e2;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.hp-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.5s ease-in-out, background-color 0.3s;
+}
+
+/* สถานะเลือด (HP Status) */
+.hp-high { background-color: #107c10; } /* เขียว: ปลอดภัย (> 50%) */
+.hp-medium { background-color: #d97706; } /* ส้ม: เตือน (21% - 50%) */
+.hp-low { 
+    background-color: #d13438; /* แดง: วิกฤต (<= 20%) */
+    animation: pulse-danger 1.5s infinite; /* กะพริบเตือน */
+}
+
+/* แอนิเมชันหลอดเลือดใกล้หมด */
+@keyframes pulse-danger {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.hp-text {
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 4px;
+    display: flex;
+    justify-content: space-between;
+}
+   :root {
+            --acrylic-bg: rgba(243, 243, 243, 0.85);
+            --border-color: #e5e5e5;
+            --primary-color: #0078D4; /* สีน้ำเงินแบบ Windows */
+            --primary-hover: #005A9E;
+            --text-color: #333;
+        }
+    .chat-container {
+            width: 100%;
+            height: 450px;
+            background: var(--acrylic-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 16px 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 1.1em;
+            color: var(--text-color);
+        }
+
+        .chat-history {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 6px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            
+            /* เพิ่มส่วนนี้เข้าไปครับ */
+    user-select: text; /* บังคับให้เลือกข้อความได้ */
+    -webkit-user-select: text; /* สำหรับ Safari */
+    -moz-user-select: text; /* สำหรับ Firefox */
+    
+    cursor: text; /* เปลี่ยน Cursor ให้เป็นรูปตัว I เมื่อชี้ที่ข้อความ */
+
+        }
+
+        .msg-user {
+            background-color: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+            
+            /* เพิ่มส่วนนี้เข้าไปครับ */
+    user-select: text; /* บังคับให้เลือกข้อความได้ */
+    -webkit-user-select: text; /* สำหรับ Safari */
+    -moz-user-select: text; /* สำหรับ Firefox */
+    
+    cursor: text; /* เปลี่ยน Cursor ให้เป็นรูปตัว I เมื่อชี้ที่ข้อความ */
+
+        }
+
+        .msg-ai {
+            background-color: white;
+            color: var(--text-color);
+            align-self: flex-start;
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 2px;
+        }
+
+        .chat-input-area {
+            padding: 16px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.2s;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .send-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .send-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .loading {
+            align-self: flex-start;
+            color: #666;
+            font-style: italic;
+            font-size: 0.9em;
+            display: none;
+        }
+    </style>
+  
+
+<div>
+<div class="bi-dashboard-panel">
+    
+    <div class="bi-zone bi-zone-left">
+        <div class="bi-zone-header">
+            <span><i class="fa fa-list-check"></i> Validation Status</span>
+            <span style="font-weight: normal; color: #888;">(0 Errors)</span>
+        </div>
+        
+        <div class="bi-zone-body">
+      
+        <c:if test="${process.expires_in_days > 0}">
+
+    <c:set var="remainingDays" value="${process.expires_in_days - daysPassed}" />
+    <c:set var="hpPercent" value="${(remainingDays / process.expires_in_days) * 100}" />
+    
+    <c:if test="${hpPercent < 0}"><c:set var="hpPercent" value="0" /></c:if>
+    <c:if test="${hpPercent > 100}"><c:set var="hpPercent" value="100" /></c:if>
+
+    <c:choose>
+        <c:when test="${hpPercent > 50}"><c:set var="hpClass" value="hp-high" /></c:when>
+        <c:when test="${hpPercent > 20}"><c:set var="hpClass" value="hp-medium" /></c:when>
+        <c:otherwise><c:set var="hpClass" value="hp-low" /></c:otherwise>
+    </c:choose>
+
+    <div class="val-item ${remainingDays <= 3 ? 'val-danger' : 'val-info'}">
+        <div class="val-icon">
+            <i class="fa ${remainingDays <= 0 ? 'fa-times-circle' : 'fa-hourglass-half'}"></i>
+        </div>
+        <div class="val-content" style="width: 100%;">
+            <div class="val-title">Document Lifespan (อายุเอกสาร)</div>
+            <div class="val-desc">
+                <c:choose>
+                    <c:when test="${remainingDays > 0}">
+                        เอกสารนี้มีอายุการใช้งาน เหลือเวลาอีก <b>${remainingDays}</b> วัน
+                    </c:when>
+                    <c:when test="${remainingDays == 0}">
+                        <span style="color: #d13438; font-weight: bold;">วันสุดท้าย! กรุณารีบดำเนินการ</span>
+                    </c:when>
+                    <c:otherwise>
+                        <span style="color: #d13438; font-weight: bold;">หมดอายุแล้ว!</span> (เกินกำหนดมา ${remainingDays * -1} วัน)
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            
+            <div class="hp-container">
+                <div class="hp-bar-bg">
+                    <div class="hp-bar-fill ${hpClass}" style="width: ${hpPercent}%;"></div>
+                </div>
+                <div class="hp-text">
+                   <span style="color: ${hpPercent <= 20 ? '#d13438' : '#666'};">
+    ⏳ Time Left: ${remainingDays} / ${process.expires_in_days} Days
+</span>
+<span style="color: #888;">
+    <fmt:formatNumber type="number" maxFractionDigits="0" value="${hpPercent}" />%
+</span>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</c:if>
+            <c:if test="${flow.closing_status != null}">    
+                <div class="val-item val-success">
+                    <div class="val-icon"><i class="fa fa-circle-check"></i></div>
+                    <div class="val-content">
+                        <div class="val-title">Closed</div>
+                        <div class="val-desc">เอกสารนี้ปิดงานแล้ว (${flow.closing_status }).</div>
+                    </div>
+                </div>
+            </c:if>
+             <c:if test="${edatas.acknowledge == 0 && process.is_acknowledge_required == 1 }">  
+               <div class="val-item val-warning">
+                    <div class="val-icon"><i class="fa fa-lock"></i></div>
+                    <div class="val-content">
+                        <div class="val-title">Acknowledge</div>
+                        <div class="val-desc">กรุณารับเอกสารก่อนส่ง.</div>
+                    </div>
+                </div>
+                </c:if>
+                    
+            <c:if test="${DocumentEffect != null}">
+                <div class="val-item val-success">
+                    <div class="val-icon"><i class="fa fa-circle-check"></i></div>
+                    <div class="val-content">
+                        <div class="val-title">${DocumentEffect.title}</div>
+                        <div class="val-desc"><spring:message code="${DocumentEffect.type }" text="-"/>.</div>
+                    </div>
+                </div>
+            </c:if>
+                        
+            <c:if test="${DocumentEffect == null}">            
+                <c:if test="${flow.remarks_rejected =='Rejected' }">              
+                    <div class="val-item val-danger" onclick="shows2('draggable-window3','Step Logs'); getData('/steplog-filemanager/${edatas.data_id}/${process.id}', 'mainbody3')">
+                        <div class="val-icon"><i class="fa fa-circle-xmark"></i></div>
+                        <div class="val-content">
+                            <div class="val-title">Rejected</div>
+                            <div class="val-desc"><spring:message code="check.result_reject"/>.</div>
+                        </div>
+                    </div>
+                </c:if>
+
+                <c:if test="${edatas.acknowledge == -1 }">         
+                    <div class="val-item val-danger" onclick="shows2('draggable-window3','Step Logs'); getData('/steplog-filemanager/${edatas.data_id}/${process.id}', 'mainbody3')">
+                        <div class="val-icon"><i class="fa fa-circle-xmark"></i></div>
+                        <div class="val-content">
+                            <div class="val-title">Not Accepted</div>
+                            <div class="val-desc">เอกสารนี้ไม่รับ.</div>
+                        </div>
+                    </div>
+                </c:if>
+
+                <c:if test="${edatas.acknowledge == 1}">    
+                    <div class="val-item val-success">
+                        <div class="val-icon"><i class="fa fa-circle-check"></i></div>
+                        <div class="val-content">
+                            <div class="val-title">Accepted</div>
+                            <div class="val-desc">เอกสารนี้ถูกรับเเล้ว.</div>
+                        </div>
+                    </div>
+                </c:if>
+                
+                <c:if test="${edatas.followup == 1}">   
+                    <div class="val-item val-info">
+                        <div class="val-icon"><i class="fa fa-thumbtack"></i></div>
+                        <div class="val-content">
+                            <div class="val-title">Follow Up</div>
+                            <div class="val-desc">เอกสารนี้ถูกตึงไว้.</div>
+                        </div>
+                    </div>
+                </c:if> 
+
+                <c:if test="${edatas.problem == 'Register already exist' || edatas.problem == 'Product already exist'}">
+                    <c:if test="${levenshtein.size() > 0  && levenshtein_dangers == 0}">
+                        <div class="val-item val-warning" onclick="shows2('draggable-window3','Levenshtein distance'); getData('/Levenshtein-filemanager/${edatas.data_id}', 'mainbody3')">
+                            <div class="val-icon"><i class="fa fa-triangle-exclamation"></i></div>
+                            <div class="val-content">
+                                <div class="val-title"><spring:message code="check.recheck"/>!</div>
+                                <div class="val-desc"><spring:message code="check.duplicate_names_result_no"/>.</div>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${levenshtein.size() > 0  && levenshtein_dangers > 0}">
+                        <div class="val-item val-danger" onclick="shows2('draggable-window3','Levenshtein distance'); getData('/Levenshtein-filemanager/${edatas.data_id}', 'mainbody3')">
+                            <div class="val-icon"><i class="fa fa-circle-xmark"></i></div>
+                            <div class="val-content">
+                                <div class="val-title"><spring:message code="check.recheck"/>!</div>
+                                <div class="val-desc"><spring:message code="check.duplicate_names_result_no"/>.</div>
+                            </div>
+                        </div>
+                    </c:if>  
+                </c:if>
+
+                <c:if test="${edatas.problem == 'Required Register not found'  or  edatas.problem == 'Register Type cannot be null' or edatas.problem == 'Required Product not found'  or  edatas.problem == 'Product Type cannot be null' }">
+                    <div class="val-item val-warning">
+                        <div class="val-icon"><i class="fa fa-triangle-exclamation"></i></div>
+                        <div class="val-content">
+                            <div class="val-title"><spring:message code="check.recheck"/>!</div>
+                            <div class="val-desc">ข้อมูลไม่ถูกต้องไม่พบรายการนี้</div>
+                        </div>
+                    </div>
+                </c:if>
+          
+                <c:if test="${edatas.problem ==  'May duplicate'}">
+                    <div class="val-item val-warning">
+                        <div class="val-icon"><i class="fa fa-copy"></i></div>
+                        <div class="val-content">
+                            <div class="val-title"><spring:message code="check.recheck"/>!</div>
+                            <div class="val-desc">พบเอกสารประเภทเดียวกันอ้างอิงรายชื่อเดียวกัน อาจสร้างซ้ำ.</div>
+                        </div>
+                    </div>
+                </c:if>
+          
+                <c:if test="${edatas.problem == null}">
+                    <div class="val-item val-success">
+                        <div class="val-icon"><i class="fa fa-circle-check"></i></div>
+                        <div class="val-content">
+                            <div class="val-title">Ready</div>
+                            <div class="val-desc">เอกสารไม่พบปัญหาใดๆ.</div>
+                        </div>
+                    </div>
+                </c:if>
+            
+                <c:if test="${edatas.edata_index_action_type == 1}">
+                    <div class="val-item val-info" onclick="shows2('draggable-window3','Levenshtein distance'); getData('/Comparedata-filemanager/${edatas.data_id}/${process.id}', 'mainbody3')">
+                        <div class="val-icon"><i class="fa fa-clock-rotate-left"></i></div>
+                        <div class="val-content">
+                            <div class="val-title"><spring:message code="check.recheck"/>!</div>
+                            <div class="val-desc">การเปลี่ยนเเปลงของข้อมูล.</div>
+                        </div>
+                    </div>
+                </c:if>
+            </c:if>     
+        </div>
+    </div>
+
+<div class="bi-zone bi-zone-right">
+    <div class="bi-zone-header">
+        <span><i class="fa fa-chart-pie"></i>  ERP Orchestration - AI Assistant</span>
+    
+    </div>
+
+<div class="chat-container">
+   
+        
+        <div class="chat-history" id="chatHistory">
+            <div class="message msg-ai">สวัสดีครับ ผมคือผู้ช่วย AI ประจำระบบ มีอะไรให้ผมช่วยจัดการไหมครับ?</div>
+        </div>
+        
+        <div class="loading" id="loadingIndicator" style="padding: 0 20px 10px;">กำลังประมวลผล...</div>
+
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="messageInput" placeholder="พิมพ์คำสั่ง เช่น ขอดูประวัติลูกค้า ID 1..." autocomplete="off">
+            <button class="send-btn" id="sendBtn" onclick="sendMessage('${_csrf.parameterName}=${_csrf.token}')">ส่ง</button>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+    </div>
+
+</div>
+  <script>
+var  _csrf = "${_csrf.parameterName}=${_csrf.token}";
+
+function scrollToBottom() {
+	var chatHistory = document.getElementById('chatHistory');
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+
+}
+scrollToBottom();
+
+ </script>

@@ -1,0 +1,97 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+ 
+
+
+  
+
+	 <div style="position: relative; border:1px solid #eee;min-height:300px;">
+	 	 <div style="border-bottom:2px solid #ddd;background-color:#F5F5F5;padding:2px">
+	 	  <c:if test="${  docs == null ||  (docs.current_step == 'Clear'  )   }"> 	       	 
+		<button type="button"  id="submits" class="btn btn-icon btn-sm btn-primary " style="font-size:8px;padding:4px" onclick="setinic()"  data-bs-toggle="modal" data-bs-target="#addNewGRC" >                     
+		<i data-feather='edit-2'></i>
+		</button>  
+
+
+		<a href="/titem-filemanager/${tempId}/${process.id}"   class="btn btn-icon btn-sm btn-primary  " style="font-size:8px;padding:4px" 
+		onclick="return confirm('<spring:message code="procurement.titem"  />')"  >                     
+	<i data-feather='arrow-down-circle'></i>
+		</a>  
+		</c:if>
+		
+
+	 	 </div>
+	    <table  class="table">
+                                    <thead>
+                                        <tr>
+                                        
+            	 <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>                            
+<c:forEach items="${eformfields }"   var="row" varStatus="count">
+
+	   <c:if test="${row.keymap.type == 'clear' && fn:contains(action_batch_clear,row.keymap.mainkey)  }">  
+ 			 <th class="form-label fixhead" style="padding:5px;font-size:13px">${row.field_label }</th>
+		</c:if>
+       
+                
+</c:forEach>
+                                                <c:if test="${docs == null or docs.current_step == 'Clear'    }"> 
+
+                                                           <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="tables.action" text="จัดการ" /></th>
+                                                           </c:if>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    
+                            
+                                    
+                                        <c:set var="Clear_status" value="0.00" />
+                                        <c:forEach items="${item2 }" var="row"  varStatus="count">
+				                                     
+				                                     
+				                                      <tr id="item-${row.id }">
+				                                       <td style="padding:5px;font-size:13px">${count.count }</td >
+				                                    
+				                                                                  
+															<c:forEach items="${eformfields }"   var="rows" varStatus="count">
+															
+							
+															   <c:if test="${ rows.keymap.type == 'clear' && fn:contains(action_batch_clear,rows.keymap.mainkey)  }">  
+														 		<td style="padding:5px;font-size:13px"> ${row[rows.keymap.mainkey]}</td >
+																</c:if>
+															</c:forEach>   
+				                                     
+				                                      
+				                                             <c:if test="${docs == null or docs.current_step == 'Clear'     }"> 
+				                                               <td style="padding:5px;font-size:13px">
+				                                    
+				                             
+				                                          
+				                                          
+				                                        <c:if test="${docs == null or ( docs.current_step == 'Clear'  )  }"> 
+							                                      <a herf=""   onclick="getdatas('/edititem2-filemanager/${row.id}/${tempId}','savesuccess')"  
+							                                      class="btn btn-sm btn-light" data-bs-toggle="modal"  data-bs-target="#addNewGRC"><spring:message code="btn.edit"  /></a> 
+							                                    
+							                        
+							                                     <a herf="" class="btn btn-sm btn-danger"
+							                                      onclick="getdata('/delitem2-filemanager/${row.id }/${tempId}','savesuccess')" 
+							                                     ><spring:message code="btn.delete"  /></a> 
+				                                     </c:if>
+				                                   
+				                                     
+				                                      </td>
+				                                             </c:if>
+				                                        </tr>
+                                        </c:forEach>
+                                        
+                                        
+                                    </tbody>
+                                    </table>     
+	       	          
+	  <div style="position: absolute; bottom: 0; width: 100%; border-bottom: 2px solid #ddd; background-color: #F5F5F5; padding: 2px;">
+       <spring:message code="procurement.grandtotal"  />    <input type="text"  style="border:0px;border-bottom: 1px solid #aaa;background-color: #F5F5F5;"  name="procurement_grandtotal"  value="${grandtotal2}" readonly>
+    </div>   
+	 </div>
+	 
+       

@@ -1,0 +1,85 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+<div class="mainsetting microsoft  draggable2" id="draggable-iadmin" style="z-index: 10;display:none" th:fragment="settingwindows" >
+  <div class="header iadmin" >
+    <div class="title"> 
+      <div class="icon" ><i class="material-icons">settings</i></div>
+      <div class="text" id="iadmin">Setting</div>
+    </div>
+    <div class="buttons">
+     <div class="btn "></div>
+      <div class="btn close" onclick="closeed('draggable-iadmin')"> <i class="material-icons">close</i></div>
+    </div>
+  </div>
+  <div class="bar" id="barmainbody6"></div>
+  <div class="form" id="system">
+
+  
+  <div class="container2"  id="mainbody-iadmin" style="padding:0px;">
+  
+     <div id="body" class="mainbody7"   >
+  
+     </div>
+     
+     
+     
+     <div class="footer">
+     
+     </div>
+     
+     
+     </div>
+  
+  
+  </div>
+
+  </div>
+  <script>
+    
+  var isDragging7 = false;
+  var offsetX7, offsetY7;
+  var originalZIndex7;	
+  var header7 = document.querySelector('.iadmin');
+  var draggableWindow7 = document.getElementById('draggable-iadmin');
+
+
+  draggableWindow7.addEventListener('click', function (e) {
+    index++;
+    draggableWindow7.style.zIndex = index;
+  });
+
+  header7.addEventListener('mousedown', function (e) {
+      isDragging7 = true;
+ 
+      // Save the original z-index
+      originalZIndex7 = draggableWindow7.style.zIndex;
+  
+  
+      offsetX7 = e.clientX - draggableWindow7.getBoundingClientRect().left;
+      offsetY = e.clientY - draggableWindow7.getBoundingClientRect().top;
+  });
+  
+  document.addEventListener('mousemove', function (e) {
+      if (isDragging7) {
+          var x = e.clientX - offsetX7;
+          var y = e.clientY - offsetY;
+          draggableWindow7.style.left = x + 'px';
+          draggableWindow7.style.top = y + 'px';
+      }
+      
+  });
+  
+  document.addEventListener('mouseup', function () {
+      if (isDragging7) {
+          isDragging7 = false;
+  
+          // Set back the original z-index or a default value
+          //draggableWindow6.style.zIndex = originalZIndex || '30';
+      }
+  });	
+
+    </script>
+
+   

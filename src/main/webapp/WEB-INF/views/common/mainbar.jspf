@@ -1,0 +1,578 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+ <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+   							  <c:choose>
+                                <c:when test='${cookie.theme.value.equals("moon")}'>
+                                <div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
+                                </c:when>
+                                <c:otherwise>
+                           <div class="main-menu menu-fixed menu-accordion menu-shadow expanded menu-light" data-scroll-to-active="true" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                              </c:otherwise>
+                               </c:choose>  
+
+
+
+
+
+     <div class="navbar-header notprint">
+            <ul class="nav navbar-nav flex-row">
+                <li class="nav-item me-auto"><a class="navbar-brand" href="/"><span class="brand-logo">
+                          
+                            
+                            </span>
+                        <h2 class="brand-text"><img src="/resources/app-assets/images/icons/qexcellent.png" class="me-25" alt="png" height="25"> I-Doc Plus</h2>
+                    </a></li>
+                <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pe-0" data-bs-toggle="collapse"><i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc" data-ticon="disc"></i></a></li>
+            </ul>
+        </div>
+        <div class="shadow-bottom notprint" ></div>
+       <div class="main-menu-content notprint">
+            <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+                <li   class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather='bar-chart'></i><span class="menu-title text-truncate" data-i18n="Dashboards">
+                   <spring:message code="menu.Graph&Logs" text="กราฟเเละประวัติ" />
+                </span></a>
+                    <ul class="menu-content">
+                  <li id="nav_main"><a class="d-flex align-items-center" href="/"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Analytics">
+                  
+                  <spring:message code="menu.Overview" text="ภาพรวม" />
+                  </span>​</a>
+                        </li>
+                          <li id="nav_main2"><a class="d-flex align-items-center" href="/document"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Analytics">
+                          
+                            <spring:message code="menu.Specific" text="เฉพาะด้าน" />
+                          </span></a>
+                        </li> 
+               
+     
+               
+               
+               
+                        
+                    <li id="nav_set" class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="circle"></i><span class="menu-title text-truncate" data-i18n="User">
+                       <spring:message code="menu.Otherlogs" text="ประวัติอื่นๆ" />
+                    </a>
+                    <ul class="menu-content">
+          
+                
+
+     
+     <sec:authorize access="hasAnyAuthority('READ-UE')">      
+          <li id="nav_other1">
+    <a class="d-flex align-items-center" href="/logattendance-filemanager?type=year"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+    <spring:message code="nav.alllog" text="ประวัติการใช้งาน" /></span></a>
+       </li> 
+          </sec:authorize>    
+          
+  
+         
+         
+            <li id="nav_other3">  
+          <a class="d-flex align-items-center" href="/filelog-log"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+   
+    <spring:message code="log.file" text="" />
+    </a>
+      </li> 
+      
+        <li id="nav_other4">  
+              <a class="d-flex align-items-center" href="/recordslog-log"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+   
+     <spring:message code="log.record" text="" />
+    </a>
+     </li> 
+      
+    
+      
+
+                      
+               
+                    </ul>
+                </li> 
+                       <li id="nav_set" class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="circle"></i>
+              
+                     <spring:message code="menu.DARlogs" text="ประวัติใบ DAR" />
+                    </a>
+                    <ul class="menu-content">
+          
+                       <sec:authorize access="hasAnyAuthority('ADD-DAR','CHECK-DAR','APP-DAR')">  
+                                <li id="nav_dar1"><a class="d-flex align-items-center" href="/dar" >
+                                        <i data-feather="circle"></i>     <spring:message code="nav.alldar" text="DAR ทั้งหมด" /></a>
+                                </li>
+                                       </sec:authorize>  
+
+                       <li id="nav_dar6"><a class="d-flex align-items-center" href="/expired-filemanager">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List"> <spring:message code="menu.expiredfiles" text="เอกสารล้าสมัย" /></a>
+                        </li>
+                        
+                                          <li id="nav_other2">  
+        <a class="d-flex align-items-center" href="/darlog-log"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+ 
+    <spring:message code="nav.darlog" text="ประวัติเอกสาร DAR" />
+    </a>
+         </li>   
+       				 <li id="nav_other5"> 
+          
+          
+          
+          
+         			 <a class="d-flex align-items-center" href="/distributionlog-log">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List"> <spring:message code="nav.distributionlogs" text="ประวัติเอกสารเเจกจ่าย" /></a>
+                        </li>
+                        
+                       
+                        
+     
+                    </ul>             
+                        
+                        
+                        
+         
+                        </li>
+                    </ul>
+                </li>
+                
+                   <li class=" navigation-header"><span data-i18n="Apps &amp; Pages"><spring:message code="nav.central"  /></span><i data-feather="more-horizontal"></i>
+                </li>
+				  <li id="nav_other6"><a class="d-flex align-items-center" href="/list-filemanager">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+ 									<spring:message code="menu.Register" /></a>
+                  </li>
+				  <li id="nav_doc"><a class="d-flex align-items-center" href="/filemanager">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List"><spring:message code="nav.filemanager" text="การจัดการเอกสาร" /></span></a>
+                        </li>
+						
+					                 
+               <li id="nav_project"><a class="d-flex align-items-center" href="/projects-filemanager">
+                    <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">  <spring:message code="menu.project" /></span></a>
+                        </li>	
+						
+				 <li id="nav_other7"><a class="d-flex align-items-center" href="/pn-filemanager?group=0">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List"><spring:message code="log.RecordsList" text="" /></a>
+      			</li>        
+      		
+      		     <li id="nav_Traceability" ><a class="d-flex align-items-center" href="/Traceability-workflow" >
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+ 									<spring:message code="menu.Oversee" /></a>
+      		      </li> 
+      		    
+      		    
+      		     <li id="nav_datalink2"><a class="d-flex align-items-center" href="/datalinktraceability-workflow">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+ 											<spring:message code="menu.Traceability" /></a>
+ 									
+ 					  </li> 				
+      		     
+   
+                
+                <li class=" navigation-header"><span data-i18n="Apps &amp; Pages"><spring:message code="nav.MyTask"  /></span><i data-feather="more-horizontal"></i>
+                </li>
+
+        
+                      
+                       
+                      
+                            <sec:authorize access="hasAnyAuthority('ADD-DAR','CHECK-DAR','APP-DAR')">  
+                           <li >
+                           
+                           <a class="d-flex align-items-center" href="#"><i data-feather='edit-2'></i><spring:message code="nav.dar" text="คำขอดำเนินการด้านเอกสาร​(DAR)​" />
+                           
+                               <c:if test='${ ( dars_add_count + dars_check_count +dars_app_count) > 0}'>  
+                                	  <span class="badge badge-light-danger rounded-pill ms-auto me-2">${dars_add_count + dars_check_count +dars_app_count}</span>
+                    				  </c:if>
+                           </a>
+                            <ul class="menu-content2">
+                            
+                            
+                              
+                                
+                                   <sec:authorize access="hasAnyAuthority('ADD-DAR')">  
+                                <li id="nav_dar2"><a class="d-flex align-items-center" href="/daradd-dar">
+                                   <i data-feather="circle"></i> <spring:message code="nav.create" text="สร้างใบ DAR" /> 
+                                  
+                                  
+                                   <c:if test='${dars_add_count > 0}'>  
+                                	  <span class="badge badge-light-danger rounded-pill ms-auto me-2">${dars_add_count}</span>
+                    				  </c:if>
+                                </a>
+                             
+                    
+                   		
+                                </li>
+                               </sec:authorize>   
+                                
+                                <sec:authorize access="hasAnyAuthority('CHECK-DAR')">  
+                                 <li id="nav_dar3"><a class="d-flex align-items-center" href="/darcheck-dar">
+                                   <i data-feather="circle"></i> <spring:message code="nav.pendingreview" text="รอตรวจสอบ" />
+                                
+                                     <c:if test='${dars_check_count > 0}'>  
+                                	  <span class="badge badge-light-danger rounded-pill ms-auto me-2">${dars_check_count}</span>
+                    				  </c:if>
+                                </a>
+                                </li>
+                                 </sec:authorize> 
+                                
+                                 <sec:authorize access="hasAnyAuthority('APP-DAR')">  
+                               <li id="nav_dar4"><a class="d-flex align-items-center" href="/darapp-dar" >
+                                <i data-feather="circle"></i>    <spring:message code="nav.pendingapp" text="รออนุมัติ" />
+                                
+                                   <c:if test='${dars_app_count > 0}'>  
+                                	  <span class="badge badge-light-danger rounded-pill ms-auto me-2">${dars_app_count}</span>
+                    				  </c:if>
+                                </a>
+                                </li>
+                                  </sec:authorize> 
+                              
+                            </ul>
+                        </li>
+                       
+                          </sec:authorize> 
+                       
+                       
+                          <li id="nav_dar5"><a class="d-flex align-items-center" href="/pntask-filemanager?group=1">
+                        <i data-feather="upload"></i><span class="menu-item text-truncate" data-i18n="List">  <spring:message code="menu.uploadRecords" text="อัพโหลดบันทึก" /></span>
+                        
+                               <c:if test='${    pending_count > 0}'>  
+                                	  <span class="badge badge-light-danger rounded-pill ms-auto me-2">${pending_count}</span>
+                    				  </c:if>
+                        
+                        </a>
+                        </li>
+                        
+               <li id="project"><a class="d-flex align-items-center" href="/project-filemanager">
+                       <i data-feather='target'></i><span class="menu-item text-truncate" data-i18n="List">  <spring:message code="menu.project" /></span>
+                        
+                               <c:if test='${    project_count > 0}'>  
+                                	  <span class="badge badge-light-danger rounded-pill ms-auto me-2">${project_count}</span>
+                    				  </c:if>
+                        
+                        </a>
+                        </li>
+                     
+                     
+                     
+                     
+                        <li  style="display:none"   class=" nav-item" ><a class="d-flex align-items-center" href="#"><i data-feather='edit-2'></i>
+                
+                    <c:set var="apptotal" value="0" />  
+                <span class="menu-title text-truncate" data-i18n="File Manager"><spring:message code="menu.Worksystem" text="ระบบงาน" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                </span>&nbsp;&nbsp; <span id="apptotal"></span>
+                </a>
+                    <ul class="menu-content">
+
+                     
+                        
+                            <c:forEach items="${workflow }" var="row" varStatus="count">
+             
+			<c:if test='${row.workflow_id >  0}'>
+
+				                   <c:if test='${count.count == 1}'>  <c:set var="job" value="${job1}" /></c:if> 
+    						        <c:if test='${count.count == 2}'>  <c:set var="job" value="${job2}" /></c:if> 
+    						        <c:if test='${count.count == 3}'>  <c:set var="job" value="${job3}" /></c:if> 
+
+                                    <li    class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather='edit-2'></i>
+                
+                <c:set var="jobtotal" value="0" />
+                
+                
+                <span class="menu-title text-truncate" data-i18n="File Manager">${row.workflow_name } </span>
+                   <span  id="${row.workflow_id }"></span>
+                
+                </a>
+             
+                    <ul class="menu-content">
+   							<c:forEach items="${row.process }" var="rows">
+             				<c:if test='${dd.new_status == 1}'>	 </c:if>
+							                      <li id="app_${rows.id}"><a class="d-flex align-items-center" href="/app-filemanager/${rows.id}">
+							                        <i data-feather="circle"></i>
+							                        <span class="menu-item text-truncate" data-i18n="List"> ${rows.name }</span>
+							                        
+							                        
+							                         
+							                         <c:if test='${dd.alert > 0}'>  <span class="badge badge-light-danger rounded-pill ms-auto me-2">${dd.alert}  
+							                            <c:set var="jobtotal" value="${jobtotal + dd.alert}" /></span>
+							                            
+							                            
+							                        </c:if>
+							                        
+							                        
+							                         </a>
+							                        </li>
+						                        
+                                      </c:forEach>   
+                    </ul>
+                    
+                    
+                </li> 
+                     	<c:if test='${jobtotal> 0}'>
+                     	 <c:set var="apptotal" value="${apptotal + jobtotal}" />
+                       <script>$("#"+${row.workflow_id }).html('<span class="badge badge-light-danger rounded-pill ms-auto me-2">${jobtotal}</span>')</script>
+                        </c:if>
+                        
+                    </c:if>     
+                        
+                                          </c:forEach>  
+                        
+                        	<c:if test='${apptotal > 0}'>
+                       <script>$("#apptotal").html('<span class="badge badge-light-danger rounded-pill ms-auto me-2">${apptotal}</span>')</script>
+                        </c:if>
+                        
+                        
+                    </ul>
+                    
+                    
+                </li> 
+                     
+                     
+                     
+                                 
+      
+                </li>
+          
+           
+            
+                <li  class=" navigation-header"><span data-i18n="User Interface"><spring:message code="nav.Setting&Setup"  /></span><i data-feather="more-horizontal"></i>
+                </li>
+               
+              
+         
+     
+            
+                <li id="nav_set" class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather="user"></i><span class="menu-title text-truncate" data-i18n="User">
+                <spring:message code="nav.Manageusers" text="จัดการผู้ใช้งาน" /></span></a>
+                    <ul class="menu-content">
+          
+          
+          
+                <sec:authorize access="hasAnyAuthority('READ-UE')">                  
+                     <li  id="usermanage1">
+                
+    <a class="d-flex align-items-center" href="/department-usermanage"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+    <spring:message code="tables.department" text="หน่วยงาน" /></span></a>
+     
+     
+     
+     </li>
+          </sec:authorize>   
+          
+          
+       <sec:authorize access="hasAnyAuthority('READ-RUE')">                     
+    <li  id="usermanage2">
+    <a class="d-flex align-items-center" href="/role-usermanage"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+    <spring:message code="nav.Roles" text="ตำแหน่งงานและสิทธิ์" /> </span></a>
+     
+     
+     
+     </li>
+     
+      </sec:authorize>   
+    
+        <sec:authorize access="hasAnyAuthority('READ-UE')">   
+       <li id="usermanage3">
+    <a class="d-flex align-items-center" href="/user-usermanage"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+   <spring:message code="nav.registration" text="ทะเบียนผู้ใช้" /></span></a>
+     </li>  
+     
+
+
+        <li id="usermanage5" >
+    <a class="d-flex align-items-center" href="/attendance-filemanager?type=year"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+  <spring:message code="nav.attendance"  /></span></a>
+     </li>  
+
+     
+        </sec:authorize>    
+   
+                    </ul>
+                </li> 
+
+               
+          <li id="nav_set" class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather='settings'></i><span class="menu-title text-truncate" data-i18n="User">
+          <spring:message code="nav.system" text="" /></span></a>
+                    <ul class="menu-content">
+          
+                                      <sec:authorize access="hasAnyAuthority('ROLE_SUPPEROWNER')">   
+               <li  id="nav_set2" class=" nav-item">
+               <a class="d-flex align-items-center" href="/setting"><i data-feather="circle"></i><span class="menu-title text-truncate" data-i18n="Dashboardsd">
+              
+                 <spring:message code="nav.Email" text="" />
+               </span></a>
+                 
+                </li>
+           </sec:authorize>
+          
+                <sec:authorize access="hasAnyAuthority('READ-UE')">                  
+                     <li  id="nav_set3" >
+                
+    <a class="d-flex align-items-center" href="/version-setting"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+    <spring:message code="nav.Version" text="" /></span> </a>
+     
+     
+     
+     </li>
+          </sec:authorize>   
+          
+          
+       <sec:authorize access="hasAnyAuthority('READ-RUE')">                     
+    <li id="nav_set4" >
+    <a class="d-flex align-items-center" href="/backup-setting"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+    <spring:message code="nav.Service" text="" /></span></a>
+     
+     
+     
+     </li>
+     
+      </sec:authorize>   
+             </ul>
+                </li> 
+                
+                
+                
+                
+                
+            <li id="nav_set" class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather='key'></i><span class="menu-title text-truncate" data-i18n="User">
+     
+          <spring:message code="nav.generate_code" />
+          </span></a>
+                    <ul class="menu-content">
+          
+                              
+               <li  id="dar_set1">
+               <a class="d-flex align-items-center" href="/group-dar"><i data-feather="circle"></i><span class="menu-title text-truncate" data-i18n="Dashboardsd">
+              
+                 <spring:message code="nav.generate_doc" />
+               </span></a>
+                 
+                </li>
+                    <li  id="dar_set2">
+               <a class="d-flex align-items-center" href="/gencode-usermanage"><i data-feather="circle"></i><span class="menu-title text-truncate" data-i18n="Dashboardsd">
+              
+                 <spring:message code="nav.generate_id_user"  />
+               </span></a>
+                 
+                </li>
+                
+                  <sec:authorize access="hasAnyAuthority('ROLE_SUPPEROWNER')">    </sec:authorize>
+          
+   
+          
+          
+  
+             </ul>
+                </li> 
+                      
+                
+                
+           <li id="nav_set" class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather='tool'></i><span class="menu-title text-truncate" data-i18n="User">
+          <spring:message code="nav.settinghr" text="การตั้งค่าระบบ HR" /></span></a>
+                    <ul class="menu-content">
+          
+     <sec:authorize access="hasAnyAuthority('READ-H')">
+               <li  id="nav_tool1" class=" nav-item" >
+               <a class="d-flex align-items-center" href="/holiday-setting"><i data-feather="circle"></i><span class="menu-title text-truncate" data-i18n="Dashboardsd">
+              
+                 <spring:message code="nav.holiday" text="วันหยุด" />
+               </span></a>
+      </sec:authorize>           
+         
+         
+     <sec:authorize access="hasAnyAuthority('READ-OT')">  
+       <li id="usermanage4" >
+    <a class="d-flex align-items-center" href="/attendance-usermanage"><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+   <spring:message code="nav.attendance" text="การเข้างาน" /></span></a>
+     </li>  
+     
+        </sec:authorize>   
+     
+                 </li>
+     
+          
+          
+   
+             </ul>
+                </li> 
+     
+               <li id="nav_set" class=" nav-item"><a class="d-flex align-items-center" href="#"><i data-feather='layers'></i><span class="menu-title text-truncate" data-i18n="User">
+         <spring:message code="nav.E-FormSetting" text="ตั้งค่า อี-ฟอร์ม" /></span></a>
+                    <ul class="menu-content">
+     
+     
+        <li id="nav_monitor" style="display:none"><a class="d-flex align-items-center" href="/workflow">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">Workflow Monitor</span></a>
+                        </li>
+           
+           
+                
+                                
+               
+               
+                  <li id="nav_set" class=" nav-item"><a class="d-flex align-items-center" href="/listcondition-condition"><i data-feather="circle"></i>
+                  <span class="menu-title text-truncate" data-i18n="User">
+                   <spring:message code="nav.E-Forms" text="อี-ฟอร์ม" />
+                    </a>
+                    <ul class="menu-content">
+          
+                
+
+                       <li id="e-form1"><a class="d-flex align-items-center" href="/listcondition-condition">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+                          <spring:message code="nav.E-Forms" text="อี-ฟอร์ม" />
+                        </a>
+                        </li>
+                        
+                     
+                         <li id="e-form2"><a class="d-flex align-items-center" href="/dataset-condition">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+                          <spring:message code="nav.Dataset" text="ชุดข้อมูล" />
+                       </a>
+                        </li>
+                          <sec:authorize access="hasAnyAuthority('READ-DS')">    </sec:authorize>
+                        
+                       
+                         <li id="e-form4"><a class="d-flex align-items-center" href="/listgroup_label-condition">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+                         การจัดกลุ่มฟอร์ม
+                        </a>
+                        </li>
+                       
+                       
+                        <li id="e-form3" ><a class="d-flex align-items-center" href="/listpolicy-filemanager/TASK">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List"><spring:message code="policy.mypolicy"  /></a>
+                        </li>
+       			
+                        
+                       
+                        
+                        
+                    </ul>  
+               
+             <li id="nav_datalink" ><a class="d-flex align-items-center" href="/datalink-workflow">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+ 											<spring:message code="menu.DataLink" /></a>
+ 									
+ 					  </li> 		
+ 			     
+             <li id="nav_workflowsystem" ><a class="d-flex align-items-center" href="/workflowsystem-workflow">
+                        <i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="List">
+ 											<spring:message code="menu.worksystem" /></a>
+ 									
+ 					  </li> 			  
+ 					  
+ 					  
+               
+                    </ul>
+                </li> 
+
+           
+           
+           
+         
+                                             
+            </ul>
+            
+        </div>
+
+   </div>
+    <!-- END: Main Menu-->
+
+  

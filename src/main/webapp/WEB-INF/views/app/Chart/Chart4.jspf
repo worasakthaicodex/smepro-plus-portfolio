@@ -1,0 +1,139 @@
+
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+ <script>
+
+ window.addEventListener("DOMContentLoaded", function () {
+	  const theme = "${customreports.theme}";
+
+	    // ฟังก์ชันเพิ่มคอมมาในตัวเลข
+	    function numberWithCommas(x) {
+	        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	    }
+
+	    // ดึงตาราง
+	    var tables = document.getElementsByClassName("ui-dynamic-table-page");
+	    if (!tables.length) {
+	        console.error("ไม่พบตาราง ui-dynamic-table-page");
+	        return;
+	    }
+	    var table = tables[0];
+	    var rows = table.querySelectorAll('tbody tr');
+	    if (!rows.length) {
+	        console.error("ไม่พบแถวในตาราง");
+	        return;
+	    }
+
+	    // กำหนด axisY และ axisXClass
+	    var axisY = "${customreports.axis_y}".split(",").map(function(y) { return y.trim(); }); // คอลัมน์ข้อมูล (Month 1-12)
+	    var axisXClass = '.cell-' + ${customreports.level}; // คอลัมน์ชื่อซี่รี่ (ขั้นตอน, cell-5)
+
+	    // เตรียมข้อมูลสำหรับกราฟ Funnel
+	    var funnelData = [];
+
+	    // วนลูปผ่านแต่ละแถวเพื่อสร้างข้อมูล
+	    for (var i = 0; i < rows.length; i++) {
+	        var row = rows[i];
+	        var labelCell = row.querySelector(axisXClass);
+	        var label = labelCell ? labelCell.innerText.trim() : 'แถว ' + (funnelData.length + 1);
+
+	        // รวมข้อมูลจากคอลัมน์ใน axisY
+	        var rowSum = 0;
+	        for (var j = 0; j < axisY.length; j++) {
+	            var cellClass = '.cell-' + axisY[j];
+	            var dataCell = row.querySelector(cellClass);
+	            rowSum += (dataCell && dataCell.innerText ? Number(dataCell.innerText) : 0);
+	        }
+
+	        if (rowSum !== 0) {
+	            funnelData.push({ category: label, value: rowSum });
+	        }
+	    }
+
+	    // ดึงชื่อสำหรับหัวกราฟ
+	    var axisXHeaderIndex = parseInt(${customreports.level}) - 1;
+	    var axisXHeaderCell = document.getElementById("ui-dynamic-table-header-cell-" + axisXHeaderIndex);
+	    var chartTitleLabel = axisXHeaderCell ? axisXHeaderCell.innerText : "ขั้นตอน";
+
+	    // ดีบักข้อมูล
+	    console.log("Funnel Data:", funnelData);
+	    console.log("Chart Title Label:", chartTitleLabel);
+
+	    // สร้างกราฟ Funnel
+	    if (funnelData.length > 0) {
+	        am5.ready(function () {
+	            var root = am5.Root.new("funnel_chart");
+
+
+
+	            root.setThemes([am5themes_Animated.new(root)]);
+
+	            var chart = root.container.children.push(
+	                am5percent.SlicedChart.new(root, {
+	                    layout: root.verticalLayout
+	                })
+	            );
+
+	            var series = chart.series.push(
+	                am5percent.FunnelSeries.new(root, {
+	                    alignLabels: false,
+	                    orientation: "vertical",
+	                    valueField: "value",
+	                    categoryField: "category"
+	                })
+	            );
+
+	            series.slices.template.setAll({
+	                strokeOpacity: 0,
+	                fillGradient: am5.LinearGradient.new(root, {
+	                    rotation: 0,
+	                    stops: [
+	                        { brighten: -0.4 },
+	                        { brighten: 0.4 },
+	                        { brighten: -0.4 }
+	                    ]
+	                })
+	            });
+
+	            // ปรับแต่ง tooltip
+	            series.slices.template.set("tooltipText", "{category}: " + numberWithCommas("{value}") + " ({valuePercent.formatNumber('#.0')}%)");
+
+	            series.data.setAll(funnelData);
+	            series.appear();
+
+	            // Legend ด้านล่าง
+	            var legend = chart.children.push(
+	                am5.Legend.new(root, {
+	                    centerX: am5.p50,
+	                    x: am5.p50,
+	                    marginTop: 15,
+	                    marginBottom: 15,
+	                    layout: root.horizontalLayout // ทำให้ legend จัดเรียงแนวนอน
+	                })
+	            );
+
+	            legend.data.setAll(series.dataItems);
+
+	            // ตั้งชื่อกราฟ
+	            chart.children.unshift(
+	                am5.Label.new(root, {
+	                    text: "${customreports.report_name} ",
+	                    fontSize: 18,
+	                    centerX: am5.p50,
+	                    x: am5.p50,
+	                    marginBottom: 20
+	                })
+	            );
+
+	            chart.appear(1000, 100);
+	        });
+	    }
+	});
+ 
+ 
+ </script> 

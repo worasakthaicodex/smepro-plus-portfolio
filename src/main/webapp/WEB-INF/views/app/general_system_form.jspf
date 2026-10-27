@@ -1,0 +1,653 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+ 
+
+<style>
+		 table {
+		    border-collapse:collapse;
+		    margin: 0;
+		  width: 100%;
+		   border: 1px solid #eee;
+		   
+		}
+		
+		
+		td {
+    text-align: center;
+   border: 1px solid #eee;
+      max-width: 200px;
+     font-size:14px;
+      overflow: hidden;   /*ซ่อนเนื้อหาที่ล้น */
+  text-overflow: ellipsis; /* เพิ่มจุดไข่ปลา (ellipsis) เมื่อเนื้อหาล้น */
+  white-space: nowrap; /* ป้องกันการขึ้นบรรทัดใหม่ */
+  padding:10px;
+}
+td  .action{
+ text-align: center;
+    border: 1px solid #eee;
+    max-width: 200px;
+    font-size: 14px;
+    white-space: normal; /* ขึ้นบรรทัดใหม่เมื่อเนื้อหาล้น */
+    
+}
+
+
+
+td:first-child { text-align: left; }
+
+
+th {
+    text-align: center;
+   border: 1px solid #eee;
+  background-color: #f2f2f2;
+     height: 30px;
+     
+}
+		
+</style>
+ <c:set var="readonly" value="readonly" />
+<c:if test="${docs== null ||  docs.current_step == 'draft' ||  docs.current_step == 'rejected'     }"> 
+ <c:set var="readonly" value="" />
+</c:if>
+
+    <c:if test="${typeshow == 1 }"> 
+
+					   <li class="d-flex justify-content-between align-items-center">
+						    <p>Stock Requisition</p>
+						   <p class="fw-bold">${sr.sr_date}${sr.sr_id}</p>
+					   </li>                                              
+	                      <li class="d-flex justify-content-between align-items-center">
+						    <p><spring:message code="stock.stock_daterequisition" /></p>
+						   <p class="fw-bold">${stock.stock_date }</p>
+					   </li>                                        
+	   		
+	      
+	
+	      
+	     </c:if>  
+	     
+	     
+	      <c:if test="${typeshow == 2 }">  
+
+	         
+	       
+	        <input type="hidden" name="tempId"  readonly value="${tempId}" >
+	         <input type="hidden" name="datalink_name"  readonly value="${key.datalink_name}" >
+	        
+	        
+
+	   									<div class="col-12">
+                                                <div class="mb-1 row">
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label" for="fname-icon" >Stock Requisition <span title="Auto-generated">ℹ️</span></label>
+                                                    </div>
+                                                     <div class="col-sm-9"> 
+                                                     
+                                                              <input type="text" class="form-control"  readonly value="${sr.sr_date}${sr.sr_id}" >
+                                                             <input type="hidden"  class="form-control" name="stock_id"   value="${stock.stock_id+0 }" >
+                                                      </div>
+                                                     </div> 
+                                           </div>  
+                   				   <div class="col-12">
+                                                <div class="mb-1 row">   
+                                                    <div class="col-sm-3">
+                                                        <label class="col-form-label" for="fname-icon" >
+                                                      <spring:message code="stock.stock_daterequisition" />
+                                                        </label>
+                                                    </div>
+ 
+                                                     <div class="col-sm-9"> 
+                                                    <input type="date"  class="form-control" name="stock_date"   value="${stock.stock_date }" ${readonly }>
+                                       
+                                                    
+                                                      </div>
+                                                     </div> 
+                                           </div>
+
+                            
+              
+                                           
+                              
+                  
+                                          
+	       </c:if>  
+	       
+	       
+	       	      <c:if test="${typeshow == 3 }">  
+	       	      
+<style>
+ #Register th {
+    position: sticky;
+    top: 0;
+    z-index: 10; /* ให้แน่ใจว่าหัวตารางอยู่ด้านบน */
+}        
+ </style>     
+ 
+ 
+
+       <input type="text" id="searchInputstock_card" placeholder="Search..." class="form-control mb-3">
+              
+	       	      
+	       	              <div style="max-height:500px;overflow-y:auto">
+	       	        <table   class="tabledata" style="height:auto" id="stock_cards" >
+                                    <thead>
+                                        <tr>
+                                            <th class="form-label fixhead">SID</th>
+                                            <th class="form-label fixhead"> <spring:message code="stock.list" /></th>
+                                             <th class="form-label fixhead"><spring:message code="stock.type"  /></th>
+   										 <th class="form-label fixhead"><spring:message code="stock.quantity" /></th>
+   										      <th class="form-label fixhead"><spring:message code="item.unit" text="หน่วยนับ" /></th>
+   										      
+   									    <th style="font-size: 10px;padding:5px"><spring:message code="maindata.pd"  /></th>
+                      <th style="font-size: 10px;padding:5px"><spring:message code="maindata.batch"  /></th>
+   										      
+   										          <th class="form-label fixhead">Action</th>
+                                            </tr>
+                                            
+                                            
+                                           
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                          
+                          
+ 
+                                        <c:forEach items="${stock_card }" var="row" varStatus="count">
+				                                      <tr>
+				                                            <td data-custom="id">${row.stock_receipt_date }${row.stock_id }</td>
+				                                             <td data-custom="list">${row.stock_list }</td>
+				                                             <td data-custom="type">${row.stock_type }</td>
+				                                            <td data-custom="quantity">${row.stock_remaining+0.0 }</td>
+  															<td data-custom="unit">${row.stock_unit }</td>
+  	
+  														    <td data-custom="product">${row.stock_pd }</td>
+  															<td data-custom="batch">${row.stock_batch }</td >
+  																<td>
+  													
+  															<a class="btn btn-sm btn-success" ><spring:message code="maindata.apply"  /></a>
+  											
+  															
+  														
+  																</td >
+				                                        </tr>
+				                                        
+				                     
+                                        </c:forEach>
+                                        
+                                    </tbody>
+                                    </table> 
+                                    </div>
+                                    
+                   <script>
+    $(document).ready(function() {
+        // ฟังก์ชันกรองข้อมูลเมื่อพิมพ์ลงในช่องSearch
+        $("#searchInputstock_card").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#stock_cards tbody tr").filter(function() {
+                // ซ่อนหรือแสดงแถวตามการSearch
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+        });
+    });
+</script>                          
+                                    
+                                    
+      
+	      	  
+	      	    <script>    
+
+	       	  
+	          $("#stock_cards").on("click", "a", function(event) {
+	        	    event.preventDefault();
+	        	    // ดึงข้อมูลจากแถวที่กดเลือก
+	        	    const row = $(this).closest("tr");
+	        	    const list = row.find("td[data-custom='list']").text();
+	        	    const type = row.find("td[data-custom='type']").text();
+	         	    const quantity = row.find("td[data-custom='quantity']").text();
+	         	    const unit = row.find("td[data-custom='unit']").text();
+	         	    const id = row.find("td[data-custom='id']").text();
+	         	   const product = row.find("td[data-custom='product']").text();
+	         	  const batch = row.find("td[data-custom='batch']").text();
+	         	 
+	         	  
+
+	         	    $("#id_stock").val(id);
+	         	    $("#stock_stockid").val(quantity);
+	         	
+
+	         	   // ตั้งค่า max และ value ให้ input number
+	         	   $("#qty").attr("max", quantity);
+
+	         	   
+	        	    const data =  " SID: "+id+" List: "+list+" Quantity: "+quantity+""+unit+" PD: "+product+" Batch: "+batch;
+	        	    
+	        	    // นำข้อมูลที่ได้ไปใส่ใน input ที่ต้องการ
+	        	    $("#display_stock_stockid").val(data).css("border", "2px solid red").prop("disabled", true);
+
+	        	    // หากต้องการทำให้สีขอบกลับเป็นปกติหลังจากเวลาหนึ่ง
+	        	    setTimeout(function() {
+	        	        $("#display_stock_stockid").css("border", "").prop("readonly", false);
+	        	    }, 10000); // 10000ms = 10 วินาที
+	        	       
+	        	    
+	        	    
+	        	  
+	        	    
+	        	    
+	        	});
+	          
+	          
+	          
+	      	  </script>    
+	       	          </c:if>  
+	       	          
+	       	          
+	       	          
+	    	<c:if test="${typeshow == 4}">  
+	       	           <table  class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>
+                                            <th class="form-label fixhead" style="padding:5px;font-size:13px"> <spring:message code="item.description" text="รายละเอียดสินค้า/บริการ" /></th>
+                                           
+                                           
+                                             <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="item.rq"  /></th>
+                                              <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="item.iq"  /></th>
+                                             
+                                             
+                                                      <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="item.unit" text="หน่วยนับ" /></th>
+                                                      
+                                                      
+                                                      
+                                              <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="stock.pd"  /></th>
+                                              <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="stock.batch" /></th>
+                                      
+                                                <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="item.idate"  /></th>
+                                                
+                                                 
+                                                  
+                                
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:set var="Clear_status" value="0.00" />
+                                        <c:forEach items="${item }" var="row" varStatus="count">
+				                                      <tr id="item-${row.id }">
+				                                                 <td style="padding:5px;font-size:13px">${count.count }</td >
+				                                             <td style="padding:5px;font-size:13px">${row.description }</td >
+				                                             <td style="padding:5px;font-size:13px">${row.qty }</td >
+				                                             <td style="padding:5px;font-size:13px">${row.issued_qty }</td >
+				                                            <td style="padding:5px;font-size:13px">${row.unit }</td >
+				                                              <td style="padding:5px;font-size:13px">${row.pd }</td >
+															  <td style="padding:5px;font-size:13px">${row.batch }</td >
+															  <td style="padding:5px;font-size:13px">${row.date_action }</td >
+				                                            
+				                          
+				                                        </tr>
+                                        </c:forEach>
+                                        
+                                        
+                                    </tbody>
+                                    </table>  
+                                    
+                                    <br>    <br>
+                                      ${stock.stock_support_dataflow }
+                                    
+      
+	       	 </c:if>  
+	       	 
+	
+	
+	
+	<c:if test="${typeshow == 5 }">  
+	       	 
+	 
+	 
+  <c:if test="${  docs == null ||  (docs.current_step == 'draft' or docs.current_step == 'rejected'  )   }"> 	       	 
+		<button type="button"  id="submits" class="btn btn-sm btn-light " onclick="setini()"  data-bs-toggle="modal" data-bs-target="#addNewSR" >                     
+		<spring:message code="btn.add" text="เพิ่ม" />
+		</button>  
+</c:if>
+
+
+	<br>  	<br>     	 
+	       	 
+             <table  class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>
+                                            <th class="form-label fixhead" style="padding:5px;font-size:13px"> <spring:message code="item.description" text="รายละเอียดสินค้า/บริการ" /></th>
+                                           
+                                           
+                                             <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="item.rq"  /></th>
+                                              <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="item.iq"  /></th>
+                                             
+                                             
+                                                      <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="item.unit" text="หน่วยนับ" /></th>
+                                                      
+                                                      
+                                                      
+                                              <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="stock.pd"  /></th>
+                                              <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="stock.batch" /></th>
+                                      
+                                                <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="item.idate"  /></th>
+                                                
+                                                 
+                                                  
+                                                           <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="tables.action" text="จัดการ" /></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:set var="Clear_status" value="0.00" />
+                                        <c:forEach items="${item }" var="row" varStatus="count">
+				                                      <tr id="item-${row.id }">
+				                                            <td style="padding:5px;font-size:13px">${count.count }</td >
+				                                             <td style="padding:5px;font-size:13px">${row.description }</td >
+				                                             <td style="padding:5px;font-size:13px">${row.qty }</td >
+				                                             <td style="padding:5px;font-size:13px">${row.issued_qty }</td >
+				                                            <td style="padding:5px;font-size:13px">${row.unit }</td >
+				                                              <td style="padding:5px;font-size:13px">${row.pd }</td >
+															  <td style="padding:5px;font-size:13px">${row.batch }</td >
+															  <td style="padding:5px;font-size:13px">${row.date_action }</td >
+				                                            
+				                                            
+				                                            
+				                                            
+				                                      <td style="padding:5px;font-size:13px">
+				                                    
+				                                      <c:if test="${  docs.current_step == 'cleared'  }"> 
+				                                        
+				                                           <a herf=""   onclick="getdatas('/edititem-filemanager/${row.id }/${tempId}','savesuccess')"  
+							                                      class="btn btn-sm btn-success" data-bs-toggle="modal"  data-bs-target="#addNewSR2"><spring:message code="btn.cleared"  /></a> 
+				                                          </c:if>
+				                                          
+				                                          
+				                                        <c:if test="${docs == null or ( docs.current_step == 'draft' or docs.current_step == 'rejected'  )  }"> 
+							                                      <a herf=""   onclick="getdatas('/edititem-filemanager/${row.id }/${tempId}','savesuccess')"  
+							                                      class="btn btn-sm btn-light" data-bs-toggle="modal"  data-bs-target="#addNewSR"><spring:message code="btn.edit"  /></a> 
+							                                    
+							                        
+							                                     <a herf="" class="btn btn-sm btn-danger"
+							                                      onclick="getdata('/delitem-filemanager/${row.id }/${tempId}','savesuccess')" 
+							                                     ><spring:message code="btn.delete"  /></a> 
+				                                     </c:if>
+				                                   
+				                                     
+				                                      </td>
+				                                      
+				                                        </tr>
+                                        </c:forEach>
+                                        
+                                        
+                                    </tbody>
+                                    </table>  
+                                    
+                                    
+   <script>             
+function setini(){
+	var uuid = crypto.randomUUID();
+	  $("form#formsr #id").val(uuid);	
+}
+                                
+</script>                                      
+                                    
+                            
+	 </c:if>  
+	 
+	 <c:if test="${typeshow == 6}">  
+	       	         
+                                     <div class="modal fade" id="addNewSR" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true">
+ 
+                    <div class="modal-dialog   modal-lg modal-dialog-centered">
+                         <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel33"> <spring:message code="item.Additem" /></h4>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                  
+                                                         <form:form method="POST"  modelAttribute="SubData"  action="/additem-filemanager?${_csrf.parameterName}=${_csrf.token}"  id="formsr" name ="formsr"> 
+                                                 
+                                                 
+                                                            <div class="modal-body">
+                                                             
+                                                             
+                                                                <label> <spring:message code="item.description" text="รายละเอียดสินค้า/บริการ" />: </label>
+                                                                <div class="mb-1">
+                                                            
+                                                                   <div class="input-group">
+                                     <span class="input-group-text" id="basic-addon-search1"  >
+                                      <a href="#" data-bs-toggle="modal" data-bs-target="#new-stock-modal">  
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+       								 </a>
+                                        </span>
+                                        
+                                       <c:set var="display_stock_stockid" value="" />
+                                       <c:if test="${card_stock != null }">
+                                         <c:set var="display_stock_stockid" value="SID: ${card_stock.stock_id } List: ${card_stock.stock_list }  Quantity: ${card_stock.stock_remaining+0.0 }${card_stock.stock_unit } PD: ${card_stock.stock_pd } Batch: ${card_stock.stock_batch }" />
+                                       </c:if>
+ 
+ 
+                                        <input type="text" class="form-control" id="display_stock_stockid"    value="${display_stock_stockid }"  readonly required>
+                                    </div>
+                                        
+                                    
+                                                     <input type="hidden"  class="form-control" name="id_stock"  id="id_stock"   value="${stock.stock_stockid+0 }" >
+                                                    
+                                                    
+                                                     <input type="hidden"  class="form-control" name="id"  id="id"   value="0" >
+                                                      <input type="hidden"  class="form-control" name="status"  id="status"   value="PENDING" >  
+                                                      <input type="hidden" name="tempId" id="tempId"  readonly value="${tempId}" >
+							       					  <input type="hidden" name="datalink_name"  id="datalink_name"   readonly value="${key.datalink_name}" >
+       								  					<input type="hidden" name="type"  id="type"   readonly value="${key.datalink_name}" >
+                                                             
+                                                             
+                                                             
+                                                             
+                                                             
+                                                                </div>
+
+							 
+                                                                <label><spring:message code="item.rq"  />: </label>
+                                                                <div class="mb-1">
+                                                                    <input type="number" step="0.01" min="0" id="qty"  name="qty"   class="form-control" required>
+                                                                </div>
+                                                                
+                                                                
+                                                               <label></label>  
+                                                             <div class="mb-1">  
+
+                  							   <input type="checkbox" id="save"  name="save" value="1" > Don't close the window.
+                  							       </div>
+                                                            </div>
+                                                           
+                                                           
+                                                            <div class="modal-footer" >
+                                                                <button type="button"  onclick='send("/additem-filemanager?${_csrf.parameterName}=${_csrf.token}","formsr","subdata")'  class="btn btn-primary waves-effect waves-float waves-light" >เพิ่ม</button>
+                                                            </div>
+                                                </form:form>
+                                                    </div>    
+                               
+                                        </div>
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                             <div class="modal fade" id="addNewSR2" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true">
+ 
+                    <div class="modal-dialog   modal-lg modal-dialog-centered">
+                         <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel33"><spring:message code="btn.cleared"  /></h4>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                  
+                                                         <form:form method="POST"  modelAttribute="SubData"  action="/additem-filemanager?${_csrf.parameterName}=${_csrf.token}"  id="formsr_c" name ="formsr_c"> 
+                                                 
+                                                 
+                                                            <div class="modal-body">
+                                                             
+                                                             
+                                                                <label> <spring:message code="item.description" text="รายละเอียดสินค้า/บริการ" />: </label>
+                                                                <div class="mb-1">
+                                                            
+                                                                   <div class="input-group">
+                                     <span class="input-group-text" id="basic-addon-search1"  >
+                                      <a href="#" data-bs-toggle="modal" data-bs-target="#new-stock-modal${readonly}">  
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+       								 </a>
+                                        </span>
+                                        
+                                       <c:set var="display_stock_stockid" value="" />
+                                       <c:if test="${card_stock != null }">
+                                         <c:set var="display_stock_stockid" value="SID: ${card_stock.stock_id } List: ${card_stock.stock_list }  Quantity: ${card_stock.stock_remaining+0.0 }${card_stock.stock_unit } PD: ${card_stock.stock_pd } Batch: ${card_stock.stock_batch }" />
+                                       </c:if>
+ 
+ 
+                                        <input type="text" class="form-control" id="display_stock_stockid"    value="${display_stock_stockid }"  readonly required>
+                                    </div>
+                                        
+                                    
+                                                     <input type="hidden"  class="form-control" name="id_stock"  id="id_stock"   value="${stock.stock_stockid+0 }" >
+                                                     <input type="hidden"  class="form-control" name="id"  id="id"   value="0" >
+                                                        <input type="hidden"  class="form-control" name="status"  id="status"   value="CLEARED" >  
+                                                             
+                                                             
+                                                             
+                                                             
+                                                             
+                                                                </div>
+
+							        <input type="hidden" name="tempId" id="tempId"  readonly value="${tempId}" >
+							         <input type="hidden" name="datalink_name"  id="datalink_name"   readonly value="${key.datalink_name}" >
+       								  <input type="hidden" name="type"  id="type"   readonly value="${key.datalink_name}" >
+
+                                                                <label><spring:message code="item.rq"  />: </label>
+                                                                <div class="mb-1">
+                                                                    <input type="number" step="0.01" min="0" id="qty"  name="qty"   class="form-control"  ${readonly} required>
+                                                                </div>
+                                                                
+                                                                
+                                                               <label><spring:message code="item.iq"  />: </label>
+                                                                <div class="mb-1">
+                                                                    <input type="number" step="0.01" min="0" id="issued_qty"  name="issued_qty"   class="form-control"  required>
+                                                                </div>
+                                                                
+                                                                 <label><spring:message code="item.idate"  />: </label>
+                                                                <div class="mb-1">
+                                                                    <input type="date"  id="date_action"  name="date_action"   class="form-control"  required>
+                                                                </div>
+                                                                
+                                                               <label></label>  
+                                                             <div class="mb-1">  
+
+                  							   <input type="checkbox" id="save"  name="save" value="1" > Don't close the window.
+                  							       </div>
+                                                            </div>
+                                                           
+                                                           
+                                                            <div class="modal-footer" >
+                                                                <button type="button"  onclick='send2("/additem-filemanager?${_csrf.parameterName}=${_csrf.token}","formsr_c","subdata")'  class="btn btn-primary waves-effect waves-float waves-light" >เพิ่ม</button>
+                                                            </div>
+                                                </form:form>
+                                                    </div>    
+                               
+                                        </div>
+                                        </div>
+                                        
+                                        
+                                        
+                                        
+                                        
+<script>             
+
+
+$("form#formsr #id").val(uuid);
+
+   function send(Mode1,Mode2,Mode3){                                   
+	     var maxQty = parseInt($("form#formsr #qty").attr("max")); // ดึงค่า max
+	    var currentQty = parseInt($("form#formsr #qty").val()); // ดึงค่าที่ผู้ใช้กรอก
+	
+	    // ถ้าเกิน maxQty ให้เซ็ตค่าเป็น max
+	    if (currentQty > maxQty ) {
+            alert("Error จำนวนคงเหลือไม่เพียงพอ [The remaining amount is not enough.]");  
+	    }
+	    
+	    // ถ้าเกิน maxQty ให้เซ็ตค่าเป็น max
+	    else if (currentQty > maxQty ) {
+            alert("Error จำนวนคงเหลือไม่เพียงพอ [The remaining amount is not enough.]");  
+	    }
+	    else{
+	    	
+	    
+	    	
+	    	postdata(Mode1,Mode2,Mode3);
+
+	    	if ($("form#formsr #save").is(":checked")) {
+
+	    	} else {
+		    	const modal = bootstrap.Modal.getInstance(document.getElementById('addNewSR'));
+		    	modal.hide();
+	    	}
+
+	    
+     	    $("form#formsr #id_stock").val(0);
+     	    $("form#formsr #stock_stockid").val(0);
+     	    $("form#formsr #qty").attr("max", 0).val(0);
+     	   $("form#formsr #display_stock_stockid").val("");
+     		var uuid = crypto.randomUUID();
+     		  $("form#formsr #id").val(uuid);	
+	    }
+	    
+
+   }  
+   
+   
+   
+
+   function send2(Mode1,Mode2,Mode3){                                   
+	     var maxQty = parseInt($("form#formsr_c #issued_qty").attr("max")); // ดึงค่า max
+	    var currentQty = parseInt($("form#formsr_c #issued_qty").val()); // ดึงค่าที่ผู้ใช้กรอก
+	
+	    // ถ้าเกิน maxQty ให้เซ็ตค่าเป็น max
+	    if (currentQty > maxQty ) {
+            alert("Error จำนวนคงเหลือไม่เพียงพอ [The remaining amount is not enough.]");  
+	    }
+	    
+	    // ถ้าเกิน maxQty ให้เซ็ตค่าเป็น max
+	    else if (currentQty > maxQty ) {
+            alert("Error จำนวนคงเหลือไม่เพียงพอ [The remaining amount is not enough.]");  
+	    }
+	    else{
+	    	
+	    
+	    	
+	    	postdata(Mode1,Mode2,Mode3);
+
+	    	if ($("form#formsr_c #save").is(":checked")) {
+
+	    	} else {
+		    	const modal = bootstrap.Modal.getInstance(document.getElementById('addNewSR2'));
+		    	modal.hide();
+	    	}
+	    	
+	    
+	    	
+	    	$("form#formsr #issued_qty").val(0);
+     	    $("form#formsr #id_stock").val(0);
+     	    $("form#formsr #stock_stockid").val(0);
+     	    $("form#formsr #qty").attr("max", 0).val(0);
+     	   $("form#formsr #display_stock_stockid").val("");
+     		var uuid = crypto.randomUUID();
+     		  $("form#formsr #id").val(uuid);	
+	    }
+	    
+
+   }  
+</script>  
+	 	 </c:if>  
+	      

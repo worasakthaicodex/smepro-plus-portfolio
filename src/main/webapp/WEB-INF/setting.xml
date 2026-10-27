@@ -1,0 +1,64 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    
+    <context:component-scan base-package="com.smepro"/>
+
+<bean id="viewResolver"
+      class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+    <property name="prefix" value="/WEB-INF/views/"/>
+    <property name="suffix" value=".jsp"/>
+</bean>
+
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/> 
+ 
+		<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en" />
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="messages" />
+		
+	</bean>
+	
+	
+	
+  <mvc:interceptors>
+    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="language" />
+    </bean>
+  </mvc:interceptors>
+  
+<context:property-placeholder location="classpath:datasource.properties,file:///${catalina.base}/ds/datasource.properties" ignore-resource-not-found="true" />  
+<mvc:resources mapping="/resources/**" location="/resources/template/" />
+<mvc:resources mapping="/app/**" location="/resources/app/" />
+<mvc:resources mapping="/lib/**" location="/resources/lib/" />
+<mvc:resources mapping="/document/**" location="${storage.path}" />
+<mvc:resources mapping="/document-filemanager/DriveA/**" location="${storage.path}" />
+<mvc:resources mapping="/document-filemanager/DriveB/**" location="${storage.path}" />
+<mvc:resources mapping="/document-filemanager/DriveC/**" location="${storage.path}" />
+<mvc:resources mapping="/document-filemanager/DriveD/**" location="${storage.path}" />
+<mvc:resources mapping="/document-filemanager/DriveE/**" location="${storage.path}" />
+<mvc:resources mapping="/document-filemanager/DriveF/**" location="${storage.path}" />
+<mvc:resources mapping="/document-filemanager/DriveG/**" location="${storage.path}" />
+<mvc:resources mapping="/document-filemanager/DriveH/**" location="${storage.path}" />
+<mvc:resources mapping="/readdocument/**" location="${storage.path}" />
+<mvc:resources mapping="/openfile/**" location="/renders/" />
+<mvc:resources mapping="/Component/**" location="/controlComponent/" />
+<mvc:resources mapping="/avatar/**" location="${storage.path}user/" />
+
+
+    <!-- ... -->
+ <mvc:annotation-driven />
+ <context:annotation-config/>
+ 
+ 
+</beans>

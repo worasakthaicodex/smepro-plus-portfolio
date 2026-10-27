@@ -1,0 +1,103 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+ <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+ <style>
+.report-container {
+    display: flex;
+    justify-content: space-between;
+   // max-width: 1200px;
+    margin: 20px auto;
+
+}
+
+.column {
+    width: 48%;
+}
+
+.report-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.label {
+    width: 150px;
+    font-weight: bold;
+    margin-right: 15px;
+
+}
+
+.value {
+    flex: 1;
+    border-bottom: 1px solid #ddd; /* สีฟ้าแบบ Word */
+    padding-bottom: 2px;
+  
+}
+
+.report-container {
+    padding: 15px;
+    border-radius: 8px;
+
+}
+
+
+    </style>
+
+ <div class="report-container">
+ 
+ 
+<fieldset>
+
+  </fieldset>
+ 
+ 
+        <!-- คอลัมน์ซ้าย -->
+
+        
+       <div class="row">
+        <c:forEach items="${eformfields }"   var="row" varStatus="count">
+           
+             <c:set var="data" value="${transaction[row.keymap.mainkey]}" />  
+               
+             <c:set var="title" value="${row.field_label }" />  
+           <c:if test="${ row.field_type.equals('Title')}">    
+
+              <div class="report-item col-sm-12">
+                      <div class="three">
+ 			<h1>${title } </h1>
+
+			</div>
+            
+            </div>   
+             <br> 
+    
+          </c:if>  
+         <c:if test="${! row.field_type.equals('Title')}">  
+     
+	         <c:choose>
+	         	<c:when test="${autoid.contains(row.field_id.toString()) }">
+	         	 <c:set var="data" value="${Code_app}" />  
+	         	</c:when>
+	         </c:choose>	
+         	
+     	    <c:if test="${row.keymap != null && !actionBatchList.contains(row.keymap.mainkey)  }">
+              	<div class="report-item col-sm-6" >
+	                <span class="label">${title }:</span>
+	                <span class="value">${data }&nbsp;</span>
+            	</div>
+            </c:if>  	
+            
+          </c:if>        
+            
+        </c:forEach>    
+            </div> 
+ 
+   
+    </div>
+
+
+              
+   
+ 

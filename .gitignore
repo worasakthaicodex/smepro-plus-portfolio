@@ -1,0 +1,41 @@
+# Build output
+/target/
+*.class
+*.war
+*.jar
+
+# IDE and local tooling
+/.settings/
+/.externalToolBuilders/
+.classpath
+.project
+.idea/
+.vscode/
+
+# Runtime data and user uploads
+/filesuploads/
+/Users/
+/src/main/webapp/filesuploads/
+/src/main/webapp/resources/template/app-assets/images/profile/user-uploads/
+
+# Secrets and environment-specific configuration
+.env
+.env.*
+!.env.example
+/src/main/resources/ds/datasource.properties
+/src/main/resources/keystore/
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.pem
+*.key
+*.lic
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+.DS_Store
+Thumbs.db

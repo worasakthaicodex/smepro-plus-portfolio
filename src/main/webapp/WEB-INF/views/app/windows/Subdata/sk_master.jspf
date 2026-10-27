@@ -1,0 +1,73 @@
+   <%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+      <table class="datatable" >
+          <thead>
+          
+          <tr>
+<th  style="padding:5px;font-size:13px">#</th>      	                          
+       					<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="product.lot_batch"  /></th>         	                          
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="material.stock_code"  /></th>     
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="material.stock_name"  /></th>    
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="maindata.batch_producer"  /></th>   
+  
+
+  
+  
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="fg.quantity"  /></th>     
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="fg.unit"  /></th>     
+
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="product.product_cost_price"  /></th>     
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="common.status"  /></th>    
+<th style="width:10%">Action</th>
+           </tr>
+   
+
+   
+   
+
+                                    </thead>
+                                    <tbody>
+                         
+                                  <c:forEach items="${item }" var="rows"  varStatus="count">  
+		   
+														
+				                   <c:forEach items="${rows.stock_lot }" var="row"  varStatus="count">   
+				                                                              <tr>
+                                        
+<%--             	 <td class="form-label fixhead" style="padding:5px;font-size:13px">${count.count<%--  --%> }</td>    --%>
+            	 
+            	                          
+ 					<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="code" 
+ 					title="${row.lot_batch }">${row.lot_batch }</td>    
+ 					
+ 					 
+<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="stock_code"  title="${row.stock_code }-${row.stock_id }">${row.stock_code }-${row.stock_id }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="stock_name"   title="${row.stock_name }">${row.stock_name }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="tracking_number"  title="${row.tracking_number }">${row.tracking_number }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="quantity"   title="${row.stock_remaining }">${row.stock_remaining }</td>   
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="unit"   title="${rows.stock_unit }">${rows.stock_unit }</td>  
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="price"   title="${row.price }">${row.price }</td>  
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="status"   title="${row.stock_status }">${row.stock_status }</td>  
+<td  data-custom="stock_storage"   title="${row.stock_storage}" style="display:none"></td> 
+<td  data-custom="supplier_name"   title="${row.supplier_name}" style="display:none"></td> 
+<td  data-custom="supplier_code"   title="${row.supplier_code}" style="display:none"></td> 
+ 
+
+
+<td  style="text-align:center">
+         
+    <button class="fa-button dark" title="เลือก"   onclick="showAddressTitle(this,'sk','myForms${process.id}');closeed2('draggable-window3')"  style="color:black;margin:auto" data-original-title="List"> 
+    <i class="material-icons text-success">
+  
+check_circle
+
+  </i></button>
+          </td>  
+           </tr>
+             </c:forEach>   
+		           </c:forEach>   
+       
+        </tbody>
+        </table>

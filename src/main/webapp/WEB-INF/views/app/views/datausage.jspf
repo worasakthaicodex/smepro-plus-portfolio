@@ -1,0 +1,212 @@
+ <%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+
+ <button type="button" data-bs-toggle="modal" data-bs-target="#addNewCard4"  class="btn btn-sm  btn-light add-todo-item me-1 waves-effect waves-float waves-light" 
+ style="float:right"><i data-feather="plus"></i><spring:message code="btn.add"  /></button>
+ 
+ 
+ <br> <br>
+ <table  id="tables" width="100%">
+                                    <thead>
+<tr>  <th class="form-label fixhead" style="width:10px">#</th>    
+ <th class="form-label fixhead" ><spring:message code="loose_link.table"  /> </th>    
+ <th class="form-label fixhead" ><spring:message code="loose_link.note"  /></th>   	
+ <th class="form-label fixhead" ><spring:message code="loose_link.link_scope"  />1</th>  
+  <th class="form-label fixhead" ><spring:message code="loose_link.link_scope"  />2</th>  
+ <th class="form-label fixhead" > <spring:message code="tables.action" text="ดำเนินการ" />   </th>   
+        
+
+         </tr>
+                                    </thead>
+                                    <tbody>
+                                       
+                                       
+                                
+<c:forEach items="${Looselink }" var="rows"  varStatus="count">
+				                                   			                                     
+ <tr>
+<td class="form-label fixhead" style="padding:5px;font-size:13px">${count.count }</td>   
+ <td class="form-label fixhead" style="padding:5px;font-size:13px" >${rows.loose_link_tablename }</td>   
+ <td class="form-label fixhead" style="padding:5px;font-size:13px" >${rows.loose_link_note }</td>     	
+<td class="form-label fixhead" style="padding:5px;font-size:13px" >${rows.loose_link_scopename1 }</td>      
+<td class="form-label fixhead" style="padding:5px;font-size:13px" >${rows.loose_link_scopename2 }</td> 
+
+
+<td class="form-label fixhead" style="padding:5px;font-size:13px" >
+<a href="/viewLooselink-workflow/${rows.loose_link_id }" target="blank" class="btn btn-sm btn-light"><spring:message code="btn.view"  /></a>
+<a href="/deleteLooselink-workflow/${data.id }/${rows.loose_link_id }" class="btn btn-sm btn-danger" onClick="confirm('<spring:message code="btn.showconfirm"  />')" ><spring:message code="btn.delete"  /></a>
+</td> 
+
+
+
+</tr>
+</c:forEach>					
+				                                 
+                                        
+                                    </tbody>
+                                </table>
+                                
+                                
+                                
+                                
+                              <!--/ add new card modal  -->
+    <div class="modal fade" id="addNewCard4" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" >
+                        <div class="modal-content">
+                            <div class="modal-header bg-transparent">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body px-sm-5 mx-50 pb-5">
+                                <h1 class="text-center mb-1" id="addNewCardTitle"><spring:message code="report.datausage"  /></h1>
+
+
+               <form:form method="POST" modelAttribute="Looselink" action="/setdatausage-workflow">
+
+                              <input type="hidden" name="loose_link_type"  value="${LooseLinkByType }">
+    				      	  <input type="hidden" name="loose_link_to"  value="${data.id }">
+    				      	  <input  type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+    				      	  
+                            <div class="card-body">
+                                   
+                                     <div class="col-12">
+                                     
+                                           <div class="row">
+                                                         <div class="col-12">
+                                                <div class="mb-1 row">
+                                                    <div class="col-sm-4">
+                                                        <label class="col-form-label" for="first-name"><spring:message code="loose_link.table"  /></label>
+                                                    </div>
+                                                    <div class="col-sm-8">
+    <select class="form-select" name="loose_link_table">
+    
+   			 <option value="0">-</option>
+   			 <c:forEach items="${process }" var="rows"  varStatus="count">
+    			<option value="${rows.id}">${rows.name }</option>
+    		</c:forEach>
+    </select>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                                                      <div class="col-12">
+                                                <div class="mb-1 row">
+                                                    <div class="col-sm-4">
+                                                        <label class="col-form-label" for="first-name"><spring:message code="loose_link.link_scope"  />1</label>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                <input type="text" name="loose_link_key1"  class="form-control"  value="${key1}"  readonly>
+                                                    </div>
+                                               <div class="col-sm-4">
+   <select class="form-select" name="loose_link_scope1">
+    
+   			 <option value="-">-</option>
+   			 <c:forEach items="${process }" var="rows"  varStatus="count">
+   				  <c:forEach items="${rows.eformfields}" var="keyrows"  varStatus="count">
+    					<option value="${keyrows.field_id}" data-custom="${rows.id}">${keyrows.field_label }</option>
+    				</c:forEach>
+    		</c:forEach>
+    </select>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                                                            <div class="col-12">
+                                                <div class="mb-1 row">
+                                                    <div class="col-sm-4">
+                                                        <label class="col-form-label" for="first-name"><spring:message code="loose_link.link_scope"  />2</label>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                           <input type="text" name="loose_link_key2"  class="form-control"  value="${key2 }"  readonly>
+                                                    </div>
+                                                                                 <div class="col-sm-4">
+              <select class="form-select" name="loose_link_scope2">
+    
+   			 <option value="-">-</option>
+   			 <c:forEach items="${process }" var="rows"  varStatus="count">
+   				  <c:forEach items="${rows.eformfields }" var="keyrows"  varStatus="count">
+    					<option value="${keyrows.field_id}" data-custom="${rows.id}">${keyrows.field_label }</option>
+    				</c:forEach>
+    		</c:forEach>
+    </select>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                      
+                      
+                      <div class="col-12">
+                                                <div class="mb-1 row">
+                                                    <div class="col-sm-4">
+                                                        <label class="col-form-label" for="first-name"><spring:message code="loose_link.note"  /></label>
+                                                    </div>
+                                                    <div class="col-sm-8">
+                <input type="text" name="loose_link_note"  class="form-control" value="${policy.name }"  >
+                                                    </div>
+                                                </div>
+                                            </div>    
+                                            
+                                                            
+                                       
+                                      <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary me-1 mt-1" >
+                                        <spring:message code="btn.save" />
+                                        
+                                        </button>
+                                        <button type="reset" class="btn btn-outline-secondary mt-1" data-bs-dismiss="modal" aria-label="Close">
+                                         
+                                         
+                                         <spring:message code="btn.cancel" />
+                                        </button>
+                                    </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form:form>
+                            </div>
+                        </div>
+                    </div>
+                    </div>   
+                    
+                    
+                    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const tableSelect = document.querySelector('select[name="table"]');
+    const scopeSelects = document.querySelectorAll('select[name="link_scope1"], select[name="link_scope2"]');
+
+    function filterOptions() {
+        const selectedValue = tableSelect.value;
+
+        scopeSelects.forEach(select => {
+            // แสดง/ซ่อน options ตาม data-custom
+            select.querySelectorAll("option").forEach(opt => {
+                if (opt.value === "-" || opt.dataset.custom === selectedValue) {
+                    opt.style.display = "";
+                } else {
+                    opt.style.display = "none";
+                }
+            });
+
+            // ถ้าค่าเดิมไม่ตรง ให้ reset กลับเป็น "-"
+            if (select.querySelector(`option[value="${select.value}"]`)?.style.display === "none") {
+                select.value = "-";
+            }
+        });
+    }
+
+    // ตอนโหลดหน้า
+    filterOptions();
+
+    // ตอนเปลี่ยนค่า table
+    tableSelect.addEventListener("change", filterOptions);
+});
+
+
+<c:if test="${ TAB == 'LooseLink' }">
+
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelector('#tabdata .menus-item[data-custom="10"]').click();
+});
+
+</c:if>
+</script>

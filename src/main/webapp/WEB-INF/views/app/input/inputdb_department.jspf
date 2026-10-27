@@ -1,0 +1,21 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>                    
+                    
+                    
+                    
+                                      <select class="form-select select2" id="${row.keymap.mainkey}" name="${row.keymap.mainkey}"  ${readonly} 
+                                        <c:if test="${readonly != ''}">disabled</c:if>>
+                                        
+                                             <option value="-">-</option>
+                                        
+						                <c:forEach items="${db_department}" var="alls" varStatus="count">
+						                    <option value="${alls.department_name}"
+						                        <c:if test="${transaction[row.keymap.mainkey] == alls.department_name}">selected</c:if>>
+						                       ${alls.department_name}
+						                    </option>
+						                </c:forEach>
+          							  </select>
+                                    

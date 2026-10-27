@@ -1,0 +1,91 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>                    
+                    
+
+
+<div class="search-select-box" id="box-${row.keymap.mainkey}" style="display: flex;align-items: center;gap: 5px;">
+    
+    <input type="hidden" id="hidden-${row.keymap.mainkey}" name="edata.${key}" value="${edatas[key]}">
+    
+     <input type="hidden" id="segmentation_data"  value="${edatas[key]}">
+    
+
+    <select id="input-${row.keymap.mainkey}" 
+            placeholder="เลือกชุดข้อมูล..." 
+            autocomplete="off"
+            style="width: 100%;"
+            ${readonly} <c:if test="${readonly != ''}">disabled</c:if>>
+    </select>
+
+    <span class="input-group-text" id="btn-${row.keymap.mainkey}"> 
+        <c:if test="${edatas[key] != null && edatas[key] != ''}">
+            <a href="#" 
+               onclick="shows2('draggable-window3','จัดการชุดข้อมูล'); getData('/vieweditstaticsnapshot-filemanager/${edatas[key]}/${appId}', 'mainbody3')" 
+               style="pointer-events: auto; cursor: pointer;">  
+               <img src="/app/system/icon/find next.ico" />
+            </a>
+        </c:if>
+            <c:if test="${edatas[key] == null || edatas[key] == ''}">
+            <a href="#" 
+               onclick="openwindows('draggable-window3','Static Snapshot','1050px'); getData('/setstaticsnapshot-filemanager/${appId}/${edatas['data_id']}', 'mainbody3')" 
+               style="pointer-events: auto; cursor: pointer;">  
+               <img src="/app/system/icon/95.ico" />
+            </a>
+        </c:if>
+    </span>
+</div>
+
+<script>
+    var initialId = "${edatas[key]}"; // ค่าเก่าที่เคยเซฟไว้
+    
+    // 💡 ทริค: ถ้าฝั่ง Java ส่งชื่อ (Text) มาด้วยได้จะดีมาก เช่น "${edatas_text[key]}"
+    // แต่ถ้าไม่มี เราจะใช้ ID เป็น Text ไปก่อนเพื่อไม่ให้ช่องว่าง
+    var initialText = "${edatas[key]}"; 
+
+    var selectElement = document.getElementById("input-${row.keymap.mainkey}");
+    var hiddenElement = document.getElementById("hidden-${row.keymap.mainkey}");
+
+    // ยิงไปดึงข้อมูลมาจาก Java
+    fetch('/segmentationforuse-filemanager')
+        .then(response => response.json())
+        .then(json => {
+            if(!json) json = [];
+
+            var tomSelectInstance = new TomSelect(selectElement, {
+                options: json,
+                valueField: 'value',  
+                labelField: 'text',   
+                searchField: 'text',
+                create: false,          
+                maxOptions: 50,         
+                allowEmptyOption: true,
+                
+                onChange: function(value) {
+                    if (hiddenElement) hiddenElement.value = value || "";
+                }
+            });
+
+            // 🌟 พระเอกอยู่ตรงนี้: จัดการค่าเริ่มต้น
+            if (initialId && initialId.trim() !== "") {
+                // 1. ลองเช็คว่าใน JSON ที่โหลดมา มีค่าเก่านี้อยู่ไหม
+                var existsInOptions = json.some(item => String(item.value) === String(initialId));
+                
+                // 2. ถ้า "ไม่มี" ให้สร้าง Option ยัดเข้าไปดื้อๆ เลย!
+                if (!existsInOptions) {
+                    tomSelectInstance.addOption({ 
+                        value: initialId, 
+                        text: initialText + " (รหัสที่เลือกไว้)" // แปะป้ายบอกนิดนึงว่านี่คือค่าเดิม
+                    });
+                }
+                
+                // 3. สั่ง Select ค่านั้นได้เลย (รับรองว่าเจอแน่นอนเพราะยัดให้แล้ว)
+                tomSelectInstance.setValue(initialId, true); 
+            }
+
+        }).catch(err => {
+            console.error("โหลดข้อมูล Segmentation ไม่สำเร็จ:", err);
+        });
+</script>

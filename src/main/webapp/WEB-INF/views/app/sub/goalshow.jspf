@@ -1,0 +1,155 @@
+  <%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+         <link href="<c:url value="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&amp;display=swap" />" rel="stylesheet">
+ 
+  
+  
+        <style>
+/* styles.css */
+.card {
+    box-shadow: 0px 0px 3px 1px #ddd;
+}
+
+.list-group-item {
+    padding: .5rem .75rem;
+    border: 1px solid rgba(0, 0, 0, .07);
+    display: flex;
+    align-items: center;
+}
+
+.list-group-item:first-child {
+    border-radius: 0;
+}
+
+.list-group-item:last-child {
+    border-radius: 0;
+}
+
+.list-group-item i.fa-square {
+    flex-grow: 0;
+    cursor: pointer;
+    order: 1;
+}
+
+.list-group-item i.fa-check-square {
+    display: none;
+}
+
+.list-group-item i.fa-trash-alt {
+    flex-grow: 0;
+    cursor: pointer;
+    order: 3;
+}
+
+
+.list-group-item .todo-text {
+    flex-grow: 1;
+    margin: 0 10px;
+    order: 2;
+}
+
+.list-group-item.done i.fa-check-square {
+    flex-grow: 0;
+    cursor: pointer;
+    color: #28a745;
+    display: block;
+}
+
+.list-group-item.done i.fa-square {
+    display: none;
+}
+
+.list-group-item.done .todo-text {
+    text-decoration: line-through;
+    color: #888;
+}
+
+
+
+</style>                           
+    <div class="mb-1 row">
+<div class="col-sm-4"><spring:message code="goals.name" /></div>
+  <div class="col-sm-8">  
+	     <input type="text" class="form-control" value="${goals.name }" readonly="">
+	     </div>        
+     </div>
+     <div class="mb-1 row">
+<div class="col-sm-4"><spring:message code="goals.frequency" /></div>
+  <div class="col-sm-8">  
+	     <input type="text" class="form-control" value="${goals.frequency }" readonly="">
+	     </div>        
+     </div>
+       <div class="mb-1 row">
+<div class="col-sm-4"><spring:message code="goals.start_time" /> - <spring:message code="goals.end_time" /></div>
+  <div class="col-sm-8">  
+	     <input type="text" class="form-control" value="${goals.start_time } - ${goals.end_time }" readonly="">
+	     </div>        
+     </div>   
+     
+     <br>
+                                              <ul class="list-group mb-3">
+            <li class="list-group-item" style="display:none">
+    
+           
+  
+			       <span class="badge rounded-pill bg-warning  "><i data-feather='loader'></i></span>
+			
+              <span class="todo-text"><spring:message code="goal.state3" /> <spring:message code="goal.state4" /> </span>
+              <i class="far fa-trash-alt"></i>
+            </li>
+            
+            
+            <c:if test="${upload_log.status >=  100 }">
+		            <li class="list-group-item done">
+		              <i class="far fa-square done-icon"></i>
+		                <span class="badge rounded-pill bg-success "><i data-feather='check'></i></span>
+		              <span class="todo-text"><spring:message code="goal.state2" /> = [${goals.quantity_per_action}]  </span>
+		              <i class="far fa-trash-alt">100%</i>
+		            </li>
+		            
+            </c:if>
+            
+                   
+            <c:if test="${upload_log == null || upload_log.status < 100  }">
+		            <li class="list-group-item ">
+		              <i class="far fa-square done-icon"></i>
+		                <span class="badge rounded-pill bg-warning  "><i data-feather='loader'></i></span>
+		              <span class="todo-text"><spring:message code="goal.state2" /> [ ${goals.quantity_per_action}]    </span>
+		              <i class="far fa-trash-alt">${upload_log.status+0  } %</i>
+		            </li>
+            </c:if>
+            
+            
+            
+            
+            
+                <c:if test="${files_tage == 1 }">
+				            <li class="list-group-item done">
+				              <i class="far fa-square done-icon"></i>
+				                 <span class="badge rounded-pill bg-success ">
+				                 
+				                
+				                 <i data-feather='check'></i>
+				        
+				                 
+				                 </span>
+				              <span class="todo-text"><spring:message code="goal.state1" />  </span>
+				              <i class="far fa-trash-alt">${goals.file_tag }</i>
+				            </li>
+                     </c:if>
+                     
+                     <c:if test="${files_tage == 0 }">
+				            <li class="list-group-item">
+				              <i class="far fa-square done-icon"></i>
+				    				 <span class="badge rounded-pill bg-warning  "><i data-feather='loader'></i></span>
+				              <span class="todo-text"><spring:message code="goal.state1" /> </span>
+				              <i class="far fa-trash-alt">${goals.file_tag }</i>
+				            </li>
+                     </c:if>
+          </ul>
+          
+          
+          
+          
+          

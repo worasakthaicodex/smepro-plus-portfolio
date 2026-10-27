@@ -1,0 +1,163 @@
+ <%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>     
+       
+       
+        <form:form method="POST"  id="cmform" name="cmform">
+                                     
+                                                 <input type="hidden" name="cm_idrefer" value="${cm_idrefer}">
+                                            	  <input type="hidden" name="type" value="${type}">
+                                            	  
+                                            	  
+                                        <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
+                                            <div class="action-tags">
+                                                <div class="mb-1">
+                                                    <label for="todoTitleAdd" class="form-label"><spring:message code="cm.Fill"  /></label>
+                                                    <textarea type="text" name="cm_title" id="cm_title"  class="new-todo-item-title form-control" ></textarea>
+                                                </div>
+                                          
+                                             
+                                          
+                                            </div>
+                                            <div class="my-1">
+                                                <button type="button" 
+                                                onclick='savecm("/addcm-filemanager?${_csrf.parameterName}=${_csrf.token}","cmform","cmdiv");' 
+                                                class="btn btn-primary add-todo-item me-1 waves-effect waves-float waves-light">Add</button>
+                                           
+                                               
+                                             
+                                            </div>
+                                        </div>
+                                    </form:form>
+                                     
+                                     
+                                      <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
+                                    <div class="tab-content" id="myTabContent">
+                                      
+                                            <div class="tab-pane fade active show" id="activity-tab" role="tabpanel" aria-labelledby="activity-tab">
+                                                <h6 class="file-manager-title my-2"><spring:message code="cm.today"  /></h6>
+                                                
+                                   <div id="cmdiv">
+                                                
+                                    <c:forEach items="${listcms2 }" var="row" varStatus="count">
+                                   <div class="d-flex align-items-center mb-2" id="cm-${row.cm_id }">
+                                                    <div class="avatar avatar-sm me-50" >
+                                                        <img src="/resources/app-assets/images/portrait/small/avatar.jpg" alt="avatar" width="28">
+                                                    </div>
+                                                    <div class="more-info" style="width:90%">
+                                                        <p class="mb-0">
+                                                            <span class="fw-bold">${row.cm_user_name }</span> <span class="fw-bold"> ${cm_date } </span>
+                                                            <br>
+                                                            ${row.cm_title }
+                                                       
+                                                        </p>
+                                                    </div>
+                                                       <button type="button" onclick="return delcm('/delcm-filemanager/${row.cm_id}/${row.type}','-');"  class="btn btn-sm btn-outline-danger update-btn waves-effect ">
+                                                   <spring:message code="btn.delete"  />
+                                                </button>
+                                          </div>
+
+
+                               </c:forEach>
+                                 </div>
+                                              
+                                              
+                                                <h6 class="file-manager-title mt-3 mb-2"><spring:message code="cm.all"  /></h6>
+                                            <c:forEach items="${listcms1 }" var="row" varStatus="count">
+                                   <div class="d-flex align-items-center mb-2" id="cm-${row.cm_id }">
+                                                    <div class="avatar avatar-sm me-50" >
+                                                        <img src="/resources/app-assets/images/portrait/small/avatar.jpg" alt="avatar" width="28">
+                                                    </div>
+                                                    <div class="more-info" style="width:90%">
+                                                        <p class="mb-0">
+                                                            <span class="fw-bold">${row.cm_user_name }</span> <span class="fw-bold"> ${cm_date } </span>
+                                                            <br>
+                                                            ${row.cm_title }
+                                                       
+                                                        </p>
+                                                    </div>
+                                                       <button type="button"   onclick="return delcm('/delcm-filemanager/${row.cm_id}');"  class="btn btn-sm btn-outline-danger update-btn waves-effect ">
+                                                <spring:message code="btn.delete"  />
+                                                </button>
+                                          </div>
+
+
+                               </c:forEach>
+                                       
+                                             
+                                            </div>
+                                        </div>
+                                            </div>
+                  
+                  
+                     <div id="savedata"></div>                        
+      
+      
+      
+           <script>         
+           
+           function savecm(Mode, Mode2, Mode3) {
+
+        	    let targetDiv = $("#" + Mode3);
+        	    
+        	    // ทำให้เนื้อหาเก่าจางลง
+        	    targetDiv.css("opacity", "0.5").css("position", "relative");
+
+        	    // สร้าง Spinner อยู่ตรงกลางของ div
+        	    let loadingSpinner = `
+        	        <div class="spinner-overlay">
+        	            <div class="spinner-border text-primary" role="status">
+        	                <span class="visually-hidden">Loading...</span>
+        	            </div>
+        	        </div>`;
+
+        	    // แทรก Spinner เข้าไปใน div
+        	    targetDiv.append(loadingSpinner);
+
+        			
+        		
+        		
+        	    var formData = new FormData($("#" + Mode2)[0]);
+
+        	    $.ajax({
+        	        url: Mode,
+        	        type: "POST",
+        	        data: formData,
+        	        processData: false,
+        	        contentType: false,
+        	        success: function(result){
+        	            $('#' + Mode3).html(result);
+        	            targetDiv.css("opacity", "1"); // คืนค่า opacity ปกติ
+        	        },
+        	        error: function(jqXHR, textStatus, errorThrown) {
+        	                window.location.href = '/login'; // URL ของหน้า login
+        	       
+        	        }
+        	    });
+
+        	    $("#cm_title").val("");
+        	   
+        	    return false;
+        	}
+        		    
+                       
+         function delcm(url) {
+    	
+    	  if (confirm("You want to take action.?")) {
+    	    $.ajax({
+    	      type: 'GET',
+    	      url: url,
+    	      success: function(data) {
+    	        $("#savedata").html(data);
+    	      }
+    	    });
+    	  } else {
+    	    console.log("ยกเลิกการโหลดข้อมูล");
+    	  }
+    	  return false;
+    	}
+         
+         
+
+        </script>                                       

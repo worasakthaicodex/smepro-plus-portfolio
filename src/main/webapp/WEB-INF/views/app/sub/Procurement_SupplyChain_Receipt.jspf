@@ -1,0 +1,76 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+
+
+                                
+                                 <li class="todo-item " title="ID${row.edata_id} ">
+                                      <a href="#"  onclick="getdata('/showdata-filemanager/${row.edata_id}','wrappermain')"  style="color:black" data-bs-toggle="modal" data-bs-target="#new-task-modal" > 
+                                        <div class="todo-title-wrapper">
+                                            <div class="todo-title-area">
+                                            
+                                 
+                                                <div class="title-wrapper">
+                                                    <div class="form-checks">
+                                                    
+                                                    
+                
+                                <span class="badge bg-danger">               
+							<i data-feather='layout' ></i>
+							</span>  
+						
+                                                    </div>                    
+                                                    <span class="todo-title">
+                                          
+                                                    
+                                                        ${row.data_value1}   ${row.data_value2}  ${row.data_value3} 
+                         						
+                                             			
+                                                   <br>
+                                                    <span style="font-size:11px;color:#aaa">
+                                                     <spring:message code="tables.by" />  : ${row.data_nameadd}  
+                                                    </span>
+                                                    
+          
+                                                    
+             
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="todo-item-action">
+                                        
+                                      
+                                                
+          										  
+                                                ${row.created_at}   
+                                           
+                                  
+                                    
+                                       
+                                  		  
+                                                <div class="email-label">
+                                           
+                                            <span class="mail-label badge rounded-pill badge-light-primary">
+                                            
+                            ${ row.status}   
+                                           
+                                            </span>
+                     
+                                      
+                                        </div>
+                                                
+                                                
+                                                       
+                                                
+                                             
+                                            </div>
+                                        </div>
+                                        
+                                             </a>
+                                          
+                                    </li>
+                                    
+                                
+                       

@@ -1,0 +1,80 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<style>
+.fixhead {
+    max-width: 150px; /* กำหนดความกว้างสูงสุด */
+    white-space: nowrap; /* ป้องกันข้อความขึ้นบรรทัดใหม่ */
+    overflow: hidden; /* ซ่อนข้อความที่เกินขอบเขต */
+    text-overflow: ellipsis; /* แสดง ... เมื่อข้อความยาวเกินไป */
+}
+</style>
+
+
+	  <input type="hidden" name="process_id" value="${process_id }">
+		    	  <input type="hidden" name="tables" value="${tables }">
+		    	   <input type="hidden" name="filters" value="${filters }">
+		    	  <input type="hidden" name="edata_id" value="${edata_id+0 }">
+			  <input type="hidden" name="type" value="${type }">
+    <div class="row">
+                                            <div class="col-md-12 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="first-name-column"><spring:message code="register.name"  /></label>
+                                                    <input type="text" name="register_name" id="first-name-column" class="form-control"  name="fname-column">
+                                                </div>
+                                            </div>
+                                            
+                                         
+                                      <div>       
+               <a class="btn btn-primary waves-effect waves-float waves-light" onclick='postdata("/search_workflow_dbs-filemanager?${_csrf.parameterName}=${_csrf.token}","subdata_search","wrappermain")' >Submit</a>           
+                                        
+                                    </div>         
+                                        </div>
+                                                
+                                                <br>  <br>
+  <table  class="table">
+                                    <thead>
+                                        <tr>
+                                        
+            	 <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>   
+            	 
+       				
+<th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="bom.bom_name"  /></th>     
+  <th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="product.product_name"  /></th>  
+ 
+          <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>  
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <c:forEach items="${item }" var="row"  varStatus="count">
+                                     <tr>    
+            	 <td class="form-label fixhead" style="padding:5px;font-size:13px">${count.count }</td>   
+            	 
+<td class="form-label fixhead" style="padding:5px;font-size:13px">${row.bom_note }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px">${row.bom_product_name }</td>     
+          <td class="form-label fixhead" style="padding:5px;font-size:13px">
+          <a  href="/attachdocuments-filemanager/${process_id}/${edata_id}/${row.id }/Bom" class="btn btn-sm btn-success">+</a>
+          </td>  
+                                        </tr>
+                                        	</c:forEach>   
+                                        
+                                    </tbody>
+                                    </table>     
+                                    
+   <script>
+        
+            if (feather) {
+                feather.replace({
+                    width: 14,
+                    height: 14
+                });
+            }
+      
+    </script>                                   
+                                    
+                     

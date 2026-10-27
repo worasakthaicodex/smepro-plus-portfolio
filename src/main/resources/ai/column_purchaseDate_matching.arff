@@ -1,0 +1,17 @@
+@relation column_purchaseDate_matching
+
+@attribute purchaseDate {purchaseDate, date, Date_purchase, d1}
+@attribute label {Yes, No}
+
+@data
+"purchaseDate", No
+"date", No
+"Date_purchase", No
+"purchaseDate", No
+"d1", No
+"price", No
+"amount", No
+"customerName", No
+"name", No
+"quantity", No
+"quantitySold", No

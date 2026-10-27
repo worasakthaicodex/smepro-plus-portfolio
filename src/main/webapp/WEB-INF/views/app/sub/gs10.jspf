@@ -1,0 +1,329 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+ 
+
+
+                                        
+                 <c:forEach items="${process }" var="rows" varStatus="count">
+   
+<div class="card business-card">
+                            <div class="card-header pb-1">
+                                <h4 class="card-title">${rows.name }</h4>
+                          
+                            
+                                <button type="button" class="btn btn-primary me-1 waves-effect waves-float waves-light" data-bs-toggle="modal" data-bs-target="#Integrations${count.count }">  <spring:message code="btn.add" /></button>
+                                
+                              
+                         
+                             </div>
+                             
+                             
+       
+                            <div class="card-body">
+                        
+                                <div class="business-items">
+                       <c:set var="list" value="${workflows.workflow_key1 }" />
+                       
+                              <c:forEach items="${rows.policies }" var="row" >
+                      
+                                  <c:set var="listcheck" value="${row.id }" />
+                                         
+                                    <div class="business-item">
+                                 <div class="d-flex align-items-center justify-content-between">
+                                 
+                                            <div class="form-check">
+    
+                                        <span >
+                                    -
+                                        <spring:message code="item.Policies" />:  ${row.name } 
+                                  
+                                            </div>
+                                            <span class="badge">
+                                               <a href="/editpolicies-workflow/${workflows.workflow_id }/${row.group_id }" type="button" class="btn  btn-sm btn-light me-1 waves-effect waves-float waves-light" >
+                                                  <spring:message code="btn.edit" /></a>
+                                                  <a href="/delpolicies-workflow/${workflows.workflow_id }/${row.group_id }" type="button" class="btn  btn-sm btn-danger me-1 waves-effect waves-float waves-light" onclick="return confirm('are you sure delete?')">
+                                                  <spring:message code="btn.delete" /></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                  
+                             
+                              	</c:forEach>	  
+                             
+                             
+                                     
+                                </div>
+                                
+                                   <c:if test="${( Member_id == workflows.workflow_idadmin ) || ( Member_id == workflows.workflow_idadd )}">
+                                <div >
+                                     <input  type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                                     <input type="hidden" class="form-select"  name="workflow_id" value="${workflows.workflow_id }"> 
+                                        <input type="hidden" class="form-select"  name="workflow_type" value="1"> 
+                                      
+                                             
+                                </div>
+                                </c:if>
+                                
+                            </div>
+                     
+                            
+                        </div>
+                  
+                        
+                        
+                        
+                        <div class="modal fade" id="Integrations${count.count }" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true" >
+ 
+                    <div class="modal-dialog   modal-lg modal-dialog-centered" style="min-width:1000px;">
+                         <div class="modal-content">
+                                                        <div class="modal-header">
+                                                              <h4 class="modal-title" id="myModalLabel33"> <spring:message code="item.Policies" /></h4>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                  
+                                                       <form:form method="POST" modelAttribute="policies" action="/savepolicies-workflow">
+                                               
+                                                     <input  type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                                                     
+                                              
+                                                     <input type="hidden" class="form-select"  name="process" value="${rows.id }"> 
+                                                     <input type="hidden" class="form-select"  name="group_id" value="${group_id }"> 
+                                                     <input type="hidden" class="form-select"  name="workflow_id" value="${workflows.workflow_id }"> 
+                                                       
+                                                            <div class="modal-body">
+                                                              <ul class="nav nav-tabs" role="tablist">
+                  
+                 
+                  												   <li class="nav-item ">
+						                                            <a class="nav-link active" id="homeIcon-tab${count.count}0" data-bs-toggle="tab" href="#homeIconapp${count.count}0" aria-controls="home" role="tab" aria-selected="true">
+						                                Policies </a>
+						                                       
+						                                        </li>
+                 
+                 
+                  <c:forEach items="${rows.sub_processes }" var="rowed" varStatus="tabcounted"> 
+                   
+                   <c:set var="active" value="" />  
+	                   <c:if test='${tabcounted.count == 1}'>   
+	                   <c:set var="active" value="active" />  
+                   </c:if>
+                  
+		                                 
+									<c:set var="steps" value="${rowed.description}" />
+						           <c:if test="${rowed.description == '' }"> <c:set var="steps" value="${rowed.step}" /></c:if>
+						                                       
+						                                       
+						                                        <li class="nav-item ">
+						                                            <a class="nav-link" id="homeIcon-tab${count.count}${tabcounted.count }" data-bs-toggle="tab" href="#homeIconapp${count.count}${tabcounted.count }" aria-controls="home" role="tab" aria-selected="true">
+						                                 ${tabcounted.count }.${steps } </a>
+						                                       
+						                                        </li>
+						<c:set var="list" value="Record,Forward,Receive," />
+		                  <c:set var="listcheck" value="${rowed.step}" />  
+		                 <c:if test='${!fn:contains(list,listcheck)}'>       
+		                 </c:if>
+                </c:forEach>
+       
+                                      
+                                 
+                                        
+                                    </ul>
+                                    
+                                         <div class="tab-content">
+                                         
+                                              <div class="tab-pane active" id="homeIconapp${count.count}0" aria-labelledby="homeIcon-tab" role="tabpanel">
+                                             <div class="row">
+						                                            <div class="col-12">
+						                                                <div class="mb-1 row">
+						                                                    <div class="col-sm-1">
+						                                                        <label class="col-form-label" for="first-name">
+						                                                         <spring:message code="item.Policies" />
+						                                                         </label>
+						                                                    </div>
+						                                                    <div class="col-sm-9">
+						                                      <input type="text" class="form-select"  name="name" value="" >  
+						                                                    </div>
+						                                                </div>
+						                      					  </div>
+						                      					  </div>
+                               </div>
+                                         
+                                         
+                                    <c:forEach items="${rows.sub_processes }" var="rowed" varStatus="tabcounted"> 
+                   
+                   
+                          <input type="hidden" class="form-select"  name="sub_processes_string" value="${rowed.id }"> 
+                   <c:set var="active" value="" />  
+	                   <c:if test='${tabcounted.count == 1}'>   
+	                   <c:set var="active" value="active" />  
+                   </c:if>
+                  
+		                                  
+                                    
+                                    
+                               
+                           
+                               
+                               
+                                        <div class="tab-pane " id="homeIconapp${count.count}${tabcounted.count }" aria-labelledby="homeIcon-tab" role="tabpanel">
+         
+                   <c:set var="listed" value="Record,Forward,Receive" />
+		                  <c:set var="listchecked" value="${rowed.step}" />  
+		                 <c:if test='${!fn:contains(listed,listchecked)}'>      
+         
+		                 <c:if test='${ rowed.step == "Approval" || rowed.step == "Review" || rowed.step == "Proceed"    }'>     
+                                                             <div class="row">
+						                                            <div class="col-12">
+						                                                <div class="mb-2 row">
+						                                                    <div class="col-sm-3">
+						                                                        <label class="col-form-label" for="first-name">
+						                                                         <spring:message code="item.responsibleperson" />
+						                                                         
+						                                                           
+						                                                         </label>
+						                                                    </div>
+						                                                    <div class="col-sm-9">
+						                                       <select class="form-select select2"   name="respon" >
+						                                           	 		<option value="Creator">Creator</option>
+						                                      <c:forEach items="${userall}" var="userss" varStatus="tabcounted"> 
+						                                      
+						                                        			<option value="user_${userss.user_id}">${userss.user_name }</option>
+						                                        	</c:forEach>
+						                                      </select>
+						                                                    </div>
+						                                                </div>
+						                      					  </div>
+						                      					  </div>
+						                      					  
+						                      			 <c:if test='${ rowed.step != "Approval"}'>    
+						                      			   <input type="hidden" class="form-select" step="0.01"  name="max_approval_amount" value="0" >  
+						                      			    </c:if>  			  
+						                      		 <c:if test='${ rowed.step == "Approval"}'>     			  
+   														 <div class="row">
+						                                            <div class="col-12">
+						                                                <div class="mb-2 row">
+						                                                    <div class="col-sm-3">
+						                                                        <label class="col-form-label" for="first-name">
+						                                                         <spring:message code="item.max_approval_amount" />
+						                                                         </label>
+						                                                    </div>
+						                                                    <div class="col-sm-9">
+						                                      <input type="number" class="form-select" step="0.01"  name="max_approval_amount" value="0" required>  
+						                                                    </div>
+						                                                </div>
+						                      					  </div>
+						                      					  </div>
+						                      			   </c:if>  		  
+						                      					  
+						             </c:if>           					  
+						                      					  
+						               <c:if test='${ rowed.step != "Review" &&  rowed.step != "Approval"   &&  rowed.step != "Proceed"   }'>     
+                                                             <div class="row">
+						                                            <div class="col-12">
+						                                                <div class="mb-2 row">
+						                                                    <div class="col-sm-3">
+						                                                        <label class="col-form-label" for="first-name">
+						                                                         <spring:message code="item.responsibleperson" />
+						                                                              <c:if test='${  rowed.step == "Completion"  }'>     
+						                                                                         <spring:message code="item.responsiblepersonReceivedocuments" />
+						                                                        
+						                                                           </c:if>
+						                                                           
+						                                                         </label>
+						                                                    </div>
+						                                                    <div class="col-sm-9">
+						                
+						                                      <select class="form-select select2s"  data-custom="action${rows.id}${rowed.id}"  multiple="multiple">
+
+								                                       	<option value="Creator">Creator</option>
+								                                       	<option value="ALL">ALL</option>
+								                                          <optgroup label = '<spring:message code="nav.department" />'>
+								                                         	<c:forEach items="${departments}" var="department" varStatus="tabcounted"> 
+								                                        			<option value="department_${department.department_id}">${department.department_name }</option>
+								                                        	</c:forEach>
+								                                       </optgroup> 	
+								                                     
+								                                        <optgroup label = '<spring:message code="nav.position" />'>
+								                                         	<c:forEach items="${groupss}" var="groups" varStatus="tabcounted"> 
+								                                        			<option value="group_${groups.id}">${groups.group_name }</option>
+								                                        	</c:forEach>
+								                                       </optgroup> 	
+								                                       
+								                                        <optgroup label = '<spring:message code="nav.user" />'>	
+								                                      	  	<c:forEach items="${userall}" var="userss" varStatus="tabcounted"> 
+								                                        			<option value="user_${userss.user_id}">${userss.user_name }</option>
+								                                        	</c:forEach>
+								                                    	</optgroup> 
+						                                      </select>
+						                                      
+						                                     <input type="hidden" name="respon" class="hiddenInput" value="0"  data-custom="action${rows.id}${rowed.id}">     
+						                                                    </div>
+						                                                </div>
+						                      					  </div>
+						                      					  </div>
+						                      					  					                      					  
+<script>
+
+    $(document).ready(function () {
+        $(".select2s").select2({
+            tags: true
+        }).on("change", function () {
+        	
+        	
+        	
+            let selectedValues = $(this).val();
+            let customId = $(this).data("custom"); // ดึงค่า data-custom
+
+            // ค้นหา hidden input ที่มี data-custom ตรงกัน
+            $('input[name="respon"][data-custom="' + customId + '"]')
+                .val(selectedValues ? selectedValues.join("|") : "");
+
+        });
+        
+    });
+</script>  	
+ <input type="hidden" class="form-select" step="0.01"  name="max_approval_amount" value="0" >  			
+						             </c:if>   
+	          </c:if>					               
+						                     
+<c:if test='${fn:contains(listed,listchecked)}'>  
+ <input type="hidden" class="form-select" step="0.01"  name="max_approval_amount" value="0" >  		
+<input type="hidden" name="respon" class="hiddenInput" value="0"  >   					         
+</c:if>          
+		       		            					  
+			                 		
+						                 		
+						                 					  
+                                   </div>
+                                   
+                          
+                                   
+                                   
+                                   
+                                         
+                </c:forEach>     
+                                  
+                                       
+                                    </div>
+                                       </div> 
+                                                          
+                                                        
+                                                      
+                                                      
+                                                            
+                                                            
+                                                            <div class="modal-footer" Style="display: inline-block;">
+                                                                <button type="Submit"   class="btn btn-primary waves-effect waves-float waves-light" data-bs-dismiss="modal">
+                                                                <spring:message code="btn.save" />
+                                                                </button>
+                                                            </div>
+                                                </form:form>
+                                                    </div>    
+                               
+                                        </div>
+                                        </div>
+                        
+                        
+	      	</c:forEach>	   	          	 
+	          

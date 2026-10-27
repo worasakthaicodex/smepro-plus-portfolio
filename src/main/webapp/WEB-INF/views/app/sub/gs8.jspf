@@ -1,0 +1,304 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+ 
+
+
+
+
+    <style>
+    .container {
+  width: 100%;
+
+}
+
+
+
+	  .progressbar {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap; /* ไม่ให้ขึ้นบรรทัดใหม่ */
+  padding: 0;
+  margin: 0;
+  counter-reset: step;
+  overflow: hidden; /* กันไอเทมล้น */
+
+}
+
+.progressbar li {
+  list-style: none;
+  flex-grow: 1;
+  flex-basis: auto; /* ปรับขนาดอัตโนมัติ */
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+
+   
+}
+
+.progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 24px; /* ลดขนาดวงกลม */
+  height: 24px;
+  line-height: 24px;
+  font-size: 11px; /* ลดขนาดตัวเลข */
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  display: block;
+  text-align: center;
+  margin: 0 auto 5px auto;
+  background-color: #ddd;
+  z-index: 99; /* ให้ตัวเลขอยู่หน้าเส้น */
+}
+
+.progressbar li:after {
+  content: "";
+  position: absolute;
+  width: 80%;
+  height: 1px;
+  background-color: #ddd;
+  top: 12px;
+  left: -40%;
+  z-index: 1; /* ให้เส้นอยู่ด้านหลัง */
+}
+
+.progressbar li:first-child:after {
+  content: none;
+}
+
+/* Active Step */
+.progressbar li.active {
+  color: green;
+}
+.progressbar li.active:before {
+  border-color: green;
+   background-color: green;
+   color:#fff;
+   
+}
+.progressbar li.active_user:before {
+  border-color: Blue;
+   background-color: Blue;
+   color:#fff;
+   
+}
+
+
+
+
+
+.progressbar li.active + li:after {
+  background-color: green;
+  
+}
+
+/* 🔹 Responsive: ลดขนาดทุกอย่าง เมื่อ div แคบลง */
+@media (max-width: 768px) {
+  .progressbar li {
+    font-size: 8px; /* ลดขนาดตัวอักษร */
+       
+  }
+
+  .progressbar li:before {
+    width: 20px; /* ลดขนาดวงกลม */
+    height: 20px;
+    line-height: 20px;
+    font-size: 8px; /* ลดขนาดตัวเลข */
+     
+  }
+
+  .progressbar li:after {
+    height: 1px; /* ลดความหนาของเส้น */
+    top: 10px;
+   
+  }
+}
+
+
+.mainalert {
+  display: flex;
+  align-items: center; /* จัดตรงกลางแนวตั้ง */
+  justify-content: center; /* จัดตรงกลางแนวนอน */
+  text-align: center; /* จัดข้อความตรงกลาง */
+
+  height: 50px; /* กำหนดความสูงเพื่อให้กลางจริง ๆ */
+}
+</style>
+	     
+	          <c:forEach items="${process }" var="row" varStatus="count">
+	       <div class="accordion accordion-border" id="accordionBorder" data-toggle-hover="true">
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingBorderOne">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accordionBorderOne${count.count }" aria-expanded="false" aria-controls="accordionBorderOne">
+                                           ${row.name }
+                                                    </button>
+                                
+                                                </h2>
+                
+                      
+                                                         
+                                                
+                                                
+                                                <div id="accordionBorderOne${count.count }" class="accordion-collapse collapse" aria-labelledby="headingBorderOne" data-bs-parent="#accordionBorder" style="">
+                                                    <div class="accordion-body" >
+                                                                   
+                                    <a  class="btn btn-primary me-1 waves-effect waves-float waves-light" onclick="addprocess('${row.id}')"
+                                                      data-bs-toggle="modal" data-bs-target="#Integrations" style="float:right">  <spring:message code="btn.add" /></a>
+                                                      
+                                                      <br> <br>
+                                                	      
+   
+       
+<br><br>
+
+   <div class="container">
+ <ul class="progressbar">
+       <c:forEach items="${row.sub_processes }" var="rows" varStatus="count">
+      
+       <c:set  var="mystep" value="" />
+
+			<c:set var="steps" value="${rows.description}" />
+           <c:if test="${rows.description == '' }"> <c:set var="steps" value="${rows.step}" /></c:if>
+        
+        <li class="${mystep }"> ${steps} </li>
+        </c:forEach>
+      </ul>
+    </div>
+        
+   <br><br>    
+          <div class="business-items">
+          <c:forEach items="${row.sub_processes }" var="rows" varStatus="count">
+                      
+                                
+                                         
+                                    <div class="business-item">
+                                 <div class="d-flex align-items-center justify-content-between">
+                                    
+                                            <div class="form-check">
+                                          <div class="badge rounded-pill badge-light-primary">${count.count }</div>
+                                                <label class="form-check-label" for="business-checkbox-1">${rows.step }</label>
+                                           <br><span style="font-size:11px"> <spring:message code="process.description" />:  ${rows.description } 
+                                           </span>
+                                            </div>
+                                            <span class="badge">
+                                                  <a href="/delsubprocess-workflow/${workflows.workflow_id }/${rows.id }" type="button" class="btn  btn-sm btn-danger me-1 waves-effect waves-float waves-light" onclick="return confirm('are you sure delete?')">
+                                                  X</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                  <br>
+                             
+                              	</c:forEach>	
+                              	
+                           <br>   <br>      	
+           </div>
+        
+        
+          </div>
+                                                
+                                                    </div>
+                                                </div>
+                                    	                
+                                                
+                                                
+                                                
+                                            </div> 
+                                             	</c:forEach>
+                                           </div>
+                                          
+                                          
+                                    
+                                        </div>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const accordions = document.querySelectorAll('.accordion-button');
+    const scrollToId = sessionStorage.getItem("accordion-scroll-to");
+
+    // ถ้ามี accordion ที่เคยเปิดไว้
+    if (scrollToId) {
+        const target = document.getElementById(scrollToId);
+        if (target) {
+            const collapse = new bootstrap.Collapse(target, {
+                toggle: true
+            });
+
+            // scroll ไปยัง accordion ที่เคยเปิด
+            setTimeout(() => {
+                target.scrollIntoView({ behavior: "smooth", block: "center" });
+            }, 300);
+        }
+        sessionStorage.removeItem("accordion-scroll-to");
+    }
+
+    // เมื่อมีการคลิก accordion ให้บันทึก id ลง sessionStorage
+    accordions.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-bs-target').substring(1); // ตัด #
+            sessionStorage.setItem("accordion-scroll-to", targetId);
+        });
+    });
+});
+</script>
+
+<div class="modal fade" id="Integrations" tabindex="-1" aria-labelledby="addNewCardTitle" aria-hidden="true">
+ 
+                    <div class="modal-dialog   modal-lg modal-dialog-centered">
+                         <div class="modal-content">
+                                                        <div class="modal-header">
+                                                              <h4 class="modal-title" id="myModalLabel33"> <spring:message code="item.Additem" /></h4>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                  
+                                                       <form:form method="POST" modelAttribute="process" action="/savesubprocess-workflow">
+                                               
+                                                            <div class="modal-body">
+                                                                <label><spring:message code="process.step" />: </label>
+                                                                <div class="mb-1">
+                                                                   
+                                                                   <select class="form-select" name="step">
+								 	                                   
+									                                    <c:forEach items="${Steptype }" var="row" varStatus="count">
+									                                    <option value="${row.name()}">${row.name()}  [${row.label} ]</option>
+									            						  </c:forEach>
+								 	                               </select>
+								 	                               
+                                                                </div>
+
+                                                                <label><spring:message code="process.description" />: </label>
+                                                                <div class="mb-1">
+                                                                    <input type="text"  name="description" id="description"    class="form-control">
+                                                                </div>
+                                                                 
+                                                     <input type="hidden"  name="processe_id" id="processe_id" value="0"   class="form-control">
+                                                   <input type="hidden" class="form-select"  name="workflow_id" value="${workflows.workflow_id }"> 
+                                     
+                                                    <div class="mb-1">  
+      												<input  type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                                   					  <input type="hidden" class="form-select"  name="id_refer" value="${workflows.workflow_id }"> 
+                  							       </div>
+                  				     
+                  							       
+                  							       
+                                                          
+                                                            </div>
+                                                            <div class="modal-footer" Style="display: inline-block;">
+                                                                <button type="Submit"   class="btn btn-primary waves-effect waves-float waves-light" data-bs-dismiss="modal">เพิ่ม</button>
+                                                            </div>
+                                                </form:form>
+                                                    </div>    
+                               
+                                        </div>
+                                        </div>
+   <script>                                       
+  function addprocess(Id){
+	  $("#processe_id").val(Id);
+  }
+		  
+	</script>	  
+                                        
+                                        
+        

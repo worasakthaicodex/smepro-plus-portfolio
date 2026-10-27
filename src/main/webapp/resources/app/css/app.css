@@ -1,0 +1,2256 @@
+html {
+  background: url(http://wallpapercave.com/wp/NNo5yub.jpg);
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -o-user-select: none;
+  overflow: hidden;
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+}
+
+
+.app-badge {
+    position: absolute;
+    top: -2px;     /* ขยับขึ้นลงตามความสวยงาม */
+    right: -2px;   /* ขยับซ้ายขวาตามความสวยงาม */
+    background-color: #ff3b30; /* สีแดงแจ้งเตือน */
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%; /* ทำเป็นวงกลม */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 2;
+    padding: 2px;
+}
+
+
+/* คลาสสำหรับจัดการความนุ่มนวล */
+.window.microsoft {
+    opacity: 0;
+    transform: scale(0.95); /* ย่อขนาดลงนิดนึงเพื่อให้ดูเหมือนเด้งออกมา */
+    transition: opacity 0.4s ease, transform 0.4s ease-out;
+    pointer-events: none; /* ป้องกันการคลิกระหว่างยังโหลดไม่เสร็จ */
+}
+
+/* คลาสที่จะใส่เพิ่มเข้าไปหลังจากหน่วงเวลา */
+.window.microsoft.show {
+    opacity: 1 ;
+    transform: scale(1) ;
+    display: block;
+    pointer-events: auto;
+}
+/* เมื่อหน้าต่างถูก Focus หรือดึงขึ้นหน้าสุด */
+.window-focus-animate {
+    animation: windowFocusPulse 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes windowFocusPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02); /* ขยายใหญ่ขึ้นนิดนึงให้ดูเหมือนถูกดึงขึ้นมา */
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* เพิ่มเงาให้ดูหนาขึ้นขณะเคลื่อนไหว */
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes slideDown {
+    0% {
+        transform: scaleY(1);
+        transform-origin: bottom; /* กำหนดจุดหมุนไว้ที่ด้านล่าง */
+        opacity: 1;
+    }
+    100% {
+        transform: scaleY(0); /* บีบแกน Y ให้เหลือ 0 */
+        transform-origin: bottom;
+        opacity: 0;
+    }
+}
+
+.slide-out {
+    /* ใช้ forwards เพื่อให้สถานะค้างอยู่ที่ scaleY(0) */
+    animation: slideDown 0.50s ease-out forwards;
+    pointer-events: none; /* ป้องกันการคลิกขณะกำลังพับ */
+}
+  
+
+
+
+
+.toolbar {
+  padding: 3px;
+background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.ripple {
+ width: 75px;
+    height: 25px;
+    border: 1px solid #adadad;
+    background-color: #e1e1e1;
+    font-size: 12px;
+    cursor: pointer;
+}
+.ripple:hover {
+  background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
+}
+.ripple:active {
+  background-color: #6eb9f7;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+.column  {
+
+  min-height: 450px;
+    padding: 10px;
+    margin: 10px;
+
+}
+
+.column div {
+  padding: 2px 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+
+}
+
+.column label {
+  width: 25%;
+  padding: 5px 0 0 0px;
+  display: block;
+  float: left;
+  font-size:13px;
+  color: #222;
+}
+
+input[type='text'], input[type='password'], input[type='number'], input[type='email'], input[type='url'], input[type='date'], input[type='time'], input[type='datetime-local'], textarea, select {
+
+	
+	
+	background-color: #fff;
+  border:  1px solid #bbb;
+  width: 350px;
+  padding: 8px;
+   z-index: 1;
+    --input-focus-border-color: #3595f6;
+}
+
+.wpfform input ,.wpfform textarea,.wpfform select {
+	  width: 60%;
+	
+}
+
+.wpfform > div {
+    margin-bottom: 5px;
+    padding:0px;
+   min-height:42px;
+}
+/* 1. ปรับความกว้างของตัวกรอบ TomSelect ทั้งก้อน (เลือกใช้ 350px หรือ 60% ตามต้องการ) */
+.wpfform .ts-wrapper {
+    width: 100% !important; /* หรือ 60% */
+    padding:0px;
+}
+
+/* 2. ปรับความสูง (Padding), สีพื้นหลัง และเส้นขอบ ให้เหมือน Input ของคุณเป๊ะๆ */
+.wpfform .ts-control {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(187, 187, 187);
+    padding: 8px !important;
+    min-height: unset !important; /* ลบความสูงขั้นต่ำเดิมของ TomSelect ทิ้ง */
+    z-index: 1;
+       flex-wrap: nowrap !important; /* ห้ามปัดบรรทัดเด็ดขาด */
+}
+
+/* 2. บังคับข้อความที่ถูกเลือก (Item) ให้อยู่บรรทัดเดียว ถ้าล้นให้ตัดเป็นจุดไข่ปลา ... */
+.wpfform .ts-control > .item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%; /* ไม่ให้กว้างทะลุกล่อง */
+    pointer-events: none; /* กันบั๊กเวลาคลิกโดนข้อความ */
+}
+
+
+
+input[type='checkbox'] {
+    /* คุณสมบัติเดิมของคุณ */
+    background-color: #fff;
+    border: 1px solid #bbb;
+    padding: 8px; /* ⚠️ อาจจะต้องลด padding ลง หรือลบออก */
+    z-index: 1;
+    --input-focus-border-color: #3595f6;
+
+    /* ✅ ส่วนที่เพิ่มเพื่อปรับขนาด Checkbox */
+    width: 18px;   /* กำหนดความกว้าง */
+    height: 18px;  /* กำหนดความสูง */
+}
+
+
+
+input[type='text'][readonly] {
+    background-color: #E0DEDE;
+}
+
+/* Focus state */
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='number']:focus,
+input[type='email']:focus,
+input[type='url']:focus,
+input[type='date']:focus,
+input[type='time']:focus,
+input[type='datetime-local']:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--input-focus-border-color); /* ใช้ตัวแปร */
+  outline: none; /* เอาเส้นสี default ออก */
+}
+
+
+.thead th {
+      
+          position: sticky;
+          top: 0;
+          font-size: 13px;
+
+
+    white-space: nowrap;
+    font-family: 'Lato', sans-serif;
+
+ 
+    height: 30px;
+    background-repeat: no-repeat;
+    color: white;
+    text-shadow: #012b4d 2px 2px 2px;
+    text-align: center;
+    background-image: url("https://www.jqueryscript.net/demo/jQuery-Plugin-For-Draggable-Resizable-Table-Columns-colResizable/img/th.png");
+
+}
+table {
+  border-collapse: collapse;
+    text-indent: initial;
+    border-spacing: 2px;
+}
+td{
+  text-indent: 5px;
+    color: #444;
+    border-bottom: 1px solid #bbb;
+    border-left: 1px solid #bbb;
+    font-size: 13px;
+}    
+a .button{
+  height:40px;
+  width:65px;
+  border:none;
+  background:#465;
+  box-sizing:border-box;
+  color:white;
+  outline:none;
+  z-index:200;
+  font-weight:600;
+  margin:5px;
+}
+a.button:hover{
+  opacity:0.75;
+}
+a.button:active{
+  opacity:0.5;
+}
+.window {
+
+    width: 1580px; 
+    height: 96vh;
+    
+/* 🌟 เพิ่ม 2 บรรทัดนี้เพื่อจำกัดความสูง */
+    max-height: 85vh; 
+    overflow-y: hidden; 
+  margin: 20px auto 0px auto;
+}
+
+
+.subwindow {
+  max-width: 1300px;
+  min-width: 1300px;
+  margin: 20px auto 0px auto;
+}
+
+.mainsetting{
+  max-width: 400px;
+  min-width:  400px;
+  margin: 20px auto 0px auto;
+ }
+
+.microsoft {
+  font-family: "Raleway", sans-serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  animation: openwindows 0.2s;
+  transform-origin: bottom center;
+}
+.microsoft .header {
+  display: flex;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 40px;
+  font-weight: 100;
+  height: 40px;
+
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+
+
+
+.microsofts {
+	  background: #449;
+}
+
+
+.subwindow .microsoft .header {
+  background: #fff;
+}
+
+
+
+.window.microsoft.draggable2.fullscreen { 
+    /* 1. บังคับชิดขอบทุกด้าน */
+    position: fixed !important; 
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    /* หรือใช้ inset: 0 !important; ก็ได้ */
+
+    /* 2. บังคับขนาดให้เต็มจอ */
+    width: 100vw !important;
+    height: 100vh !important; /* 🔥 ต้องใช้ vh (Viewport Height) ถึงจะเต็มความสูง */
+    
+    max-width: 100% !important;
+    max-height: 100% !important;
+
+    /* 3. ล้างค่าเดิมที่ทำให้มันขยับ */
+    margin: 0 !important;        /* ลบ margin auto ออก เพื่อไม่ให้มันพยายามจัดกลาง */
+    transform: none !important;  /* ปิด transform (เผื่อตัวเดิมมีการ translate) */
+    border-radius: 0 !important; /* ลบมุมโค้งเพื่อให้แนบสนิทขอบจอ */
+    
+
+}
+
+
+
+.fullscreen .container2 #body{
+
+max-height: 95%;
+overflow: auto;
+}
+
+
+ .fullscreen .main{max-height:1500px;overflow-y: scroll;}
+
+
+
+#tm-v2-wrapper{
+	
+		     flex: 1 !important;      /* ยืดเต็ม 100% ของ Wrapper */
+    height: 100% !important; /* กันเหนียว */
+     min-height: 100% !important; /* กันเหนียว */
+    overflow: auto;        /* หรือ auto ถ้าอยากให้มี Scrollbar */
+}
+.tm-window{
+		     flex: 1 !important;      /* ยืดเต็ม 100% ของ Wrapper */
+    height: 100% !important; /* กันเหนียว */
+     min-height: 100% !important; /* กันเหนียว */
+
+}
+#tm-v2-wrapper .tm-content{
+	     flex: 1 !important;      /* ยืดเต็ม 100% ของ Wrapper */
+
+	
+}
+.fromfull{
+	   flex: 1 !important;      /* ยืดเต็ม 100% ของ Wrapper */
+    height: 100% !important; /* กันเหนียว */
+     min-height: 100% !important; /* กันเหนียว */
+	
+}
+
+#wpf-wrapper{
+	     flex: 1 !important;      /* ยืดเต็ม 100% ของ Wrapper */
+    height: 100% !important; /* กันเหนียว */
+     min-height: 100% !important; /* กันเหนียว */
+    overflow: auto;        /* หรือ auto ถ้าอยากให้มี Scrollbar */
+	
+}
+.form{
+	     flex: 1 !important;      /* ยืดเต็ม 100% ของ Wrapper */
+    height: 100% !important; /* กันเหนียว */
+     min-height: 100% !important; /* กันเหนียว */
+   
+	
+}
+
+/* 3. ตัวลูก (.wpf-window): ยืดให้เต็ม Wrapper */
+.window.microsoft.draggable2.fullscreen #wpf-wrapper .wpf-window {
+    flex: 1 !important;      /* ยืดเต็ม 100% ของ Wrapper */
+    height: 100% !important; /* กันเหนียว */
+     min-height: 100% !important; /* กันเหนียว */
+    overflow: auto;        /* หรือ auto ถ้าอยากให้มี Scrollbar */
+}
+
+
+.window.microsoft.draggable2.fullscreen #window { 
+	height: 90vh;
+	 }
+.window.microsoft.draggable2.fullscreen .mainbody { 
+	height: 90vh;
+	 }
+	 .window.microsoft.draggable2.fullscreen .column { 
+	height: 75vh;
+	 }
+	 
+	.fullscreen .tif-container{
+		height: 75vh;
+	}
+	
+	
+		
+	 
+	.window.fullscreen .tm-window{
+ height: 77vh;
+}
+	 
+.window.fullscreen .pbi-window{
+height: 77vh !important;
+}
+	 
+	 
+	 
+	 
+.window.fullscreen .window-container {
+    height: calc(100vh - 40px) !important; /* ตัวอย่าง: เต็มจอ - หัวหน้าต่าง */
+}
+
+.ubuntu {
+ background-color: #337ab7;
+}
+
+.system {
+  background-color: #222;
+ }
+ .system2 {
+  background-color: #222;
+ }
+ .calendar {
+  background-color: rgb(194, 24, 91);
+  color: rgb(248, 187, 208);
+ }
+ 
+ .settingsystem{
+  background-color: #666;
+  color: #222;
+ }
+ .setting{
+  background-color: #337ab7;
+  color: #222;
+ }
+ .iadmin{
+  background: #449;
+ color: black;
+ }
+
+.microsoft .header .title {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  padding: 0px 10px;
+  display: flex;
+}
+.microsoft .header .title .icon {
+  width: 30px;
+  position: relative;
+  display: inline-block;
+  top: 6px;
+}
+.microsoft .header .title .text {
+  height: 25px;
+  top: 7px;
+  position: relative;
+  padding: 0px 8px;
+  line-height: 25px;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+}
+.microsoft .header .buttons {
+  display: flex;
+  width: 160px;
+  height: 30px;
+}
+.microsoft .header .buttons .btn {
+  flex: 1;
+  text-align: center;
+}
+.microsoft .header .buttons .btn:hover {
+  cursor: pointer;
+}
+.microsoft .header .buttons .btn:hover.minus {
+  background: rgba(0, 0, 0, 0.25);
+}
+.microsoft .header .buttons .btn:hover.expand {
+  background: rgba(0, 0, 0, 0.25);
+}
+.microsoft .header .buttons .btn:hover.close {
+  background: rgba(150, 0, 0, 0.5);
+}
+.microsoft .header .buttons .btn i {
+  position: relative;
+  display: inline-block;
+  top: -1px;
+  font-size: 20px;
+}
+.microsoft .form {
+  min-height: 80px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+ .draggable {
+     position: absolute;
+      cursor: move; /* Set cursor to move to indicate it's draggable */
+	   left: 25%;
+	   z-index:5;
+    }
+ .draggable2 {
+     position: absolute;
+      cursor: move; /* Set cursor to move to indicate it's draggable */
+	   left: 10%;
+	      z-index:2;
+    }
+.mainbody{
+	
+	overflow-y: scroll;
+
+  
+}
+ .expanded {
+     min-width: 95%;
+	height: 800px;
+	min-height: 800px;
+    }
+
+.lable{
+  margin:10;
+}
+
+.container {
+  line-height: 22px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.75);
+    color: black;
+    background:#fff;
+}
+.container .menus {
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
+    background: #fff;
+   color: black;
+}
+.container .menus .menu {
+  font-weight: 600;
+  display: inline-block;
+  padding: 0px 5px;
+  position: relative;
+
+}
+.container .menus .menu:hover {
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index:999;
+}
+.container .menus .menu:hover .submenu {
+  opacity: 1;
+  pointer-events: initial;
+}
+.container .menus .menu .submenu {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  border: 1px solid  #ccc;
+  box-shadow: 0px 2px 3px #ccc;
+  left: 0px;
+ background-color:#fff;
+ color:black !important;
+}
+.container .menus .menu .submenu .submenu-item {
+  padding: 0px 20px 0px 10px;
+  white-space: nowrap;
+  position: relative;
+
+}
+.container .menus .menu .submenu .submenu-item .submenu {
+  left: initial;
+  right: 0px;
+  transform: translateX(100%);
+  top: 0px;
+  opacity: 0;
+  pointer-events: none;
+
+}
+.container .menus .menu .submenu .submenu-item:hover {
+  background: rgba(0, 0, 0, 0.25);
+   color: black;
+}
+.container .menus .menu .submenu .submenu-item:hover .submenu {
+  opacity: 1;
+  pointer-events: initial;
+}
+.container .menus .menu .submenu .submenu-item.has-submenu:after {
+  content: "";
+  position: absolute;
+  border: 4px solid transparent;
+  border-left: 4px solid rgba(0, 0, 0, 0.75);
+  right: 5px;
+  top: 6px;
+
+}
+
+.bg-red{ background:#770000 !important; }
+.bg-green{ background:#465 !important; }
+.bg-grey{ background:#444 !important; }
+
+.container2 {
+   width:100%;
+
+   margin:auto;
+   box-shadow:0px 4px 8px rgba(0, 0, 0, 0.5);
+   box-sizing:border-box;
+
+   color: black;
+   background:#fff;
+}
+
+.container2 .footer{
+  height: 45px;
+    background-color: #f0f0f0;
+    border-top: 1px solid #d9d9d9;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 15px;
+    gap: 10px;
+}
+
+.container2 #body{
+   flex:1;
+   z-index:1;
+   overflow: auto;
+    min-height:500px;
+   margin:0px 0px -20px 0px;
+max-height: 500px;
+    overflow: auto;
+}
+
+.container2 #body2{
+   flex:1;
+   z-index:1;
+   overflow: auto;
+    min-height:400px;
+   margin:0px 0px -20px 0px;
+
+}
+.datatable_list{
+	 padding-left:2px;
+	padding-right:2px;
+}
+
+.container2 .modal .body{
+   padding:15px;
+   position:relative;
+   overflow:auto;
+}
+
+.container2 .modal .body label{
+   margin-bottom:10px;
+   display:block;
+   width:100%;
+}
+
+.container2 .modal .body select{
+   
+}
+
+#menu {
+   position: absolute; /* or position: fixed; depending on your layout needs */
+   top: 0px;
+   left: 100px;
+   width: 200px;
+   color: black;
+   text-transform: uppercase;
+   transition: opacity 0.25s; /* Corrected typo in the transition property */
+   z-index: 1000; /* Set a high z-index value to ensure it appears above other elements */
+   
+}
+
+#menu ul {
+   list-style: none;
+   padding: 0px;
+   margin: 0px;
+   background: rgba(0, 0, 0, 0.75);
+   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+#menu li {
+   padding: 10px 0px 10px 10px;
+   border-left: 4px solid transparent;
+   margin: 0px;
+}
+
+#menu li:hover {
+   border-left: 4px solid #444;
+   background: #555;
+   color: #FFF;
+   cursor: pointer;
+}
+
+.container3 {
+  max-width: 100%;
+  width: 100%;
+  height:  500px;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25);
+  margin: 0;
+  position: relative;
+  padding-top: 0.1px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: black;
+  background:#fff;
+}
+
+.header3 {
+
+  width: 100%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(to left, #465, #354);
+  position: absolute;
+  padding: 20px;
+  z-index: 1;
+}
+
+.btn {
+  display: inline-block;
+  border: none;
+  background: transparent;
+  color: white;
+  margin: 0px;
+  padding: 0px;
+}
+.btn.right {
+  float: right;
+}
+.btn:active {
+  color: #444;
+}
+
+.body2 {
+  margin-top: 64px;
+  background: #333;
+  padding: 0px 10px 10px 10px;
+  width: 100%;
+}
+
+.body3 {
+  margin-top: 0px;
+
+}
+.card2 {
+  width:48%;
+  float: left;
+  padding-right: 20px;
+  height: 160px;
+  margin-top: 30px;
+ 
+}
+.card3 {
+  margin-top: 30px;
+  margin-bottom: 50px;
+  height: 280px;
+}
+
+.card2:nth-child(even) {
+  padding-right: 0px;
+}
+.body2 .card2 .content2 {
+  background: #444;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  height: 100%;
+  padding: 10px;
+}
+
+.footer2 {
+
+  background: linear-gradient(to left, #444, #444);
+  padding: 20px;
+  clear: both;
+  top:0;
+}
+.footer2 a {
+  display: inline-block;
+}
+
+.guide {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 100%;
+  transform: translateX(100%);
+  z-index: 1000;
+  font-size: 12px;
+  display: none;
+}
+.guide.show {
+  display: block;
+}
+.guide .guide-content {
+  position: absolute;
+  text-align: left;
+  left: 0px;
+  top: 0px;
+  max-width: 150px;
+  width: 200px;
+  background: #222;
+  padding: 20px;
+  z-index: 1000;
+  border-radius: 2px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  animation: slide-right 0.5s;
+}
+.guide .guide-content:after {
+  content: " ";
+  position: absolute;
+  top: 1px;
+  left: -20px;
+  border: 10px solid transparent;
+  border-right: 10px solid #222;
+}
+.guide .guide-content .guide-close {
+  position: absolute;
+  top: 0px;
+  right: 4px;
+  transform: rotateZ(45deg);
+  font-size: 24px;
+  z-index: 10000;
+}
+
+@keyframes slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+.microsoft {
+  font-family: "Raleway", sans-serif;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  -webkit-animation: openwindows 0.2s;
+          animation: openwindows 0.2s;
+  transform-origin: bottom center;
+}
+.microsoft .header {
+  display: flex;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 40px;
+  font-weight: 100;
+  height: 40px;
+  background: #4c4391;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+}
+.microsoft .header .title {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  padding: 0px 10px;
+  display: flex;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.microsoft .header .title .icon {
+  width: 30px;
+  position: relative;
+  display: inline-block;
+  top: 6px;
+}
+.microsoft .header .title .text {
+  flex: 1;
+  height: 25px;
+  top: 7px;
+  position: relative;
+  padding: 0px 8px;
+  line-height: 25px;
+  border-left: 1px solid rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.microsoft .header .buttons {
+  display: flex;
+  width: 160px;
+  height: 30px;
+}
+.microsoft .header .buttons .btn {
+  flex: 1;
+  text-align: center;
+}
+.microsoft .header .buttons .btn:hover {
+  cursor: pointer;
+}
+.microsoft .header .buttons .btn:hover.minus {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+
+.microsoft .header .buttons .btn:hover.expand {
+  background: rgba(0, 0, 0, 0.25);
+}
+.microsoft .header .buttons .btn:hover.close {
+  background: rgba(150, 0, 0, 0.5);
+}
+.microsoft .header .buttons .btn i {
+  position: relative;
+  display: inline-block;
+  top: -1px;
+  font-size: 20px;
+}
+.microsoft .form {
+  min-height: 60px;
+  background: #333;
+}
+.microsoft .form .top {
+  padding: 10px;
+  display: flex;
+}
+.microsoft .form .top .icon {
+  width: 50px;
+  padding: 0px 10px 0px 0px;
+}
+.microsoft .form .top .icon .amd {
+  background: #333;
+  box-shadow: none;
+}
+.microsoft .form .top .icon .amd .amd-border, .microsoft .form .top .icon .amd .amd-border:after, .microsoft .form .top .icon .amd .amd-top:after {
+  background: #333;
+}
+.microsoft .form .top .loader {
+  flex: 1;
+}
+.microsoft .form .top .loader .text {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+.microsoft .form .top .loader .bars {
+  min-height: 20px;
+  background: #019966;
+  width: 100%;
+  transition: 0.2s all;
+  -webkit-animation: 0.4s opacitize;
+          animation: 0.4s opacitize;
+}
+.microsoft .middle {
+  padding: 0px 10px 10px 10px;
+}
+.microsoft .middle .display {
+  height: 380px;
+  background: #fff;
+  padding: 5px;
+  font-size: 12px;
+  color:  #444;
+  font-weight: 300;
+  overflow-y: auto;
+  box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.5);
+}
+.microsoft .bottom {
+  min-height: 40px;
+  display: flex;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0px 10px;
+  line-height: 30px;
+}
+.microsoft .bottom .btn {
+  width: 80px;
+  text-align: center;
+  height: 30px;
+  position: relative;
+  background: #444;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: all 0.2s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.microsoft .bottom .btn:not(:first-child) {
+  margin-left: 4px;
+}
+.microsoft .bottom .btn:active {
+  box-shadow: none;
+}
+.microsoft .bottom .text {
+  color: rgba(255, 255, 255, 0.1);
+  flex: 1;
+  text-align: center;
+}
+
+.amd {
+  display: inline-block;
+  width: 100%;
+  padding: 5%;
+  background: #000;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 2px;
+}
+.amd .amd-border {
+  width: 100%;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 100%;
+}
+.amd .amd-border:after {
+  content: "";
+  width: 45%;
+  height: 45%;
+  background: #000;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+.amd .amd-border .amd-top {
+  position: absolute;
+  background: #019966;
+  top: 0%;
+  left: 0%;
+  width: 200%;
+  height: 200%;
+  transform: rotateZ(-45deg);
+  transform-origin: top left;
+}
+.amd .amd-border .amd-bottom {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 55%;
+  background: #019966;
+  transform: rotateZ(-45deg) translateX(-30%) translateY(-30%);
+}
+
+@-webkit-keyframes opacitize {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes opacitize {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+
+
+.bodyprofile{
+	margin:0;padding:0;box-sizing:border-box;
+	height:100%;
+	
+	   
+	
+}
+
+    img{border:none;}
+
+    .header{background:linear-gradient(#2c5898,#16365c);height:36px;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 10px;}
+    .header .logo{font-weight:bold;font-size:18px;}
+    .header .menu a{color:#fff;text-decoration:none;margin:0 12px;}
+    .header .right span{margin:0 10px;cursor:pointer;}
+
+   .tabs{display:flex;border-radius:4px 4px 0 0;overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,0.3);}
+    .tab{background:#1a5a8c;padding:10px 32px;font-size:13px;}
+    .tab.active{background:#4c8fbe;}
+
+    .container.containerprofile{flex:1;display:flex;background:#fff; 
+    
+      font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            color: #000;
+        
+
+    height: 90% !important; /* กันเหนียว */
+     min-height: 90% !important; /* กันเหนียว */
+    overflow: hidden;        /* หรือ auto ถ้าอยากให้มี Scrollbar */
+	
+
+            user-select: none;
+    }
+    .sidebarprofile{width: 220px;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #e5e5e5;}
+    .sidebarprofile .sidebar-title{background:#2c5898;color:#fff;padding:8px 15px;font-weight:bold;font-size:13px;}
+    .sidebarprofile .sidebar-menu{list-style:none;padding:0px;}
+    .sidebar-menu.sidebar-menus li{padding: 8px 15px;
+    font-size: 13px;
+    cursor: pointer;
+    color: rgb(0, 0, 0);}
+     .sidebar-menu.sidebar-menus li:hover{background:#d4e4f7;}
+     .sidebar-menu.sidebar-menus li.active{background-color: #0078d7;color:#fff;font-weight:bold;}
+ .sidebar-menu.sidebar-menus li.active::before{content:"→";position:absolute;left:18px;top:7px;font-size:11px;}
+
+    .main{flex:1;display:flex;flex-direction:column;min-height:600px;max-height:600px;overflow-y: scroll;}
+  
+
+    .content.contentprofile{display:flex;gap:25px;}
+    .left-col{flex:1;}
+    .left-col h1{font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: normal;}
+    .left-col .line{margin:5px 0;color:#333;}
+    .left-col .line b{font-weight:bold;}
+    .left-col .line .tag{color:#0066cc;margin-left:4px;}
+
+    .right-col{width:390px;display:flex;gap:18px;}
+    .photo{width:140px;height:170px;border:1px solid #999;background:#f8f8f8;overflow:hidden;flex-shrink:0;}
+    .photo img{width:100%;height:100%;object-fit:cover;}
+    .reminder-box{background:#fff;border:1px solid #ccc;padding:14px;width:230px;font-size:11.5px;line-height:1.4;}
+    .reminder-box h3{color:#1e3e72;font-weight:bold;margin-bottom:8px;}
+    .reminder-box input[type=text]{width:100%;padding:5px;margin:8px 0 12px;border:1px solid #999;}
+    .reminder-box .redtxt{color:#c4122f;font-weight:bold;}
+    .reminder-box input[type=checkbox]{accent-color:#e74c3c;margin-right:6px;}
+
+    .basics{margin-top:22px;background:#fff;border:1px solid #ccc;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:30px;}
+    .basics label{display:inline-block;width:72px;color:#333;}
+    .basics input,.basics select{width:100%;padding:4px 6px;border:1px solid #999;border-radius:2px;}
+
+    .section{background:#fff;border:1px solid #ccc;}
+    .sec-title{background:#e6f0fa;padding:8px 12px;color:#1e3e72;font-weight:bold;font-size:12.5px;}
+    table{width:100%;border-collapse:collapse;}
+    th{background:#f0f0f0;padding:7px 10px;text-align:left;color:#333;border-bottom:1px solid #ccc;}
+    td{padding:7px 10px;border-bottom:1px solid #ddd;vertical-align:top;}
+    .primary input[type=checkbox]{accent-color:#666;}
+
+    .bottombar{height:52px;background:#e6f0fa;border-top:1px solid #ccc;display:flex;justify-content:space-between;align-items:center;padding:0 20px;}
+    .bottombar button{padding:7px 18px;border:1px solid #999;background:#fff;border-radius:3px;cursor:pointer;font-size:12px;}
+    .saveclose{background:#e74c3c;color:#fff;border:none;font-weight:bold;padding:8px 22px;}
+
+        .datatable5 thead th {
+      
+          position: sticky;
+          top: 0;
+        
+        background-color: #465;
+
+        
+        }
+      
+
+
+
+#bodys{
+  background: #c0c0c0;
+
+ }
+ 
+.windows{
+
+  background: #c0c0c0;
+  width: 100%;
+ 
+}
+  .window-toolbar{
+    background: #000080;
+   color: black;
+    padding: 4px;
+    font-weight: bold;
+  }
+  
+  .window-buttons{
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    
+    .window-button{
+      background: no-repeat center #ccc;
+      border: 2px solid #7c7c7c;
+      border-top-color: #fff;
+      border-left-color: #fff;
+      height: 17px;
+      width: 17px;
+      float: right;
+      margin-left: 2px;
+      
+      &.close{
+        background-image: url(https://win98icons.alexmeub.com/images/close-icon.png);
+      }
+      
+      &.help{
+        background-image: url(https://win98icons.alexmeub.com/images/question-icon.png);
+      }
+    }
+  }
+  
+  .window-tabs{
+    overflow: hidden;
+    padding-top: 2px;
+    
+    .tabs-button{
+      background: none;
+      border: none;
+      padding: 5px 8px;
+      float: left;
+      border-top: 1px solid #fff;
+      border-bottom: 1px solid #fff;
+      border-radius: 3px 3px 0 0;
+      border-right: 2px solid #666;
+      margin: 0;
+      cursor: pointer;
+      &:first-child{ 
+        border-left: 1px solid #fff;
+      } &.active{
+        border-bottom: none;
+        padding-top: 7px;
+        margin-top: -2px;
+      }
+    }
+  }
+  
+  .window-content{
+    padding: 15px;
+    border: 1px solid #fff;
+    
+  }
+  .tabs{
+    cursor: pointer;
+
+  }
+  .window-wrapper{
+    padding: 10px;
+    
+    fieldset{
+      border: 1px solid #7c7c7c;
+      padding: 10px;
+      position: relative;
+      
+      &::before {
+        content: " ";
+        position: absolute;
+        z-index: -1;
+        bottom: -2px;
+        left: 0;
+        width: calc(100% + 1px);
+        height: calc(100% - 7px);
+        border: 1px solid #fff;
+      }
+      
+      legend{
+        padding: 0 3px;
+        background: #c0c0c0;
+      }
+      
+      select{
+        width: 100%;
+        margin: 15px 0;
+        
+        option{
+          background: url(https://win98icons.alexmeub.com/icons/png/paint_file-1.png) no-repeat 2px 2px;
+          background-size: auto 14px;
+          padding: 2px 3px 0 18px;
+          vertical-align: middle;
+        }
+        
+        option:first-child{
+          background-image: url(https://win98icons.alexmeub.com/icons/png/paint_file-1.png);
+        }
+      }
+      
+      p::first-letter{
+        text-decoration: underline;
+      }
+    } 
+  }
+  
+  .window-actions{
+    margin-top: 10px;
+    overflow: hidden;
+  }
+    .window-action-button{
+      border: 1px solid #131313;
+      border-top-color: #fff;
+      border-left-color: #fff;
+      background: #c0c0c0;
+      width: 75px;
+      text-align: center;
+      padding: 5px 0;
+      float: right;
+      margin-left: 5px;
+    }
+  
+.hidden{
+display:none
+}
+
+.spatiu{
+  width:150px;
+  height: 20px;
+  overflow:hidden;
+  border-radius: 2.5px;
+  border: 1px solid #8D8D8D;
+
+  background: linear-gradient(to top,
+    #D8D8D8 10%,
+    #D8D8D8 20%,
+    #CECECE 30%,
+    #CBCBCB 40%,
+    #CBCBCB 50%,
+    #D5D5D5 60%,
+    #D4D4D4 70%,
+    #E9E9E9 80%,
+    #E9E9E9 90%,
+    #F2F2F2 100%
+    );
+}
+.bars{
+  width:150px;
+  height: 20px;
+  background: linear-gradient(to top,
+    #5DCF78 10%,
+    #21DE46 20%,
+    #19DA31 30%,
+    #08D226 40%,
+    #08D226 50%,
+    #8AF99D 60%,
+    #A3F1B3 70%,
+    #BFFEC9 80%,
+    #CCFFC7 90%,
+    #D7FBCF 100%
+    );
+
+  border-radius: 2px;
+  box-shadow: inset 6px 0px 6px 0px rgba(0,0,0,0.13), inset -6px 0px 6px 0px rgba(0,0,0,0.13), 3px 0px 15px 0px rgba(25,218,47,0.55);
+  animation: loading 2s cubic-bezier(.93,.71,.39,.04);
+  animation-fill-mode: forwards;
+}
+
+#light{
+  width: 15px;
+  height: 32px;
+  animation: move 5s cubic-bezier(.93,.71,.39,.04) infinite;
+  box-shadow: 0px 0px 50px 18px rgba(255,255,255, .55);
+  background:rgba(255, 255, 255, .6);
+}
+
+@keyframes move {
+  from{
+    margin-left: -40px;
+  }
+  to{
+    margin-left: 420px;
+  }
+}
+
+@keyframes loading {
+  from{
+    margin-left: -400px;
+  }
+  to{
+    margin-left: 0px;
+  }
+}
+
+
+  /* --- SCOPED CSS: เริ่มต้นด้วย #edit-person-wrapper --- */
+        #edit-person-wrapper {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            color: #000;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        #edit-person-wrapper * { box-sizing: border-box; }
+
+        /* --- Window Container --- */
+        #edit-person-wrapper .ep-window {
+            width: 800px;
+            height: 650px;
+            background-color: #f0f0f0; /* สีพื้นหลังหลัก */
+            border: 1px solid #707070;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header (Title Bar) --- */
+        #edit-person-wrapper .ep-header {
+            height: 30px;
+            padding: 0 10px;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #d9d9d9;
+        }
+        #edit-person-wrapper .ep-title {
+            display: flex; align-items: center; font-weight: 600; color: #d9534f; /* สีแดงตามภาพ */
+        }
+        #edit-person-wrapper .ep-icon-red {
+            width: 16px; height: 16px; background-color: #d9534f; margin-right: 8px; border-radius: 2px;
+        }
+        #edit-person-wrapper .ep-close {
+            font-size: 16px; color: #666; cursor: pointer;
+        }
+
+        /* --- Body --- */
+        #edit-person-wrapper .ep-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        #edit-person-wrapper .ep-subtitle {
+            font-style: italic; color: #555; margin-bottom: 15px;
+        }
+
+        /* --- Form Grid Layout --- */
+        #edit-person-wrapper .ep-form-grid {
+            display: grid;
+            grid-template-columns: 80px 1fr 70px 1fr;
+            gap: 10px 15px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        #edit-person-wrapper .ep-label { text-align: right; color: #333; }
+        #edit-person-wrapper .ep-input {
+            width: 100%; padding: 4px; border: 1px solid #adadad; font-size: 12px;
+        }
+        #edit-person-wrapper .ep-btn-blue {
+            background-color: white; border: 2px solid #2a8dd4; color: #2a8dd4;
+            font-weight: 600; padding: 4px 10px; cursor: pointer;
+        }
+
+        /* --- Tabs & Sections --- */
+        #edit-person-wrapper .ep-section-title {
+            font-weight: 600; color: #2a8dd4; margin-bottom: 5px; display: flex; align-items: center;
+        }
+        #edit-person-wrapper .ep-btn-new {
+            margin-left: 15px; padding: 3px 15px; border: 1px solid #adadad;
+            background-color: #e1e1e1; cursor: pointer; font-size: 11px;
+        }
+
+        /* --- Data Grid (Table) --- */
+        #edit-person-wrapper .ep-grid-container {
+            border: 1px solid #adadad;
+            background-color: white;
+            margin-bottom: 20px;
+        }
+
+        #edit-person-wrapper .ep-grid-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr 60px; /* ปรับคอลัมน์ตามภาพ */
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #adadad;
+            font-weight: 600;
+        }
+        #edit-person-wrapper .ep-grid-cell {
+            padding: 5px 8px;
+            border-right: 1px solid #e0e0e0;
+            display: flex; align-items: center;
+        }
+        #edit-person-wrapper .ep-grid-cell:last-child { border-right: none; justify-content: center; }
+
+        #edit-person-wrapper .ep-grid-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr 60px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        #edit-person-wrapper .ep-grid-row:last-child { border-bottom: none; }
+        #edit-person-wrapper .ep-grid-row.ep-selected { background-color: #d1e8ff; } /* สีฟ้าแถวที่เลือก */
+
+        #edit-person-wrapper .ep-grid-input {
+            width: 100%; border: none; background: transparent; padding: 0; font-size: 12px;
+        }
+        #edit-person-wrapper .ep-grid-select {
+            width: 100%; border: 1px solid #adadad; padding: 2px; font-size: 12px;
+        }
+        #edit-person-wrapper .ep-link-add { color: #888; font-style: italic; cursor: pointer; }
+
+        /* --- Address Grid (ปรับคอลัมน์ต่างกันนิดหน่อย) --- */
+        #edit-person-wrapper .ep-address-grid .ep-grid-header,
+        #edit-person-wrapper .ep-address-grid .ep-grid-row {
+            grid-template-columns: 3fr 2fr 60px;
+        }
+
+        /* --- Footer --- */
+        #edit-person-wrapper .ep-footer {
+            height: 35px;
+            background-color: #777; /* สีเทาเข้ม */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            font-size: 11px;
+        }
+        #edit-person-wrapper .ep-footer-item {
+            display: flex; align-items: center; margin-left: 15px; cursor: pointer;
+        }
+        #edit-person-wrapper .ep-footer-icon {
+            width: 14px; height: 14px; background-color: #ccc; margin-right: 5px; border-radius: 2px;
+        }
+        #edit-person-wrapper .ep-btn-save {
+            background-color: white; color: #333; padding: 3px 10px; border-radius: 2px; font-weight: 600;
+        }
+        #edit-person-wrapper .ep-separator { margin: 0 10px; color: #aaa; }
+
+ .indexapp {
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        font-size: 12px;
+        background: #f0f0f0;
+        color: #000;
+        margin:0; padding:0; box-sizing:border-box; 
+    }
+    .container.indexcontainer { height: 65vh; display: flex; flex-direction: column; }
+
+    /* Header */
+    .indexheader {
+        background: linear-gradient(to bottom, #2b579a, #1e3e72);
+        color: white;
+        padding: 4px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 36px;
+        font-weight: bold;
+       font-size: 12px;
+    }
+
+    /* Toolbar */
+    .toolbar.indextoolbar {
+        background: linear-gradient(to bottom, #4a90e2, #2171b5);
+        color: white;
+        padding: 0px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-weight: bold;
+        font-size: 14px;
+        height: 46px;
+    }
+    
+    /* แท็บ ATTORNEY / BILLING ที่ชิดติดกันเป็นกล่องสี่เหลี่ยม */
+    .indextabs {
+        display: flex;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .indextabs .indextab {
+        background: #1e4d7f;
+        
+        padding: 15px 20.5px;
+        min-width: 110px;
+        text-align: center;
+        cursor: pointer;
+      color: black;
+    }
+.indextabs .indextab.myactives {
+    background: #f5f5f5;
+    font-weight: bold;
+ color:black; 
+}
+    .indextabs .indextab :first-child { border-right: 1px solid #2c6bb0; }
+
+    /* ปุ่ม + และ Search */
+    .toolbar-buttons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .toolbar-buttons button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .search-box {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: bold;
+    }
+    .search-box input {
+        padding: 5px 8px;
+        border: none;
+        border-radius: 3px;
+        width: 220px;
+    }
+
+    /* เนื้อหาหลัก */
+    .content.indexcontent { flex: 1; display: flex; background: white; }
+    .sidebar { width: 220px; background: #f5f5f5; border-right: 1px solid #ccc; padding: 12px; }
+    .main { flex: 1; padding: 0px; overflow: auto; }
+
+
+
+    .contact-name { color: #1e3e72; font-weight: bold; }
+    .today { color: #d35400; font-weight: bold; }
+    .marked input[type="checkbox"] { accent-color: #f5821f; }
+    
+    #body{cursor:context-menu; }
+
+
+ .header-content {
+    /* 1. สำคัญ: ต้องเป็น Block-level เพื่อให้ยืดเต็มความกว้างของ TH */
+    display: flex; 
+    
+    /* 2. บังคับให้ยืดเต็มความกว้างของเซลล์ */
+    width: 100%; 
+    
+    /* 3. จัดให้ข้อความอยู่ซ้ายสุด และไอคอนอยู่ขวาสุด */
+    justify-content: space-between; 
+    
+    /* 4. จัดให้เนื้อหาอยู่กึ่งกลางแนวตั้ง */
+    align-items: center; 
+      cursor: pointer;
+}
+
+
+
+
+        /* --- Main Window --- */
+        #tm-v2-wrapper .tm-window {
+           
+            background-color: #ffffff;
+            border: 1px solid #e5e5e5;
+            display: flex;
+            flex-direction: column;
+          
+            
+        }
+
+        /* --- 1. Tab Bar (Box Style) --- */
+        #tm-v2-wrapper .tm-tab-bar {
+            background-color: #f0f0f0; /* พื้นหลังสีเทาอ่อน */
+            padding-top: 6px;
+            padding-left: 6px;
+            display: flex;
+            border-bottom: 1px solid #d9d9d9;
+        }
+
+        #tm-v2-wrapper .tm-tab {
+            padding: 5px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #333;
+            background-color: #f0f0f0;
+            border: 1px solid transparent;
+            margin-right: -1px; /* ให้ขอบซ้อนกัน */
+            margin-bottom: -1px; /* ให้ทับเส้นขอบล่าง */
+            position: relative;
+            border-top-left-radius: 2px;
+            border-top-right-radius: 2px;
+        }
+
+        #tm-v2-wrapper .tm-tab:hover {
+            background-color: #e5f1fb;
+            border-color: #cdcdcd;
+        }
+
+        /* Active Tab Style */
+        #tm-v2-wrapper .tm-tab.active {
+            background-color: #ffffff;
+            border-color: #d9d9d9;
+            border-bottom-color: #ffffff; /* ลบเส้นล่างออกเพื่อให้เชื่อมกับเนื้อหา */
+            color: #000;
+            z-index: 10;
+        }
+
+        /* --- 2. Content Area --- */
+        #tm-v2-wrapper .tm-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            /* -height:90% !important;*/
+            overflow:auto;
+           
+        }
+
+        /* --- 3. Grid Header (Stacked Percentages) --- */
+        #tm-v2-wrapper .tm-header-row {
+            display: flex;
+            border-bottom: 1px solid #d9d9d9;
+            height: 45px; /* ความสูงพอดีสำหรับ 2 บรรทัด */
+        }
+
+        #tm-v2-wrapper .tm-h-col {
+            border-right: 1px solid #e0e0e0;
+            padding: 4px 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+        }
+        #tm-v2-wrapper .tm-h-col:hover { background-color: #eef4fc; }
+
+        /* Column Widths */
+        #tm-v2-wrapper .col-name { flex: 2; min-width: 250px; justify-content: flex-end; padding-bottom: 8px; }
+        #tm-v2-wrapper .col-status { width: 80px; border-left: 1px solid #e0e0e0; justify-content: flex-end; padding-bottom: 8px; }
+        #tm-v2-wrapper .col-metric { width: 95px; }
+
+        /* Typography inside Header */
+        #tm-v2-wrapper .h-percent {
+            font-size: 15px; color: #000; margin-bottom: 0px; line-height: 1.2;
+        }
+        #tm-v2-wrapper .h-label {
+            font-size: 11px; color: #555; display: flex; align-items: center;
+        }
+        #tm-v2-wrapper .h-label-single {
+            font-size: 11px; color: #333;
+        }
+
+        /* Active Sort Header Styling */
+        #tm-v2-wrapper .tm-h-col.sorted-mem {
+            background-color: #fff; /* Memory ในรูปพื้นหลังขาว แต่ตัวเลขเข้ม */
+        }
+        #tm-v2-wrapper .tm-h-col.sorted-mem .h-label::after {
+            content: '▼'; font-size: 8px; margin-left: 5px; color: #666;
+        }
+
+        /* Active CPU Header */
+        #tm-v2-wrapper .tm-h-col.active-cpu {
+            background-color: #fff; 
+        }
+
+        /* --- 4. Data Rows --- */
+        #tm-v2-wrapper .tm-data-container {
+            flex: 1; overflow-y: auto;
+        }
+        #tm-v2-wrapper .tm-row {
+            display: flex; height: 32px; align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        #tm-v2-wrapper .tm-row:hover { background-color: #dcebf9; }
+
+        #tm-v2-wrapper .tm-d-cell {
+            padding: 0 8px; font-size: 12px; color: #000;
+            display: flex; align-items: center;
+            height: 100%;
+            border-right: 1px solid transparent;
+        }
+
+        #tm-v2-wrapper .d-name { flex: 2; min-width: 250px; }
+        #tm-v2-wrapper .d-status { width: 80px; }
+        #tm-v2-wrapper .d-metric { width: 95px; justify-content: flex-end; color: #555; }
+
+        /* Highlights for sorted columns */
+        #tm-v2-wrapper .bg-tint-yellow { background-color: #fffbef; } /* สีเหลืองอ่อนๆ เวลาเรียง */
+        #tm-v2-wrapper .bg-tint-orange { background-color: #ffefdf; } /* สีส้มอ่อนๆ ถ้าใช้เยอะ */
+
+        /* Icons */
+        #tm-v2-wrapper .app-icon {
+            width: 16px; height: 16px; margin-right: 8px;
+            display: inline-block;
+        }
+        
+        
+        
+            .btn-hover-effect {
+    display: inline-block; /* จัดกล่องให้สวยงาม */
+    padding: 4px;          /* เพิ่มระยะห่างขอบ เพื่อให้พื้นหลังใหญ่กว่าไอคอนนิดนึง */
+    border-radius: 4px;    /* ลบมุมเหลี่ยมให้มนนิดๆ (ดูทันสมัยขึ้น) */
+    transition: background-color 0.2s;
+     /* เอฟเฟกต์ค่อยๆ เปลี่ยนสีให้นุ่มนวล */
+     
+      background-color: #fff; 
+    border: 1px solid #fff; /* (แถม) เส้นขอบบางๆ สีน้ำเงินจางๆ */
+     /* 👇 ส่วนที่เพิ่มเข้ามาเพื่อให้เนื้อหาอยู่ตรงกลาง 👇 */
+
+    justify-content: center; /* จัดให้อยู่กึ่งกลางในแนวนอน */
+    align-items: center; /* จัดให้อยู่กึ่งกลางในแนวตั้ง */
+    /* 👆 ส่วนที่เพิ่มเข้ามาเพื่อให้เนื้อหาอยู่ตรงกลาง 👆 */
+  }
+
+.btn-hover-effect a {
+    /* ตั้งค่าเพิ่มเติมสำหรับลิงก์ (ถ้าจำเป็น) */
+    text-decoration: none; /* ลบเส้นใต้ */
+    display: flex; /* ทำให้ลิงก์เป็น Flex container ด้วย เพื่อให้ img อยู่ตรงกลาง ถ้ามี */
+    align-items: center; 
+    /* ในกรณีที่รูปภาพ img มีขนาดเล็กกว่า a tag มาก */
+}
+  /* เมื่อเอาเมาส์ไปชี้ (Hover) */
+  .btn-hover-effect:hover {
+    /* สีน้ำเงิน (R, G, B) ที่มีความโปร่งใส (Alpha = 0.1 หรือ 10%) */
+    background-color: rgba(0, 123, 255, 0.15); 
+    border: 1px solid rgba(0, 123, 255, 0.3); /* (แถม) เส้นขอบบางๆ สีน้ำเงินจางๆ */
+  }
+  
+  
+  
+  fieldset {
+    border: 1px solid #d9d9d9;
+    margin: 0 0 20px 0;
+    padding: 10px 15px 15px 15px;
+    border-radius: 2px;
+}
+
+
+fieldset {
+    display: block;
+    min-inline-size: min-content;
+    margin-inline: 2px;
+    border-width: 2px;
+    border-style: groove;
+    border-color: threedface;
+    border-image: initial;
+    padding-block: 0.35em 0.625em;
+    padding-inline: 0.75em;
+}
+
+.checkboxreadonly{
+    filter: grayscale(100%);   /* 3. ล้างสีออกให้เป็นขาวดำ (ถ้ามีสีฟ้า/เขียว จะกลายเป็นเทา) */
+	pointer-events: none;
+    background-color: #E0DEDE;
+}
+
+
+
+  
+       /* ปรับแต่งตัว Item หลักใน Menu Bar */
+    #wpf-wrapper .wpf-menu-item {
+        position: relative; /* สำคัญ: เพื่อให้ Dropdown อ้างอิงตำแหน่งจากตัวนี้ */
+        display: flex;
+        align-items: center;
+        padding: 5px 10px;
+        cursor: default;
+        height: 100%;
+    }
+    #wpf-wrapper .wpf-menu-item:hover {
+        background-color: #e5e5e5;
+    }
+
+    /* กล่อง Dropdown (ซ่อนไว้ก่อน) */
+    #wpf-wrapper .wpf-dropdown {
+        display: none; /* ซ่อน */
+        position: absolute;
+        top: 100%; /* อยู่ใต้เมนูหลัก */
+        left: 0;
+        min-width: 180px;
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        z-index: 1000; /* ให้ลอยอยู่เหนือตาราง */
+        padding: 2px 0;
+    }
+
+    /* สั่งให้แสดงเมื่อเอาเมาส์ชี้ (Hover) ที่แม่มัน */
+    #wpf-wrapper .wpf-menu-item:hover > .wpf-dropdown {
+        display: block;
+    }
+
+    /* รายการข้างใน Dropdown */
+    #wpf-wrapper .wpf-drop-item {
+        padding: 8px 5px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        position: relative; /* เพื่อรองรับ Submenu */
+    }
+    #wpf-wrapper .wpf-drop-item:hover {
+        background-color: #0078d7;
+        color: white;
+    }
+
+    /* เส้นคั่นเมนู */
+    #wpf-wrapper .wpf-drop-separator {
+        height: 1px;
+        background-color: #e0e0e0;
+        margin: 4px 10px;
+    }
+
+    /* --- ส่วนของ Submenu (ชั้นที่ 2) --- */
+    
+    /* ตำแหน่งของ Submenu จะเด้งไปทางขวา */
+    #wpf-wrapper .wpf-submenu {
+        top: -1px;          /* ปรับให้ขอบตรงกัน */
+        left: 100%;         /* เด้งไปด้านขวาของแม่ */
+        margin-left: -1px;  /* ซ้อนทับเส้นขอบนิดนึงเพื่อความสวยงาม */
+    }
+
+    /* โชว์ Submenu เมื่อเอาเมาส์ชี้ที่ Item แม่ (ที่มี class has-submenu) */
+    #wpf-wrapper .wpf-drop-item.has-submenu:hover > .wpf-submenu {
+        display: block;
+    }
+       
+        /* --- SCOPED CSS: #wpf-wrapper --- */
+        #wpf-wrapper {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            color: #000;
+            background-color: #f3f3f3;
+      
+
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        #wpf-wrapper * { box-sizing: border-box; }
+
+        /* --- Main Window --- */
+        #wpf-wrapper .wpf-window {
+            width: 100%;
+            height: 95%;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- Title Bar --- */
+        #wpf-wrapper .wpf-title-bar {
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 10px;
+            background-color: #ffffff;
+            font-size: 12px;
+        }
+        #wpf-wrapper .wpf-window-controls span {
+            display: inline-flex; width: 45px; height: 32px;
+            justify-content: center; align-items: center;
+            font-size: 14px; color: #333; cursor: default;
+        }
+        #wpf-wrapper .wpf-window-controls span:hover { background-color: #e5e5e5; }
+        #wpf-wrapper .wpf-window-controls span.close:hover { background-color: #e81123; color: white; }
+
+        /* --- Menu Bar (Theme, Presets...) --- */
+        #wpf-wrapper .wpf-menu-bar {
+            padding: 3px 5px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex; gap: 5px; font-size: 13px; color: #333;
+        }
+
+        /* --- Body Layout --- */
+        #wpf-wrapper .wpf-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* --- LEFT SIDEBAR --- */
+        #wpf-wrapper .wpf-sidebar {
+            width: 220px;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #e5e5e5;
+        }
+        
+        #wpf-wrapper .wpf-search-box {
+            margin: 10px;
+            background: white; border: 1px solid #ccc; padding: 5px 10px;
+            display: flex; align-items: center;
+        }
+        #wpf-wrapper .wpf-search-box input {
+            border: none; outline: none; width: 100%; font-size: 13px;
+        }
+
+        #wpf-wrapper .wpf-nav-list {
+            flex: 1; overflow-y: auto; padding: 0; margin: 0; list-style: none;
+        }
+        #wpf-wrapper .wpf-nav-item {
+            padding: 8px 15px; font-size: 13px; cursor: pointer; color: #000;
+        }
+        #wpf-wrapper .wpf-nav-item:hover { background-color: #e0e0e0; }
+        #wpf-wrapper .wpf-nav-item.active {
+            background-color: #0078d7; color: white;
+        }
+        /* Custom Scrollbar */
+        #wpf-wrapper .wpf-nav-list::-webkit-scrollbar { width: 4px; }
+        #wpf-wrapper .wpf-nav-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+
+        /* --- CENTER CONTENT --- */
+        #wpf-wrapper .wpf-content {
+            flex: 1;
+            padding: 10px 20px;
+            display: flex; flex-direction: column;
+            background-color: white;
+            overflow: hidden;
+        }
+        
+        #wpf-wrapper .wpf-header-text {
+            font-size: 18px; margin-bottom: 15px; font-weight: normal;
+        }
+
+        /* DataGrid */
+        #wpf-wrapper .wpf-datagrid-container {
+            flex: 1; border: 1px solid #e5e5e5; overflow: auto; position: relative;
+        }
+        
+        #wpf-wrapper table {
+            width: 100%; border-collapse: collapse; min-width: 600px;
+        }
+        
+        #wpf-wrapper th {
+            text-align: left; padding: 8px;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #e5e5e5;
+            border-right: 1px solid #f0f0f0;
+            font-weight: normal; color: #666; font-size: 13px;
+            position: sticky; top: 0;
+        }
+        
+        #wpf-wrapper td {
+            padding: 6px 8px; border-bottom: 1px solid #f0f0f0; font-size: 13px;
+            white-space: nowrap;
+        }
+
+        #wpf-wrapper tr:hover { background-color: #fcfcfc; }
+        #wpf-wrapper tr.selected { background-color: #0078d7; color: white; }
+        #wpf-wrapper tr.selected td { border-bottom-color: #0078d7; }
+
+        /* --- RIGHT PANEL (Settings) --- */
+        #wpf-wrapper .wpf-right-panel {
+            width: 250px;
+            background-color: #f9f9f9;
+            border-left: 1px solid #e5e5e5;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 13px;
+        }
+
+        #wpf-wrapper .setting-group { margin-bottom: 15px; }
+        #wpf-wrapper .setting-label { font-weight: 600; margin-bottom: 8px; display: block; }
+        
+        #wpf-wrapper .radio-item, #wpf-wrapper .check-item {
+            display: flex; align-items: center; margin-bottom: 6px; cursor: pointer;
+        }
+        #wpf-wrapper input[type="radio"], #wpf-wrapper input[type="checkbox"] {
+            margin-right: 8px; accent-color: #0078d7;
+        }
+
+        #wpf-wrapper select {
+            width: 100%; padding: 5px; border: 1px solid #ccc; background: white;
+            border-radius: 2px; margin-top: 5px;
+        }
+        #wpf-wrapper select:hover { border-color: #999; }
+        
+        
+        
+        
+    
+
+/* 1. ย้ายการคุมขนาด (Width) มาไว้ที่ "ตัวคลุมแม่" (Wrapper) */
+.ts-wrapper {
+    display: inline-block !important; 
+    float: left; /* เพื่อให้ต่อท้าย Label */
+    min-width: 350px !important;
+    position: relative;
+    padding:0px;
+}
+
+/* 2. กล่อง Input (Control) ให้กว้างเต็ม 100% ของตัวแม่ */
+.ts-wrapper .ts-control {
+    background-color: #fff !important;
+    border: 1px solid #bbb !important;
+    width: 100% !important; 
+    padding: 4px 30px 4px 4px !important; /* เว้นที่ว่างด้านขวา 30px ไว้ใส่ลูกศร */
+    z-index: 1;
+    border-radius: 0; 
+    box-shadow: none !important; 
+    font-family: inherit;
+    font-size: inherit; /* เติม ; ให้แล้วครับ สำคัญมาก! */
+	
+	/* แก้ปัญหา 1: สีตัวอักษรจาง */
+    color: #222 !important; /* บังคับให้เป็นสีดำ/เทาเข้ม เหมือนช่องอื่นๆ */
+    
+    /* แก้ปัญหา 2: ข้อความลอยสูง ไม่ตรงกลาง */
+   min-height: unset !important; /* ลบความสูงขั้นต่ำเดิมของ TomSelect ทิ้ง */
+       flex-wrap: nowrap !important; /* ห้ามปัดบรรทัดเด็ดขาด */
+	
+}
+
+/* 3. กล่อง Dropdown ตอนกางออก ให้กว้าง "100% ของตัวแม่" (ไม่ล้น ไม่ยืด) */
+.ts-wrapper .ts-dropdown {
+    width: 100% !important; 
+    border: 1px solid #bbb;
+    border-top: none;
+    box-sizing: border-box; /* ป้องกันไม่ให้ padding ดันจนกล่องล้น */
+    left: 0;
+}
+
+/* 4. ตอน Focus สีขอบสีฟ้า */
+.ts-wrapper.focus .ts-control {
+    border-color: #3595f6 !important; 
+    box-shadow: 0 0 0 1px #3595f6 !important; 
+}
+
+/* ==========================================
+   5. เสก "ลูกศรชี้ลง" ให้กลับมาเหมือน Select ปกติ 
+   ========================================== */
+.ts-wrapper.single .ts-control::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    margin-top: -3px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 5px 0 5px;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* ตอนคลิกกาง Dropdown ให้ลูกศรชี้ขึ้น */
+.ts-wrapper.single.dropdown-active .ts-control::after {
+    margin-top: -4px;
+    border-width: 0 5px 5px 5px;
+    border-color: transparent transparent #555 transparent;
+}
+
+/* ปรับความกว้างของกล่อง Dropdown ตอนกางออก ให้กว้างเท่า Input พอดี */
+.ts-wrapper .ts-dropdown {
+    width:100%  !important;
+	margin-top: -5px !important;
+    border: 1px solid #bbb;
+    border-top: none;
+}
+/* บังคับให้ข้อความที่ถูกเลือกแล้ว (Item) สีดำสนิทด้วย */
+.ts-wrapper .ts-control .item {
+    color: #222 !important; 
+}
+
+
+
+
+/* เส้นแบ่งสำหรับการดึงขยาย (Resizer) */
+.resizer {
+    cursor: col-resize;
+    user-select: none;
+  font-size: 12px;
+position: absolute;
+    right: 0;  /* ชิดขวาสุด */
+    top: 0;    /* ชิดบนสุด */
+  display: flex;
+    align-items: center;   /* กึ่งกลางแนวตั้ง */
+    justify-content: center; /* กึ่งกลางแนวนอน */
+    color:#fff;
+}
+.ant-table-cell th {
+    position: relative !important; /* บังคับให้เป็นจุดอ้างอิงของเส้น Resizer */
+    background-clip: padding-box; /* ป้องกันสีพื้นหลังทับเส้น */
+}
+
+/* ตัวตาราง */
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse; /* สำคัญ: เพื่อให้ขอบตารางแนบสนิทตอน sticky */
+}
+
+/* ส่วนหัวตารางที่ต้องการตรึง */
+.table-wrapper th {
+  position: sticky !important;
+  top: 0; /* ตรึงไว้ด้านบนสุดของคอนเทนเนอร์ */
+ z-index:5;
+  background-color: #f1f1f1; /* ต้องใส่สีพื้นหลัง ไม่งั้นหัวตารางจะโปร่งใสเห็นตัวหนังสือซ้อนกัน */
+  box-shadow: inset 0 -1px 0 #ccc; /* ใช้แทน border ล่าง เพราะ border ปกติจะหายไปเวลาทำ sticky */
+}
+
+.table-wrapper, .ant-table-cell {
+    -webkit-user-select: text !important; /* Safari */
+    -moz-user-select: text !important;    /* Firefox */
+    -ms-user-select: text !important;     /* IE/Edge */
+    user-select: text !important;        /* Standard */
+}
+/* เส้น Resizer */
+.resizer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    cursor: col-resize;
+    user-select: none;
+    height: 100% !important;
+}
+.resizer:hover, .resizing {
+    border-right: 2px solid #007bff;
+}
+
+/* Icon การเรียงลำดับ */
+.sort-handle {
+    font-size: 12px;
+    margin-left: 5px;
+    display: inline-block;
+    transition: 0.2s;
+}
+
+/* ป้องกันการคลุมดำตอนกด Resize */
+.table-wrapper th  {
+    user-select: none !important;
+    position: relative;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -1,0 +1,183 @@
+
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+ <script>
+
+ window.addEventListener("DOMContentLoaded", function () {
+	  const theme = "${customreports.theme}";
+
+	    // ฟังก์ชันเพิ่มคอมมาในตัวเลข
+	    function numberWithCommas(x) {
+	        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	    }
+
+	    // ดึงตาราง
+	    var tables = document.getElementsByClassName("ui-dynamic-table-page");
+	    var table = tables[0];
+	    if (!table) {
+	        console.error("ไม่พบตาราง ui-dynamic-table-page");
+	        return;
+	    }
+	    var rows = table.querySelectorAll('tbody tr');
+	    if (!rows.length) {
+	        console.error("ไม่พบแถวในตาราง");
+	        return;
+	    }
+
+	    // กำหนด axisX, axisY, และ level
+	    var axisY = "${customreports.axis_x}".split(",")[0]; // วันที่ (cell-10)
+	    var axisX = "${customreports.axis_y}".split(",")[0]; // ยอดผลิต (cell-8)
+	    var levelClass = '.cell-' + ${customreports.level}; // ขั้นตอน (cell-5)
+
+	    // ดึงชื่อ header สำหรับกราฟ
+	    var seriesHeaderIndex = parseInt(${customreports.level}) - 1; // 5 - 1 = 4
+	    var seriesHeaderCell = document.getElementById("ui-dynamic-table-header-cell-" + seriesHeaderIndex);
+	    var chartTitleLabel = seriesHeaderCell ? seriesHeaderCell.innerText : "ขั้นตอน";
+
+	    var xHeaderIndex = parseInt(axisX) - 1; // 8 - 1 = 7
+	    var xHeaderCell = document.getElementById("ui-dynamic-table-header-cell-" + xHeaderIndex);
+	    var xAxisLabel = xHeaderCell ? xHeaderCell.innerText : "ยอดผลิต";
+
+	    // เตรียมข้อมูลสำหรับกราฟ
+	    var allData = []; // เก็บทุกจุดใน series เดียว
+	    var allDates = []; // เก็บวันที่ทั้งหมดเพื่อหาค่า min/max
+	    var stepLabels = {}; // เก็บขั้นตอนสำหรับ tooltip
+
+	    // วนลูปผ่านแถวเพื่อสร้างข้อมูล
+	    for (var i = 0; i < rows.length; i++) {
+	        var row = rows[i];
+	        // ดึงขั้นตอน (สำหรับ tooltip)
+	        var seriesCell = row.querySelector(levelClass); // cell-5
+	        var seriesName = seriesCell ? seriesCell.innerText : "แถว " + (i + 1);
+
+	        // ดึงวันที่ (axisY, cell-10) และยอดผลิต (axisX, cell-8)
+	        var dateCell = row.querySelector('.cell-' + axisY); // cell-10
+	        var prodCell = row.querySelector('.cell-' + axisX); // cell-8
+	        var date = dateCell ? dateCell.innerText : null;
+	        var production = prodCell && prodCell.innerText ? Number(prodCell.innerText) : 0;
+
+	        if (date) {
+	            var localDate = new Date(date + "+07:00"); // ใช้ local time +07:00
+	            var timestamp = localDate.getTime();
+	            allData.push({
+	                x: localDate,
+	                y: production,
+	                r: production / 100 // ขนาดจุดตามยอดผลิต (ปรับสเกล)
+	            });
+	            allDates.push(localDate);
+	            stepLabels[timestamp] = seriesName; // เก็บขั้นตอนตามวันที่
+	        }
+	    }
+
+	    // เรียงข้อมูลตามวันที่
+	    allData.sort(function(a, b) {
+	        return a.x - b.x;
+	    });
+
+	    // หาค่า min และ max สำหรับแกน X
+	    var minDate = new Date(Math.min.apply(null, allDates));
+	    var maxDate = new Date(Math.max.apply(null, allDates));
+	    minDate.setHours(10, 0, 0, 0); // เริ่ม 10:00
+	    maxDate.setDate(maxDate.getDate() + 1); // เพิ่ม buffer
+	    maxDate.setHours(23, 59, 59, 999);
+
+	    // สร้าง dataset เดียว
+	    var datasets = [{
+	        label: "ยอดผลิต",
+	        data: allData, // [{x: Date, y: number, r: number}, ...]
+	        backgroundColor: getThemeColor(theme, 0), // เพิ่ม opacity
+	        borderColor: getThemeColor(theme, 0),
+	        borderWidth: 1
+	    }];
+
+	    // ดีบักข้อมูล
+	    console.log("All Data:", allData);
+	    console.log("Step Labels:", stepLabels);
+	    console.log("Min Date (10:00):", minDate);
+	    console.log("Max Date:", maxDate);
+
+	    // สร้างกราฟ
+	    var ctx = document.getElementById('myChart').getContext('2d');
+	    new Chart(ctx, {
+	        type: 'bubble', // เปลี่ยนเป็น Bubble Chart
+	        data: {
+	            datasets: datasets
+	        },
+	        options: {
+	            responsive: true,
+	            plugins: {
+	                title: {
+	                    display: true,
+	                    text: "${customreports.report_name} ",
+	                    font: {
+	                        size: 18
+	                    }
+	                },
+	                legend: {
+	                    display: true
+	                },
+	                tooltip: {
+	                    callbacks: {
+	                        label: function(context) {
+	                            var value = context.raw.y || 0;
+	                            var timestamp = context.raw.x.getTime();
+	                            var step = stepLabels[timestamp] || "ไม่ทราบขั้นตอน";
+	                            return step + ": " + numberWithCommas(value) + " (ขนาด: " + context.raw.r + ")";
+	                        }
+	                    }
+	                },
+	                zoom: {
+	                    pan: {
+	                        enabled: true,
+	                        mode: 'x',
+	                        modifierKey: null
+	                    },
+	                    zoom: {
+	                        wheel: {
+	                            enabled: true
+	                        },
+	                        pinch: {
+	                            enabled: true
+	                        },
+	                        mode: 'x'
+	                    }
+	                }
+	            },
+	            scales: {
+	                x: {
+	                    type: 'time',
+	                    time: {
+	                        unit: 'day',
+	                        displayFormats: {
+	                            day: 'dd-MM-yyyy'
+	                        }
+	                    },
+	                    title: {
+	                        display: true,
+	                        text: "วันที่"
+	                    },
+	                    min: minDate.getTime(),
+	                    max: maxDate.getTime(),
+	                    ticks: {
+	                        maxTicksLimit: 10 // 10 ticks
+	                    }
+	                },
+	                y: {
+	                    beginAtZero: true,
+	                    title: {
+	                        display: true,
+	                        text: xAxisLabel // "ยอดผลิต"
+	                    }
+	                }
+	            }
+	        },
+	        plugins: [ChartZoom]
+	    });
+	});
+ 
+ </script> 

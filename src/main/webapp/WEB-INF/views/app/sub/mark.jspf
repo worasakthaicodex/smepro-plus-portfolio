@@ -1,0 +1,76 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+
+
+                                
+                                 <li class="todo-item " >
+                                      
+                                    
+                                
+                                        <div class="todo-title-wrapper">
+                                            <div class="todo-title-area">
+                                              
+                                 
+                                                <div class="title-wrapper">
+                                                    <div class="form-checks">
+                                                    
+                                                    
+                
+                                <c:if test='${process.process_logo != null}'>
+                                   <img src=" /resources/app-assets/images/icons/APP/${process.process_logo}" style="width:32px;height:32px;"></img> 
+                                   </c:if>
+						
+                                                    </div>                    
+                                                    <span class="todo-title">
+                                          
+                                                    
+                                               ${process.name}  ${row.data_title}  
+                         						
+                                             			
+                                                   <br>
+                                                    <span style="font-size:11px;color:#aaa">
+                                                     <spring:message code="tables.by" />  : ${row.data_nameadd}    ${row.data_dateadd}   
+                                                    </span>
+                                                    
+          
+                                                    
+             
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="todo-item-action">
+                                        
+                                      
+                                                
+          										  
+                                               
+                                           
+                                  
+                                    
+                                       
+                                  		  
+                                                <div class="email-label">
+                                                          
+                          <div class="form-check form-check-success form-switch">
+                                                <input type="checkbox"   <c:if test='${row.alert == 0 }'>checked</c:if > class="form-check-input" id="customSwitch4"
+                                                      onclick="window.location.href='/setmarkasread-filemanager/${process_id}?type=1&id=${row.id}&alert=' + (this.checked ? 0 : 1)"
+                                                >
+                                            </div>  
+                                        </div>
+                                                
+                                                
+                                     
+                                                
+                                             
+                                            </div>
+                                        </div>
+                                        
+                              
+                                          
+                                    </li>
+                                    
+                                
+                       

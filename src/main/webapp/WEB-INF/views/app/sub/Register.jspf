@@ -1,0 +1,85 @@
+     <%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>   
+  
+      <div class="modal-body">
+
+           			<c:set var="namesArray" value="${fn:split(Register, ',')}" />
+					
+					   <spring:message code="app.activate"  text="-​" /> : <select class="form-select form-select-sm d-inline w-auto" name="activate_register"  id="activate_register"  onchange="toggleDivregister(this)">
+					    <option value="-" <c:if test="${sub_processes.action == '-' }">selected</c:if>>Disable</option>
+					    
+					    <c:forEach var="commit" items="${namesArray}">
+					        <option value="${commit}" <c:if test="${sub_processes.action == commit }">selected</c:if>>${commit}</option>
+					    </c:forEach>
+					</select>
+                            
+                  
+                                   <br><br>         
+                                   
+                                                
+                                   
+                                       
+                                   
+                         
+                                              <c:forEach var="rowcommit" items="${Registers}"> 
+                                              
+                                              
+                                         
+                                                 
+                                                <div id="${rowcommit.name}" class="register-div mainaction-div" style="display:none"> 
+                                   					 <div class="mb-1 row">
+                                               
+                                                       
+                                                         <div class="col-sm-6"><spring:message code="app.e-formcolumn"  text="-​" />  </div>
+                                                         
+                                                                   <div class="col-sm-6">
+                                              
+                                                       <spring:message code="app.tag"  text="-​" />
+                                                        </div>
+                                                           
+                                                            </div>
+                                   
+                                                               <div class="col-12">
+                                                               
+                                                               
+                                                               
+                                                  <c:forEach items="${eformfields }" var="fields" >     
+                                                       
+                                                     
+		                                                                   <div class="mb-1 row">
+		                                                                 <div class="col-sm-6">
+                                                        <label class="col-form-label" for="fname-icon">${fields.field_label}
+                                                                </div>   
+                                                           <div class="col-sm-6">          
+		                                                   <input type="hidden" name="keymap.eformkey" value="${fields.field_id}">
+		                                                 
+		                                                                      <select class="form-select" name="keymap.registerkey_id">
+											                                   <option value="0" selected>-</option>
+															
+															
+																 <c:forEach items="${rowcommit.actionkeys }" var="row" varStatus="counts">   
+						  <option value="${row.id}" <c:if test="${row.keymap.eformkey.contains(fields.field_id.toString())}">selected </c:if> >
+						  #<spring:message code="${row.title }"  text="-​" /></option>
+																 </c:forEach>
+										 	                               </select>
+										 	                           
+		                                                            
+		                                                               </div>   
+		                                                               </div>      
+                                                  </c:forEach>        
+                                                               
+                                                       
+                                                     </div>        
+ 													  </div> 		
+                                               </c:forEach>           
+                                                                
+                                            
+                                                     
+                                                   
+                                     
+                  							       
+                  							       
+                                                          
+                                                            </div>
+                                            

@@ -1,0 +1,35 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+ 
+ 
+ 
+ 
+ 
+ 
+<div title="KET->${row.keymap.mainkey }">
+<label for="i51">${title } ${disabled }</label>
+   <c:set var="display_stock_stockid" value="" />
+                                       <c:if test="${card_stock != null }">
+                                         <c:set var="display_stock_stockid" value="SID: ${card_stock.stock_id } List: ${card_stock.stock_list }  Quantity: ${card_stock.stock_remaining+0.0 }${card_stock.stock_unit } PD: ${card_stock.stock_pd } Batch: ${card_stock.stock_batch }" />
+                                       </c:if>
+<input type="text" class="form-control newinput" id="${row.keymap.mainkey}" name="${row.keymap.mainkey}"    value="${transaction[row.keymap.mainkey]}"  readonly required>
+
+    <span class="input-group-text" id="basic-addon-search1"  >
+            <a href="#"  onclick="shows2('draggable-window3','${title } [เลือก]'); 
+            getData('/workflow_db-filemanager/${process.id}/${supportdata}/${input_db}/${input_db_n}', 'mainbody3')">  
+          
+          
+<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" 
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                         stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8">
+                                         </circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+       								 </a>
+                                        </span>
+</div> 
+ 
+ 
+ 
+ 
+                           
+     

@@ -1,0 +1,159 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<style>
+.fixhead {
+    max-width: 150px; /* กำหนดความกว้างสูงสุด */
+    white-space: nowrap; /* ป้องกันข้อความขึ้นบรรทัดใหม่ */
+    overflow: hidden; /* ซ่อนข้อความที่เกินขอบเขต */
+    text-overflow: ellipsis; /* แสดง ... เมื่อข้อความยาวเกินไป */
+}
+</style>
+    <div class="row">
+    
+    
+    		  <input type="hidden" name="process_id" value="${process_id }">
+		    	  <input type="hidden" name="tables" value="${tables }">
+		    	   <input type="hidden" name="filters" value="${filters }">
+		    	  <input type="hidden" name="edata_id" value="${edata_id+0 }">
+			  <input type="hidden" name="type" value="${type }">
+    
+                                            <div class="col-md-12 col-12">
+                                                <div class="mb-1">
+                                                    <label class="form-label" for="first-name-column">Search</label>
+                                                    <input type="text" name="register_name" id="first-name-column" class="form-control"  name="fname-column">
+                                                </div>
+                                            </div>
+                                            
+                                       
+                                      
+                                      <div>       
+                               <a class="btn btn-primary waves-effect waves-float waves-light" onclick='postdata("/search_workflow_dbs-filemanager?${_csrf.parameterName}=${_csrf.token}","subdata_search","wrappermain")' >Submit</a>           
+                                         
+                                    </div>         
+                                        </div>
+                                                
+                                                <br>  <br>
+  <table  class="table">
+                                    <thead>
+                                        <tr>
+                                        
+            	 <th class="form-label fixhead" style="padding:5px;font-size:10px">#</th>   
+            	 
+       					<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="product.lot_batch"  /></th>         	                          
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="product.product_code"  /></th>     
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="product.product_name"  /></th>  
+ <th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="product.customer_code"  /></th>     
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="product.customer_name"  /></th>   
+  
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="fg.quantity"  /></th>     
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="product.unit"  /></th>     
+<th class="form-label fixhead" style="padding:5px;font-size:10px"><spring:message code="common.status"  /></th>   
+          <th class="form-label fixhead" style="padding:5px;font-size:10px">#</th>  
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <c:forEach items="${item }" var="row"  varStatus="count">
+				                                     
+				                                     
+				                                                            <tr>
+                                        
+            	 <td class="form-label fixhead" style="padding:5px;font-size:13px">${count.count }</td>   
+            	 
+            	                          
+ 					<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="code" 
+ 					title="${row.lot_batch }">${row.lot_batch }</td>    
+ 					
+ 					 
+<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="product_code"  title="${row.product_code }-${row.id }">${row.product_code }-${row.id }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="product_name"   title="${row.product_name }">${row.product_name }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px" data-custom="customer_code"  title="${row.customer_code }">${row.customer_code }</td>     
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="customer_name"   title="${row.customer_name }">${row.customer_name }</td>   
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="quantity"   title="${row.quantity }">${row.quantity }</td>   
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="unit"   title="${row.unit }">${row.unit }</td>  
+<td class="form-label fixhead" style="padding:5px;font-size:13px"  data-custom="status"   title="${row.fg_status }">${row.fg_status }</td>  
+
+
+
+
+
+
+
+          <td class="form-label fixhead" style="padding:5px;font-size:13px">
+             <c:if test="${load_type != 'log'}">  <a class="btn btn-sm btn-success" title="${row.location }" onclick="showAddressTitle2(this)" data-bs-dismiss="modal">+</a></c:if>
+                 
+          </td>  
+                                        </tr>
+														
+				                                     
+				                                      
+				                                      
+                                      
+                                        	</c:forEach>   
+                                        
+                                    </tbody>
+                                    </table>     
+                                    
+   <script>
+        
+            if (feather) {
+                feather.replace({
+                    width: 14,
+                    height: 14
+                });
+            }
+      
+    </script>                                   
+                                    
+<script>
+function showAddressTitle2(element) {
+  
+    let row = element.closest("tr");
+
+    if (row) {
+    	
+    	
+        let codeTd = row.querySelector('td[data-custom="code"]')?.getAttribute("title");
+       
+        let product_codeTd = row.querySelector('td[data-custom="product_code"]')?.getAttribute("title");
+        let product_nameTd = row.querySelector('td[data-custom="product_name"]')?.getAttribute("title");
+        
+        let customer_codeTd = row.querySelector('td[data-custom="customer_code"]')?.getAttribute("title");
+        let customer_nameTd = row.querySelector('td[data-custom="customer_name"]')?.getAttribute("title");
+        let issued_unitTd = row.querySelector('td[data-custom="unit"]')?.getAttribute("title");
+        let quantityTd = row.querySelector('td[data-custom="quantity"]')?.getAttribute("title");
+        
+        
+        fillPossibleFields(['issued_lot_batch', 'transfer_lot_batch', 'adjustment_lot_batch', 'lot_batch'], codeTd);
+        fillPossibleFields(['issued_product_code', 'transfer_product_code', 'adjustment_product_code', 'product_code'], product_codeTd);
+        fillPossibleFields(['issued_product_name', 'transfer_product_name', 'adjustment_product_name', 'product_name'], product_nameTd);
+        fillPossibleFields(['issued_customer_code', 'transfer_customer_code', 'adjustment_customer_code'], customer_codeTd);
+        fillPossibleFields(['issued_customer_name', 'transfer_customer_name', 'adjustment_customer_name'], customer_nameTd);
+        fillPossibleFields(['issued_unit', 'transfer_unit','adjustment_unit','unit'], issued_unitTd);
+        fillPossibleFields(['issued_quantity'], quantityTd);
+        
+        
+        
+
+   
+
+    }
+}
+
+
+function fillPossibleFields(possibleNames, value) {
+    for (var i = 0; i < possibleNames.length; i++) {
+        var name = possibleNames[i];
+        var field = document.querySelector('input[name="' + name + '"]');
+        if (field !== null) {
+            field.value = value;
+            break;
+        }
+    }
+}
+</script>                       

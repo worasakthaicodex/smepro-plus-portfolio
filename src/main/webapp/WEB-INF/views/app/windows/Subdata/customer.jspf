@@ -1,0 +1,53 @@
+   <%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+      <table class="datatable " >
+          <thead>
+          
+          <tr>
+          <th class="form-label fixhead" style="padding:5px;font-size:13px">#</th>   
+            	 
+       					<th class="form-label fixhead" style="padding:5px;font-size:13px">ID</th>         	                          
+ 					<th class="form-label fixhead" style="padding:5px;font-size:13px"><spring:message code="register.name"  /></th>     
+  
+<th ><spring:message code="register.type"  /></th>     
+  <th><spring:message code="register.groups"  /></th>  
+    <th ><spring:message code="register.address"  /></th>  
+     <th><spring:message code="register.note"  /></th>  
+           <th style="width:10%">Action</th>
+           </tr>
+   
+
+                                    </thead>
+                                    <tbody>
+                         
+                                  <c:forEach items="${item }" var="row"  varStatus="count">  
+		                            <tr>
+		                           
+		                                	 <td class="form-label fixhead" style="padding:5px;font-size:13px">${count.count }</td>   
+            	 
+            	                          
+ 					<td data-custom="code" title="${row.register_code }${row.register_daterun }${row.register_id }">${row.register_code }${row.register_daterun }${row.register_id }</td>     
+<td  title="${row.register_name }" data-custom="name" >${row.register_name }</td>     
+<td    title="${row.register_type }" data-custom="type">${row.register_type }</td>     
+  <td  title="${row.register_groups }"  data-custom="groups" >${row.register_groups }</td>  
+    <td    title="${row.register_address }" data-custom="address">${row.register_address }</td>  
+     <td  title="${row.register_note }"  data-custom="note">${row.register_note }</td>  
+     
+     
+          <td  style="text-align:center">
+         
+    <button class="fa-button dark" title="เลือก"   onclick="showAddressTitle(this,'customer','myForms${process.id}');closeed2('draggable-window3')"  style="color:black;margin:auto" data-original-title="List"> 
+    <i class="material-icons text-success">
+  
+check_circle
+
+  </i></button>
+          </td>  
+           </tr>
+          
+		           </c:forEach>   
+       
+        </tbody>
+        </table>

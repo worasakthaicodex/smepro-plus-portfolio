@@ -1,0 +1,101 @@
+<%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ include file="../common/mainhead.jspf" %>    
+
+
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="/resources/app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="/resources/app-assets/vendors/css/forms/wizard/bs-stepper.min.css">
+    <link rel="stylesheet" type="text/css" href="/resources/app-assets/vendors/css/forms/select/select2.min.css">
+    <!-- END: Vendor CSS-->
+
+   <link rel="stylesheet" type="text/css" href="/resources/app-assets/css/core/menu/menu-types/vertical-menu.css">
+    <link rel="stylesheet" type="text/css" href="/resources/app-assets/css/plugins/forms/form-wizard.css">
+    <link rel="stylesheet" type="text/css" href="/resources/app-assets/css/plugins/forms/form-validation.css">
+    <link rel="stylesheet" type="text/css" href="/resources/app-assets/css/pages/modal-create-app.css">
+
+         Drawered : <br><br>
+                   	 <div id="showform"> 
+		                     
+		                              
+		                                        <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
+		                                     
+		                                         <div class="todo-task-list-wrapper list-group" id="wrappermain_2">
+		                                     <input type="hidden"  name="edata_id"  value="${edata_id}" >
+		                                       <input type="hidden"  name="type"  value="drawer" >
+		                                       
+		                                       
+		                                        <input type="hidden"  name="drawer_id"  value="${drawers.drawer_id+0}" >  
+		                                        
+		                                        
+		                                         
+		                                     <label><spring:message code="item.name" text="ชื่อ" />: </label>
+                                             <div class="mb-1"><input type="text"  name="drawer_name"   class="form-control" value="${drawers.drawer_name}"></div>
+                                             <br>
+                                             
+		                                     <label><spring:message code="item.info" text="ข้อมูล" />: </label>
+                                             <div class="mb-1"><textarea  name="drawer_info"   class="form-control">${drawers.drawer_info}</textarea>
+                                             
+                                             
+		                                     </div>
+		                      <div>                    
+		                                <button type="submit" onclick="postdata('/addshipping-filemanager?${_csrf.parameterName}=${_csrf.token}','adddistributor','wrappermain_2')" 
+                                       id="submits" class="btn btn-sm btn-light " >
+                                		<spring:message code="btn.add" text="เพิ่ม" />
+                               </button> 
+                               
+                               
+                                <c:if test="${drawers != null}">
+		                                  <button type="button"  
+		                                  onclick="getdata('/delsubdata-filemanager/drawer/${drawers.drawer_id}/${edata_id}','wrappermain_2')" 
+		                                   class="btn btn-sm btn-danger " >
+		                                		ลบ
+		                               </button> 
+                               </c:if>
+                               
+                               
+                              </div>   
+                               
+		                                        </div>
+		                              
+                                    
+                          </div>
+                                     
+                          <br><br><br>
+                          
+                          **ต้อง Save เอกสารก่อนเลือกรายการ ***
+  								 <table  class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="form-label fixhead">#</th>
+                                       
+                                             <th class="form-label fixhead"><spring:message code="item.name" text="ชื่อ" /></th>
+                      
+                                             <th class="form-label fixhead"><spring:message code="item.info" text="ข้อมูล" /></th>
+                       					    <th class="form-label fixhead"><spring:message code="tables.action" text="จัดการ" /></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      
+                                        <c:forEach items="${drawered }" var="row" varStatus="count">
+				                                      <tr>
+				                                            <td>${count.count }</td >
+				                                   
+				                                             <td>${row.drawer_name }</td >
+				                                             <td>${row.drawer_info }</td >
+				                                             <td>
+				                                             <a href="#" onclick="getdatas('/editsubdata-filemanager/drawer/${row.drawer_id}/${edata_id}','wrappermain_2')" 
+				                                             class="btn btn-sm btn-light">เเก้ไข</a>
+				                                              <a href="/poset-filemanager/drawer/${row.drawer_id}/${edata_id}"  class="btn btn-sm btn-success">ใช้</a>
+
+
+
+				                                             </td>
+				                                        </tr>
+                                        </c:forEach>
+                                        
+                                        
+                                    </tbody>
+                                    </table>    

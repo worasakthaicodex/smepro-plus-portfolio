@@ -1,0 +1,454 @@
+  <%@ page  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>  
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+         <link href="<c:url value="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&amp;display=swap" />" rel="stylesheet">
+ 
+  
+  
+        <style>
+/* styles.css */
+.card {
+    box-shadow: 0px 0px 3px 1px #ddd;
+}
+
+.list-group-item {
+    padding: .5rem .75rem;
+    border: 1px solid rgba(0, 0, 0, .07);
+    display: flex;
+    align-items: center;
+}
+
+.list-group-item:first-child {
+    border-radius: 0;
+}
+
+.list-group-item:last-child {
+    border-radius: 0;
+}
+
+.list-group-item i.fa-square {
+    flex-grow: 0;
+    cursor: pointer;
+    order: 1;
+}
+
+.list-group-item i.fa-check-square {
+    display: none;
+}
+
+.list-group-item i.fa-trash-alt {
+    flex-grow: 0;
+    cursor: pointer;
+    order: 3;
+}
+
+
+.list-group-item .todo-text {
+    flex-grow: 1;
+    margin: 0 10px;
+    order: 2;
+}
+
+.list-group-item.done i.fa-check-square {
+    flex-grow: 0;
+    cursor: pointer;
+    color: #28a745;
+    display: block;
+}
+
+.list-group-item.done i.fa-square {
+    display: none;
+}
+
+.list-group-item.done .todo-text {
+    text-decoration: line-through;
+    color: #888;
+}
+
+
+
+</style>   
+
+
+   <style>
+
+      .ui-datepicker .event-day a {
+            background-color: green !important;
+            color: #ff0000 !important;
+        }
+		    .ui-datepicker .samll a {
+            background-color: #90EE90 !important;
+            color: #ff0000 !important;
+        }
+		
+		
+		 .ui-datepicker .hot a {
+            background-color: #ffcccc !important;
+            color: #ff0000 !important;
+        }
+		 .ui-datepicker .hots a {
+            background-color: red !important;
+            color: #fff !important;
+        }
+		
+		
+		
+   .actives {
+   background-color: #7367f0;
+}
+   
+    .steped{
+        background-color: rgba(234, 84, 85, 0.12);
+        color: #ea5455 !important;
+    }
+
+/**
+ * Tooltip Styles
+ */
+
+/* Add this attribute to the element that needs a tooltip */
+[data-tooltip] {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* Hide the tooltip content by default */
+[data-tooltip]:before,
+[data-tooltip]:after {
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Position tooltip above the element */
+[data-tooltip]:before {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-bottom: 5px;
+  margin-left: -80px;
+  padding: 7px;
+  width: 160px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+/* Triangle hack to make tooltip look like a speech bubble */
+[data-tooltip]:after {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -5px;
+  width: 0;
+  border-top: 5px solid #000;
+  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  content: " ";
+  font-size: 0;
+  line-height: 0;
+}
+
+/* Show tooltip content on hover */
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}
+
+
+
+
+
+
+
+
+
+
+/* Simple setup for this demo */
+
+.mdl-card {
+  width: 80%;
+  min-height: 0;
+  margin: 10px auto;
+}
+
+.mdl-card__supporting-text {
+  width: 100%;
+  padding: 0;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step {
+  width: 20%;
+  /* 100 / no_of_steps */
+}
+
+
+/* Begin actual mdl-stepper css styles */
+
+.mdl-stepper-horizontal-alternative {
+  display: table;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step {
+  display: table-cell;
+  position: relative;
+  padding: 24px;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:hover,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:active {
+  background-color: rgba(0, 0, 0, .06);
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:active {
+  border-radius: 15% / 75%;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:first-child:active {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:last-child:active {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:hover .mdl-stepper-circle {
+  background-color: #757575;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:first-child .mdl-stepper-bar-left,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step:last-child .mdl-stepper-bar-right {
+  display: none;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-circle {
+  width: 24px;
+  height: 24px;
+  margin: 0 auto;
+  background-color: #9E9E9E;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 2em;
+  font-size: 12px;
+  color: white;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step .mdl-stepper-circle {
+  background-color: rgb(33, 150, 243);
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.step-done .mdl-stepper-circle:before {
+  content: "\2714";
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.step-done .mdl-stepper-circle *,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.editable-step .mdl-stepper-circle * {
+  display: none;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.editable-step .mdl-stepper-circle {
+  -moz-transform: scaleX(-1);
+  /* Gecko */
+  -o-transform: scaleX(-1);
+  /* Opera */
+  -webkit-transform: scaleX(-1);
+  /* Webkit */
+  transform: scaleX(-1);
+  /* Standard */
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.editable-step .mdl-stepper-circle:before {
+  content: "\270E";
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-title {
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: normal;
+  color:#7469B6;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-title,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-optional {
+  text-align: center;
+  color:#7469B6;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step .mdl-stepper-title {
+  font-weight: 500;
+  color:#7469B6;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step.step-done .mdl-stepper-title,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step.editable-step .mdl-stepper-title {
+  font-weight: 300;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-optional {
+  font-size: 12px;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step.active-step .mdl-stepper-optional {
+  color: rgba(0, 0, 0, .54);
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-left,
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-right {
+  position: absolute;
+  top: 36px;
+  height: 1px;
+  border-top: 1px solid #BDBDBD;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-right {
+  right: 0;
+  left: 50%;
+  margin-left: 20px;
+}
+
+.mdl-stepper-horizontal-alternative .mdl-stepper-step .mdl-stepper-bar-left {
+  left: 0;
+  right: 50%;
+  margin-right: 20px;
+}
+    </style>
+
+                        
+    <div class="mb-1 row">
+
+       <form method="POST" action="/setfollowup-filemanager"   id="followups" name ="followups"> 
+
+<div class="col-sm-4"><spring:message code="followup.date" /></div>
+  <div class="col-sm-8">  
+     <c:if test="${edatas != null }">
+  <input type="hidden" name="edata_id"  id="edata_id"  value="${edatas.data_id}">  
+
+	     <input type="text" id="datepicker" class="form-control" class="form-control" value="${edatas.data_dateplan }" 
+	      onchange='postdatafollowup("/setfollowup-filemanager?${_csrf.parameterName}=${_csrf.token}","followups","followupSave")' 
+	     name="data_dateplan">
+	   </c:if>  
+	     
+	     </div>        
+
+</form>  
+
+    <div id="followupSave"></div>  	 
+    
+
+  </div> 
+  
+<script> 	
+
+
+
+function postdatafollowup(Mode, Mode2, Mode3) {
+
+    let targetDiv = $("#" + Mode3);
+    
+    // ทำให้เนื้อหาเก่าจางลง
+    targetDiv.css("opacity", "0.5").css("position", "relative");
+
+    // สร้าง Spinner อยู่ตรงกลางของ div
+    let loadingSpinner = `
+        <div class="spinner-overlay">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>`;
+
+    // แทรก Spinner เข้าไปใน div
+    targetDiv.append(loadingSpinner);
+
+		
+	
+	
+    var formData = new FormData($("#" + Mode2)[0]);
+
+    $.ajax({
+        url: Mode,
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(result){
+            $('#' + Mode3).html(result);
+            targetDiv.css("opacity", "1"); // คืนค่า opacity ปกติ
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+                //window.location.href = '/login'; // URL ของหน้า login
+       
+        }
+    });
+
+   // $("#" + Mode2)[0].reset();
+   
+    return false;
+}
+	  
+    $(function() {
+        var events = {
+        		   <c:forEach items="${datefollow }" var="rows" varStatus="count">
+            			"${rows.data_dateplan}": ${rows.alert},
+          		  </c:forEach>
+			
+        };
+        var size = "${datefollow.size() }";
+        var per10 = 10;
+        var per30 = 0; 
+        
+        if(size > 10){
+        	per10 = size * 0.10;
+        	per10 = size * 0.30;
+        }
+        
+      
+        
+
+           $("#datepicker").datepicker({
+			     dateFormat: "yy-mm-dd",
+            beforeShowDay: function(date) {
+                var dateString = $.datepicker.formatDate('yy-mm-dd', date);
+                if (events[dateString]) {
+					
+				if(events[dateString] < per10){
+				 return [true, "event-day samll", events[dateString] + " events"];
+				}
+				else if(events[dateString] >= per10 && events[dateString] < per30){
+				 return [true, "event-day hot", events[dateString] + " events"];
+				}
+				else if(events[dateString] >= per30){
+				 return [true, "event-day hots", events[dateString] + " events"];
+				}
+				else{
+				 return [true, "event-day", events[dateString] + " events"];
+				}
+                   
+					
+					
+                }
+                return [true, "", ""];
+            }
+        });
+  
+  
+    });
+</script>
+          
